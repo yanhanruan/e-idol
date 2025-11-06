@@ -522,24 +522,81 @@ const AudioWaveButton = ({ isPlaying, onClick }) => {
   );
 };
 
-const UserCard = ({ user, idx, t, playingAudio, toggleAudio }) => (
-  <div className="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition cursor-pointer border-4 border-white hover:scale-105 mx-6">
+// 你可以把这个组件放在同一个文件，或者单独的 'Tag.jsx'
+// 抽象的 <Tag> 组件
+const Tag = ({ children, color = "blue", paddingType = "service" }) => {
+  // 颜色查找表
+  const colors = {
+    blue: "from-blue-100/50 to-cyan-100/50 border-blue-200/50",
+    purple: "from-purple-100/50 to-pink-100/50 border-purple-200/50",
+  };
+
+  // 根据 paddingType 选择不同的 padding 变量
+  const paddingClasses = {
+    service: "px-[var(--service-tag-px)] py-[var(--service-tag-py)]",
+    rank: "px-[var(--rank-tag-px-base)] py-[var(--rank-tag-py)] md:px-[var(--rank-tag-px-md)]",
+  };
+
+  return (
+    <span
+      className={`
+        bg-gradient-to-r text-slate-700 rounded-full shadow-sm font-bold border-2
+        ${colors[color]}
+        ${paddingType === 'rank' ? paddingClasses.rank : paddingClasses.service}
+        text-[var(--font-tag-base)] md:text-[var(--font-tag-md)]
+      `}
+    >
+      {children}
+    </span>
+  );
+};
+
+// 确保 Tag 组件在作用域内 (可以在此文件上方定义，或 import)
+
+const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) => (
+  <div className={`
+    ${size === 'full' ? 'user-card-full' : 'user-card-small'}
+    relative overflow-hidden rounded-[var(--card-radius)] shadow-xl hover:shadow-2xl transition cursor-pointer border-[var(--card-border)] border-white hover:scale-105
+    mx-[var(--card-margin-x)]
+  `}>
     <div className={`absolute inset-0 bg-gradient-to-br ${user.color} opacity-60`}></div>
     <div className="absolute inset-0 backdrop-blur-sm"></div>
 
-    <div className="relative z-10 p-3 sm:p-5 lg:p-6">
+    <div className={`
+      relative z-10 
+      p-[var(--card-padding-base)] 
+      sm:p-[var(--card-padding-sm)] 
+      lg:p-[var(--card-padding-lg)]
+    `}>
       <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 items-start">
         <div className="flex justify-between w-full">
           <div className="flex justify-center relative mb-3">
-            <div className={`w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br ${user.color} rounded-full flex items-center justify-center text-4xl md:text-5xl border-4 border-white shadow-2xl`}>
+            <div className={`
+              bg-gradient-to-br ${user.color} rounded-full flex items-center justify-center shadow-2xl border-[var(--card-border)] border-white
+              w-[var(--avatar-size-base)] h-[var(--avatar-size-base)] 
+              md:w-[var(--avatar-size-md)] md:h-[var(--avatar-size-md)]
+              text-[var(--font-avatar-base)] 
+              md:text-[var(--font-avatar-md)]
+            `}>
               {user.avatar}
             </div>
             {user.online && (
-              <div className="absolute -top-0 -right-0 md:-top-1 md:-right-1 w-5 h-5 md:w-7 md:h-7 bg-green-400 rounded-full border-3 border-white animate-pulse shadow-lg"></div>
+              <div className={`
+                absolute -top-0 -right-0 md:-top-1 md:-right-1 rounded-full border-white animate-pulse shadow-lg bg-green-400
+                border-[var(--online-dot-border)]
+                w-[var(--online-dot-size-base)] h-[var(--online-dot-size-base)]
+                md:w-[var(--online-dot-size-md)] md:h-[var(--online-dot-size-md)]
+              `}></div>
             )}
           </div>
           <div className="text-center">
-            <p className="text-base md:text-lg font-black text-slate-800 mb-2">{user.name}</p>
+            <p className={`
+              font-black text-slate-800 mb-2
+              text-[var(--font-name-base)] 
+              md:text-[var(--font-name-md)]
+            `}>
+              {user.name}
+            </p>
             <div className="flex flex-col items-center space-y-2">
               <AudioWaveButton 
                 isPlaying={playingAudio === idx}
@@ -550,35 +607,50 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio }) => (
         </div>
 
         <div className="space-y-3 w-full">
-          <div className="flex flex-col justify-end min-h-[300px] bg-cover bg-center bg-no-repeat backdrop-blur-sm rounded-2xl p-3 md:p-4 shadow-lg" style={{ backgroundImage: "url('./filter.png')" }}>
+          <div className={`
+            flex flex-col justify-end bg-cover bg-center bg-no-repeat backdrop-blur-sm shadow-lg
+            min-h-[var(--content-min-height)]
+            rounded-[var(--content-radius)]
+            p-[var(--content-padding-base)] 
+            md:p-[var(--content-padding-md)]
+          `} style={{ backgroundImage: "url('./filter-dark.png')" }}>
+            
+            {/* --- Rank Tags (使用你原始的样式，但替换为变量) --- */}
             <div className="flex flex-wrap gap-1 md:gap-2">
               {user.games.map((game, gIdx) => (
                 <div key={gIdx} className="flex items-center justify-between gap-1">
-                  <span className="text-[10px] md:text-xs md:sm font-bold text-slate-800">{t.games[game.name]}</span>
-                  <span className="text-[10px] md:text-xs font-bold text-indigo-600 bg-white/50 px-2 py-1 md:px-3 md:py-1 rounded-full shadow">
+                  <span className={`
+                    font-bold text-slate-800
+                    text-[var(--font-rank-base)]
+                    md:text-[var(--font-rank-md)]
+                  `}>
+                    {t.games[game.name]}
+                  </span>
+                  <span className={`
+                    font-bold text-indigo-600 bg-white/50 rounded-full shadow
+                    text-[var(--font-rank-base)] md:text-[var(--font-rank-md)]
+                    py-[var(--rank-tag-py)]
+                    px-[var(--rank-tag-px-base)]
+                    md:px-[var(--rank-tag-px-md)]
+                  `}>
                     {t.ranks[game.rank]}
                   </span>
                 </div>
               ))}
             </div>
 
+            {/* --- Service/Method Tags (使用新的 <Tag> 组件) --- */}
             <div className="flex flex-wrap gap-2 w-full">
               {user.services.map((service, sIdx) => (
-                <span
-                  key={sIdx}
-                  className="bg-gradient-to-r from-blue-100/50 to-cyan-100/50 text-slate-700 px-1.5 py-1 rounded-full text-[10px] md:text-xs font-bold border-2 border-blue-200/50 shadow-sm"
-                >
+                <Tag key={sIdx} color="blue" paddingType="service">
                   {t.serviceContent[service]}
-                </span>
+                </Tag>
               ))}
 
               {user.methods.map((method, mIdx) => (
-                <span
-                  key={mIdx}
-                  className="bg-gradient-to-r from-purple-100/50 to-pink-100/50 text-slate-700 px-1.5 py-1 rounded-full text-[10px] md:text-xs font-bold border-2 border-purple-200/50 shadow-sm"
-                >
+                <Tag key={mIdx} color="purple" paddingType="service">
                   {t.serviceMethod[method]}
-                </span>
+                </Tag>
               ))}
             </div>
           </div>
