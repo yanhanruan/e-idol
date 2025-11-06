@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* 添加到你的全局 .css 文件中 */
+@keyframes wave-stretch {
+  0%, 100% {
+    transform: scaleY(0.2); /* 从 20% 高度开始 */
+    transform-origin: bottom;
+  }
+  50% {
+    transform: scaleY(1.0); /* 缩放到 100% 高度 */
+    transform-origin: bottom;
+  }
+}
+
+/* 创建一个功能类来使用这个动画 */
+.animate-wave-stretch {
+  animation: wave-stretch 1.2s infinite ease-in-out;
+}
