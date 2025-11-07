@@ -543,7 +543,7 @@ const Tag = ({ children, color = "blue", paddingType = "service" }) => {
         bg-gradient-to-r text-slate-700 rounded-full shadow-sm font-bold border-2
         ${colors[color]}
         ${paddingType === 'rank' ? paddingClasses.rank : paddingClasses.service}
-        text-[var(--font-tag-base)] md:text-[var(--font-tag-md)]
+        [font-size:var(--font-tag-base)] md:[font-size:var(--font-tag-md)]
       `}
     >
       {children}
@@ -557,7 +557,6 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) =>
   <div className={`
     ${size === 'full' ? 'user-card-full' : 'user-card-small'}
     relative overflow-hidden rounded-[var(--card-radius)] shadow-xl hover:shadow-2xl transition cursor-pointer border-[var(--card-border)] border-white hover:scale-105
-    mx-[var(--card-margin-x)]
   `}>
     <div className={`absolute inset-0 bg-gradient-to-br ${user.color} opacity-60`}></div>
     <div className="absolute inset-0 backdrop-blur-sm"></div>
@@ -569,27 +568,9 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) =>
       lg:p-[var(--card-padding-lg)]
     `}>
       <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6 items-start">
-        <div className="flex justify-between w-full">
-          <div className="flex justify-center relative mb-3">
-            <div className={`
-              bg-gradient-to-br ${user.color} rounded-full flex items-center justify-center shadow-2xl border-[var(--card-border)] border-white
-              w-[var(--avatar-size-base)] h-[var(--avatar-size-base)] 
-              md:w-[var(--avatar-size-md)] md:h-[var(--avatar-size-md)]
-              text-[var(--font-avatar-base)] 
-              md:text-[var(--font-avatar-md)]
-            `}>
-              {user.avatar}
-            </div>
-            {user.online && (
-              <div className={`
-                absolute -top-0 -right-0 md:-top-1 md:-right-1 rounded-full border-white animate-pulse shadow-lg bg-green-400
-                border-[var(--online-dot-border)]
-                w-[var(--online-dot-size-base)] h-[var(--online-dot-size-base)]
-                md:w-[var(--online-dot-size-md)] md:h-[var(--online-dot-size-md)]
-              `}></div>
-            )}
-          </div>
-          <div className="text-center">
+        
+          
+          <div className="flex justify-center space-x-3 w-full">
             <p className={`
               font-black text-slate-800 mb-2
               text-[var(--font-name-base)] 
@@ -604,7 +585,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) =>
               />
             </div>
           </div>
-        </div>
+        
 
         <div className="space-y-3 w-full">
           <div className={`
@@ -674,7 +655,7 @@ const GamersSection = ({ users, t, playingAudio, toggleAudio }) => (
       </button>
     </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
       {users.map((user, idx) => (
         <UserCard 
           key={idx}
@@ -683,6 +664,7 @@ const GamersSection = ({ users, t, playingAudio, toggleAudio }) => (
           t={t}
           playingAudio={playingAudio}
           toggleAudio={toggleAudio}
+          size='small'
         />
       ))}
     </div>
@@ -806,9 +788,9 @@ const GameRoomApp = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <BackgroundDecorations />
+      {/* <BackgroundDecorations />
       <Header lang={lang} setLang={setLang} t={t} />
-      <HeroCarousel currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} t={t} />
+      <HeroCarousel currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} t={t} /> */}
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <GamersSection 
