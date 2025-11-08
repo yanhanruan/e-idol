@@ -1,5 +1,5 @@
 import React from "react";
-import "./Logo.css";
+import "./logo.css";
 
 const Logo = () => {
   return (
@@ -9,6 +9,7 @@ const Logo = () => {
         <span>idol</span>
       </b>
     </div>
+    
   );
 };
 

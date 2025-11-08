@@ -6,6 +6,38 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        // 主色调 (Neon Cyber Theme)
+        primary: {
+          pink: '#f472b6',     // 按钮渐变起点
+          purple: '#c084fc',   // 按钮渐变终点
+          neonPurple: '#7e0fff', // 卡片辉光左端
+          aqua: '#0fffc1',       // 卡片辉光右端
+        },
+
+        // 辅助色 (标签渐变 / 文本)
+        accent: {
+          indigo: '#4f46e5',    // 等级标签文字
+          slate100: '#f1f5f9',  // 主文字
+          slate200: '#e2e8f0',  // 次文字
+        },
+
+        // 渐变淡色标签
+        tag: {
+          blueFrom: '#dbeafeB3',
+          blueTo: '#cffafeB3',
+          purpleFrom: '#f3e8ffB3',
+          purpleTo: '#fbcfe8B3',
+          borderBlue: '#bfdbfdb3',
+          borderPurple: '#e9d5ffB3',
+        },
+
+        // 基础白色
+        base: {
+          white: '#ffffff',
+          whiteSoft: 'rgba(255,255,255,0.5)',
+        },
+      },
       keyframes: {
         wave: {
           '0%, 100%': {

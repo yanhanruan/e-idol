@@ -12,13 +12,13 @@ const TRANSLATIONS = {
     search: '検索',
     home: 'ホーム',
     login: 'ログイン',
-    register: '新規登録',
+    register: '登録',
     safeReview: '安心の相互評価制度',
     reviewDesc1: '募集プレイヤーの評価を可視化',
     reviewDesc2: '各ユーザーにこれまでに評価された3つのプレイヤーを表示',
     reviewDesc3: '一定評価に達したユーザーからのオファーを断る機能',
     announcement: '最新公告',
-    announcementDesc1: '新規登録で500コインプレゼント中!',
+    announcementDesc1: '登録で500コインプレゼント中!',
     announcementDesc2: '本日より週末限定イベント開催',
     announcementDesc3: '人気プレイヤーランキング更新しました',
     reservationGuide: '予約の流れ',
@@ -188,52 +188,91 @@ const BackgroundDecorations = () => (
 );
 
 const Header = ({ lang, setLang, t }) => (
-  <header className="bg-white/70 backdrop-blur-xl shadow-lg sticky top-0 z-50 border-b-4 border-gradient-to-r from-blue-300 via-purple-300 to-pink-300">
+  <header className="sticky top-0 z-50" style={{
+    background: 'rgba(10, 13, 30, 0.75)',
+    backdropFilter: 'blur(20px) saturate(180%)',
+    borderBottom: '1px solid rgba(0, 255, 255, 0.2)',
+    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.1) inset'
+  }}>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between h-16">
         <div className="flex items-center space-x-3">
-          <button className="w-11 h-11 bg-gradient-to-br from-slate-600 to-slate-700 rounded-2xl flex items-center justify-center text-white hover:scale-110 transition shadow-lg hover:shadow-xl">
-            👤
+          <button className="w-11 h-11 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110 group" style={{
+            background: 'linear-gradient(135deg, rgba(0, 100, 150, 0.4), rgba(0, 50, 100, 0.4))',
+            border: '1px solid rgba(0, 255, 255, 0.4)',
+            boxShadow: '0 0 20px rgba(0, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)'
+          }}>
+            <span className="group-hover:scale-110 transition-transform">👤</span>
           </button>
-          <button className="w-11 h-11 bg-gradient-to-br from-blue-400 to-purple-400 rounded-2xl flex items-center justify-center text-white hover:scale-110 transition shadow-lg hover:shadow-xl">
-            ➕
+          <button className="w-11 h-11 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110 group" style={{
+            background: 'linear-gradient(135deg, rgba(100, 0, 150, 0.4), rgba(50, 0, 100, 0.4))',
+            border: '1px solid rgba(255, 0, 255, 0.4)',
+            boxShadow: '0 0 20px rgba(255, 0, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)'
+          }}>
+            <span className="group-hover:scale-110 transition-transform">➕</span>
           </button>
-          <button className="w-11 h-11 bg-gradient-to-br from-pink-400 to-rose-400 rounded-2xl flex items-center justify-center text-white hover:scale-110 transition shadow-lg hover:shadow-xl relative">
+          <button className="w-11 h-11 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110 relative group" style={{
+            background: 'linear-gradient(135deg, rgba(150, 0, 100, 0.4), rgba(100, 0, 50, 0.4))',
+            border: '1px solid rgba(255, 0, 100, 0.4)',
+            boxShadow: '0 0 20px rgba(255, 0, 100, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)'
+          }}>
             <Bell className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center">3</span>
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-xs flex items-center justify-center font-bold" style={{
+              background: 'linear-gradient(135deg, #ff0055, #ff3388)',
+              boxShadow: '0 0 15px rgba(255, 0, 85, 0.8), 0 0 5px rgba(255, 0, 85, 1)',
+              border: '1px solid rgba(255, 255, 255, 0.3)'
+            }}>3</span>
           </button>
         </div>
 
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#" className="text-slate-700 hover:text-indigo-600 transition font-bold relative group">
-            {t.home}
-            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all rounded-full"></span>
-          </a>
-          <a href="#" className="text-slate-700 font-bold relative">
-            {t.search}
-            <span className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></span>
-          </a>
-          <a href="#" className="text-slate-700 hover:text-indigo-600 transition font-bold relative group">
-            {t.message}
-            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all rounded-full"></span>
-          </a>
+          {['home', 'search', 'message'].map((item) => (
+            <a key={item} href="#" className="transition-all font-bold relative group py-1" style={{
+              fontFamily: "'Roboto Mono', monospace",
+              color: '#00ffff',
+              textShadow: '0 0 10px rgba(0, 255, 255, 0.8)',
+              fontSize: '14px',
+              letterSpacing: '0.05em'
+            }}>
+              {t[item]}
+              <span className="absolute -bottom-1 left-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{
+                width: item === 'search' ? '100%' : '0',
+                background: 'linear-gradient(90deg, #00ffff, #0099ff)',
+                boxShadow: '0 0 10px rgba(0, 255, 255, 0.8)',
+              }}></span>
+            </a>
+          ))}
         </nav>
 
         <div className="flex items-center space-x-3">
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value)}
-            className="text-sm border-2 border-indigo-300 rounded-2xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/90 font-medium shadow-md hover:shadow-lg transition"
+            className="text-sm rounded-xl px-3 py-2 focus:outline-none font-medium transition-all cursor-pointer" style={{
+              fontFamily: "'Roboto Mono', monospace",
+              background: 'rgba(0, 50, 100, 0.3)',
+              border: '1px solid rgba(0, 255, 255, 0.3)',
+              color: '#00ffff',
+              boxShadow: '0 0 15px rgba(0, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)'
+            }}
           >
             <option value="ja">🇯🇵 日本語</option>
             <option value="en">🇬🇧 English</option>
             <option value="zh">🇨🇳 中文</option>
           </select>
-          <button className="hidden sm:block px-6 py-2.5 text-slate-700 border-3 border-slate-700 rounded-full hover:bg-slate-100 transition font-bold shadow-md hover:shadow-lg">
-            {t.login}
-          </button>
-          <button className="px-6 py-2.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white rounded-full hover:scale-105 transition font-bold shadow-lg hover:shadow-xl">
-            <Sparkles className="w-4 h-4 inline mr-1" />
+
+          <button className=" text-base opacity-90 px-1 py-2 text-white rounded-full transition-all font-bold hover:scale-105" style={{
+            fontFamily: "'Roboto Mono', monospace",
+            background: 'linear-gradient(135deg, #00ffff, #0099ff, #ff00ff)',
+            boxShadow: '0 0 30px rgba(0, 255, 255, 0.6), 0 0 60px rgba(255, 0, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+            textShadow: '0 0 5px rgba(0, 0, 0, 0.5)',
+          }}>
+            {/* <Sparkles className="w-4 h-4 inline mr-1" /> */}
             {t.register}
           </button>
         </div>
@@ -241,7 +280,6 @@ const Header = ({ lang, setLang, t }) => (
     </div>
   </header>
 );
-
 
 
 
@@ -259,22 +297,25 @@ const Header = ({ lang, setLang, t }) => (
 
 
 
+
+
 const Footer = () => (
-  <footer className="bg-gradient-to-r from-slate-800 via-indigo-900 to-purple-900 text-white mt-16 py-12 border-t-4 border-indigo-400 relative overflow-hidden">
-    <div className="absolute inset-0 opacity-10">
-      <div className="absolute top-5 left-10 text-4xl">✨</div>
-      <div className="absolute top-10 right-20 text-4xl">🌟</div>
-      <div className="absolute bottom-5 left-1/4 text-4xl">💫</div>
-    </div>
+  <footer className="mt-16 py-12 relative overflow-hidden" style={{
+    background: 'linear-gradient(180deg, rgba(5, 8, 20, 0) 0%, rgba(10, 13, 30, 0.8) 20%, rgba(10, 13, 30, 0.95) 100%)',
+    borderTop: '1px solid rgba(0, 255, 255, 0.2)',
+    boxShadow: '0 -10px 50px rgba(0, 0, 0, 0.5)',
+    backdropFilter: 'blur(10px)'
+  }}>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-      <div className="mb-4 flex items-center justify-center space-x-2">
-        {/* <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-          E
-        </div>
-        <span className="text-2xl font-black">e-Idol</span> */}
+      <div className="mb-4 flex items-center justify-center">
         <Logo />
       </div>
-      <p className="text-sm text-slate-300 font-medium">© 2025 e-Idol. All rights reserved. Made with 🌟</p>
+      <p className="text-sm font-medium" style={{
+        fontFamily: "'Roboto Mono', monospace",
+        color: '#00ffff',
+        textShadow: '0 0 10px rgba(0, 255, 255, 0.5)',
+        opacity: 0.8
+      }}>© 2025 e-Idol. All rights reserved. Made with 🌟</p>
     </div>
   </footer>
 );
