@@ -7,7 +7,7 @@ export const i18n = {
       search: '検索',
       home: 'ホーム',
       login: 'ログイン',
-      register: '新規登録',
+      register: '登録',
       safeReview: '安心の相互評価制度',
       reviewDesc1: '募集プレイヤーの評価を可視化',
       reviewDesc2: '各ユーザーにこれまでに評価された3つのプレイヤーを表示',

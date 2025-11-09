@@ -1,3 +1,5 @@
+const path = require('path'); // <--- 1. 导入 path 模块
+
 // 文件名: .eslintrc.cjs
 module.exports = {
   // 1. 定义环境
@@ -12,6 +14,7 @@ module.exports = {
     "eslint:recommended", // ESLint 官方基础规则 (会开启 "no-undef" 规则)
     "plugin:react/recommended", // React 核心规则
     "plugin:react-hooks/recommended", // React Hooks 规则 (!!!)
+    "plugin:import/recommended",
   ],
 
   // 3. 插件列表
@@ -19,6 +22,7 @@ module.exports = {
     "react",
     "react-hooks",
     "react-refresh", // Vite 热更新
+    "import",
   ],
 
   // 4. 解析器选项
@@ -47,6 +51,18 @@ module.exports = {
   settings: {
     react: {
       version: "detect",
+    },
+    "import/resolver": {
+      alias: {
+        map: [
+          ['@src', path.resolve(__dirname, './src')],
+          ['@assets', path.resolve(__dirname, './src/assets')]
+        ],
+        extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"] // 保持扩展名
+      },
+      node: {
+        extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"]
+      }
     },
   },
 
