@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        vibur: ["Vibur", "cursive"],
+      },
       colors: {
         // 主色调 (Neon Cyber Theme)
         primary: {
@@ -63,8 +66,78 @@ export default {
           '0%, 50%, 100%': { transform: 'translateX(-150%) skewX(-30deg)' },
           '65%': { transform: 'translateX(250%) skewX(-30deg)' },
         },
+        blink: {
+          "78%": {
+            color: "inherit",
+            textShadow: "inherit",
+          },
+          "79%": {
+            color: "#333",
+          },
+          "80%": {
+            textShadow: "none",
+          },
+          "81%": {
+            color: "inherit",
+            textShadow: "inherit",
+          },
+          "82%": {
+            color: "#333",
+            textShadow: "none",
+          },
+          "83%": {
+            color: "inherit",
+            textShadow: "inherit",
+          },
+          "92%": {
+            color: "#333",
+            textShadow: "none",
+          },
+          "92.5%": {
+            color: "inherit",
+            textShadow: "inherit",
+          },
+        },
+        "blink-opacity": { // <-- 重命名并优化
+          "78%": {
+            opacity: 1,
+          },
+          "79%": {
+            opacity: 0,
+          },
+          "80%": {
+            opacity: 0,
+          },
+          "81%": {
+            opacity: 1,
+          },
+          "82%": {
+            opacity: 0,
+          },
+          "83%": {
+            opacity: 1,
+          },
+          "92%": {
+            opacity: 0,
+          },
+          "92.5%": {
+            opacity: 1,
+          },
+        },
+        dropdownFadeIn: {
+          'from': {
+            opacity: 0,
+            transform: 'translateY(-4px)'
+          },
+          'to': {
+            opacity: 1,
+            transform: 'translateY(0)'
+          },
+        },
+        
       },
       animation: {
+        'dropdown-fade-in': 'dropdownFadeIn 120ms ease-out',
         wave: 'wave 1.2s ease-in-out infinite',
         animateGlow: 'animateGlow 10s ease infinite',
         autoLift: 'autoLift 5s ease-in-out infinite',

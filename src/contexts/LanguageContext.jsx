@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext,useMemo } from 'react';
 import { TRANSLATIONS } from '../data/translations'; // 确保路径正确
 
 const LanguageContext = createContext();
@@ -6,10 +6,10 @@ const LanguageContext = createContext();
 export const LanguageProvider = ({ children }) => {
   const [lang, setLang] = useState('ja');
   // 派生状态 t
-  const t = TRANSLATIONS[lang];
+  const t = useMemo(() => TRANSLATIONS[lang], [lang]);
 
-  const value = { t, lang, setLang };
-
+  const value = useMemo(() => ({ t, lang, setLang }), [t, lang]);
+  
   return (
     <LanguageContext.Provider value={value}>
       {children}

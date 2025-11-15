@@ -150,7 +150,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) =>
         lg:p-[var(--card-padding-lg)]
       `}>
         {/* ... 您的所有内部内容 (保持不变) ... */}
-        <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-6 items-start">
+        <div className="flex flex-col space-y-2 ">
           <div className="flex items-center space-x-3 w-full ">
             <p className={`
                 flex-1

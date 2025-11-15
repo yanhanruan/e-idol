@@ -421,7 +421,7 @@ const GameRoomApp = () => {
               >
                 <option value="ja">🇯🇵 日本語</option>
                 <option value="en">🇬🇧 English</option>
-                <option value="zh">🇨🇳 中文</option>
+                <option value="zh">🇨🇳 简体中文</option>
               </select>
               <button className="hidden sm:block px-6 py-2.5 text-slate-700 border-3 border-slate-700 rounded-full hover:bg-slate-100 transition font-bold shadow-md hover:shadow-lg">
                 {t.login}

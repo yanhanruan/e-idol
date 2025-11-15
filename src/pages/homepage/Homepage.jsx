@@ -1,7 +1,8 @@
+import { useTranslations } from "@src/contexts/LanguageContext";
 import { FEATURED_USERS_DATA, GAMES_DATA, USERS_DATA } from "@src/data/mockData";
-import { TRANSLATIONS } from "@src/data/translations";
 import { useAudioPlayer } from "@src/hooks/useAudioPlayer";
 import { useState } from "react";
+
 import HeroCarousel from "../../components/HeroCarousel";
 import FeaturedUsersSection from "./FeaturedUsersSection";
 import GamersSection from "./GamersSection";
@@ -11,8 +12,7 @@ const HomePage = () => {
    
   const [sortBy, setSortBy] = useState('weeklyPopular');
   const { playingAudio, toggleAudio } = useAudioPlayer();
-  const [lang, setLang] = useState('ja');
-  const t = TRANSLATIONS[lang];
+  const { t } = useTranslations(); 
   const [currentSlide, setCurrentSlide] = useState(0);
 
     return(
