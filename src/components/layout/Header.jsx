@@ -172,7 +172,7 @@ const Header = () => {
                     <div className="flex items-center space-x-3">
                         <LanguageSelector t={t} lang={lang} setLang={setLang} />
 
-                        <button className=" text-base opacity-90 px-1 py-2 text-white rounded-full transition-all font-bold hover:scale-105" style={{
+                        <button className="w-12 h-12 md:w-10 md:h-10 flex items-center justify-center rounded-full text-base opacity-90 text-white transition-all font-bold hover:scale-105 flex-shrink-0" style={{
                             fontFamily: "'Roboto Mono', monospace",
                             background: 'linear-gradient(135deg, #00ffff, #0099ff, #ff00ff)',
                             boxShadow: '0 0 30px rgba(0, 255, 255, 0.6), 0 0 60px rgba(255, 0, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',

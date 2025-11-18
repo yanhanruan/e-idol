@@ -77,16 +77,35 @@ export const USERS_DATA = [
   }
 ];
 
+import mhWildsImg from "@assets/game-logos/Monster-Hunter-Wilds.png"
+import apex from "@assets/game-logos/apex-3.svg"
+import lol from "@assets/game-logos/LOL.png"
+import valorant from "@assets/game-logos/valorant-red.svg"
+import splatoonslpy from "@assets/game-logos/splatoon.png"
+import mhr from "@assets/game-logos/monster-hunter.png"
+import dbd from "@assets/game-logos/DbD-mobile.png"
+
 export const GAMES_DATA = [
-  { name: 'モンハンワイルズ', image: '🕹️', color: 'from-slate-600 to-slate-700' },
-  { name: 'Apex', image: '🎯', color: 'from-red-600 to-orange-600' },
-  { name: 'LoL', image: '⚔️', color: 'from-blue-600 to-indigo-600' },
-  { name: 'VALORANT', image: '🔫', color: 'from-red-700 to-pink-700' },
-  { name: 'スプラ3', image: '🦑', color: 'from-orange-500 to-pink-500' },
-  { name: 'APEX mobile', image: '📱', color: 'from-red-500 to-orange-500' },
-  { name: 'MHR', image: '🐉', color: 'from-green-700 to-emerald-700' },
-  { name: 'DbD', image: '👻', color: 'from-slate-800 to-slate-900' }
+  { name: 'モンハンワイルズ', image: mhWildsImg, color: 'from-slate-600 to-slate-700' },
+  { name: 'Apex', image: apex, color: 'from-red-600 to-orange-600' },
+  { name: 'LoL', image: lol, color: 'from-blue-600 to-indigo-600' },
+  { name: 'VALORANT', image: valorant, color: 'from-red-700 to-pink-700' },
+  { name: 'スプラ3', image: splatoonslpy, color: 'from-orange-500 to-pink-500' },
+  { name: 'APEX mobile', image: apex, color: 'from-red-500 to-orange-500' },
+  { name: 'MHR', image: mhr, color: 'from-green-700 to-emerald-700' },
+  { name: 'DbD', image: dbd, color: 'from-slate-100/80 to-slate-400/80' }
 ];
+
+// export const GAMES_DATA = [
+//   { name: 'モンハンワイルズ', image: '🕹️', color: 'from-slate-600 to-slate-700' },
+//   { name: 'Apex', image: '🎯', color: 'from-red-600 to-orange-600' },
+//   { name: 'LoL', image: '⚔️', color: 'from-blue-600 to-indigo-600' },
+//   { name: 'VALORANT', image: '🔫', color: 'from-red-700 to-pink-700' },
+//   { name: 'スプラ3', image: '🦑', color: 'from-orange-500 to-pink-500' },
+//   { name: 'APEX mobile', image: '📱', color: 'from-red-500 to-orange-500' },
+//   { name: 'MHR', image: '🐉', color: 'from-green-700 to-emerald-700' },
+//   { name: 'DbD', image: '👻', color: 'from-slate-800 to-slate-900' }
+// ];
 
 export const FEATURED_USERS_DATA = [
   {
