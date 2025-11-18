@@ -14,8 +14,15 @@ const Logo = () => {
         "
       >
         {/* 1. 修改这里：应用新的动画 */}
-        <span className="animate-[blink-opacity_2s_linear_infinite]">e-</span>
-        
+        <span className="
+            inline-block 
+            transform-gpu translate-z-0 
+            will-change-[opacity]
+            animate-[blink-opacity_2s_linear_infinite]
+        ">
+          e-
+        </span>
+
         <span>idol</span>
       </b>
     </div>
