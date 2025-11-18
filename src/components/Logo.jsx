@@ -8,7 +8,8 @@ const Logo = () => {
           font-normal
           text-4xl
           text-[#fee]
-          [text-shadow:0_-2rem_6rem_#fee,0_0_0.2rem_#fee,0_0_1em_#ff4444,0_0_0.5em_#ff4444,0_0_0.1em_#ff4444,0_0.5rem_0.2rem_#000]
+          [text-shadow:0_-2rem_2rem_#fee,0_0_0.2rem_#fee,0_0_1em_#ff4444,0_0_0.5em_#ff4444,0_0_0.1em_#ff4444,0_0.5rem_0.2rem_#000]
+          sm:[text-shadow:0_-2rem_6rem_#fee,0_0_0.2rem_#fee,0_0_1em_#ff4444,0_0_0.5em_#ff4444,0_0_0.1em_#ff4444,0_0.5rem_0.2rem_#000]
           
           [&>span:nth-of-type(2)]:animate-[blink-opacity_3s_linear_infinite]
         "
