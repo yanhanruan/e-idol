@@ -5,6 +5,7 @@ import MainLayout from './components/layout/MainLayout';
 
 import HomePage from './pages/homepage/Homepage';
 import TestPage from './pages/TestPage';
+import ReservationPage from './pages/reservationpage/ReservationPage'
 
 const App = () => {
   return (
@@ -15,6 +16,12 @@ const App = () => {
           {/* 用 MainLayout 包裹 HomePage */}
           <MainLayout>
             <HomePage />
+          </MainLayout>
+        </Route>
+
+        <Route path="/reservation">
+          <MainLayout>
+            <ReservationPage />
           </MainLayout>
         </Route>
 
