@@ -8,6 +8,16 @@ export default {
     extend: {
       fontFamily: {
         vibur: ["Vibur", "cursive"],
+        sans: [
+          '"Inter"',                  // 优选英文字体
+          '"SF Pro Display"',         // Apple 系统字体
+          '"PingFang SC"',            // 苹方-简 (Mac中文)
+          '"Hiragino Sans"',          // 冬青黑体 (Mac日语/中文)
+          '"Noto Sans JP"',           // Google Noto (日语)
+          '"Microsoft YaHei"',        // 微软雅黑 (Win中文)
+          '"WenQuanYi Micro Hei"',    // 文泉驿 (Linux)
+          'sans-serif'
+        ],
       },
       colors: {
         // 主色调 (Neon Cyber Theme)
