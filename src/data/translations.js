@@ -57,7 +57,7 @@ export const TRANSLATIONS = {
     search: 'Search',
     home: 'Home',
     login: 'Log in',
-    register: 'Reg',
+    register: 'Sign up',
     safeReview: 'Safe Mutual Rating System',
     reviewDesc1: 'Visualize player ratings',
     reviewDesc2: 'Display 3 players who have rated each user',

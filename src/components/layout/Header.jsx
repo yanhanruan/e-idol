@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bell, ChevronDown, Globe, User, Plus } from "lucide-react"; 
 import { useTranslations } from '../../contexts/LanguageContext';
+import { useTransition } from '@src/contexts/TransitionContext';
 
 // --- Sub-component: LanguageSelector ---
 const LanguageSelector = ({ lang, setLang }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const { startTransition } = useTransition(); // 2. 获取触发器
 
     const languages = [
         { value: 'ja', label: '日本語' },
@@ -24,8 +26,19 @@ const LanguageSelector = ({ lang, setLang }) => {
     }, []);
 
     const handleSelect = (value) => {
-        setLang(value);
-        setIsOpen(false);
+        // 如果点击的是当前语言，直接忽略
+        if (value === lang) {
+            setIsOpen(false);
+            return;
+        }
+
+        setIsOpen(false); // 先关闭下拉菜单，让截图画面更干净（可选）
+
+        // 3. 核心修改：用转场包裹状态更新
+        // 这行代码的意思是："先截个图，挡住屏幕，然后我再悄悄换语言"
+        startTransition(() => {
+            setLang(value);
+        });
     };
 
     const selectedLanguage = languages.find(l => l.value === lang);

@@ -64,3 +64,26 @@ body{
   --service-tag-px: 0.1875rem;     /* px-[3px] */
   --service-tag-py: 0.125rem;      /* py-0.5 */
 }
+
+
+/* --- Global Transition Animation --- */
+
+/* 极简遮罩动画 */
+/* 逻辑：
+   0% - 20%: 快速淡入黑色 (Fade In)
+   20% - 60%: 保持纯黑 (Hold) -> 这段时间 JS 切换路由/语言
+   60% - 100%: 慢慢淡出 (Fade Out)
+*/
+@keyframes flash-black-simple {
+  0% { opacity: 0; }
+  20% { opacity: 1; } 
+  60% { opacity: 1; } 
+  100% { opacity: 0; }
+}
+
+/* 应用动画类 */
+/* 使用 cubic-bezier 让淡入淡出更自然，不像线性那么生硬 */
+.animate-flash-black {
+  animation: flash-black-simple 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: opacity; /* 性能优化：通知 GPU */
+}
