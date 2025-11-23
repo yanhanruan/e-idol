@@ -129,7 +129,7 @@ const Header = () => {
     const leftButtonBaseClass = "w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110 group border border-white/5 relative";
 
     return (
-        <header className="sticky top-0 z-50 w-full h-15 py-1 md:py-0 md:h-14 bg-white/5 backdrop-blur-md border-b border-white/5 font-sans">  
+        <header className="sticky top-0 z-50 w-full h-15 py-2 md:py-0 md:h-14 bg-white/5 backdrop-blur-md border-b border-white/5 font-sans">  
 
             <div className="relative z-10 max-w-[1920px] h-full mx-auto px-4 md:px-8">
                 <div className="flex items-center justify-between h-full">

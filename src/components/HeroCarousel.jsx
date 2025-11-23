@@ -5,10 +5,13 @@ import "./HeroCarousel.css";
 
 // --- 关键修改：替换为分离后的素材路径 ---
 // 1. 舞台背景图片 (建议为 JPG 或 PNG，包含灯光效果，无人物)
-const STAGE_BG_URL = "/src/assets/character-illustration/bg-only.png";
+import stageBgImage from "../assets/character-illustration/bg-only.png";
 // 2. 人物角色图片 (必须为透明背景的 PNG)
-const CHARACTER_URL = "/src/assets/character-illustration/character-only.png";
+import characterImage from "../assets/character-illustration/character-only.png";
 
+// 2. 将原来的字符串常量指向引入的变量
+const STAGE_BG_URL = stageBgImage;
+const CHARACTER_URL = characterImage;
 
 const HeroCarousel = ({ currentSlide, setCurrentSlide, t }) => {
   // ... (中间的状态管理、自动轮播逻辑等代码保持不变，省略以节省篇幅) ...
@@ -111,7 +114,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }) => {
            <img 
              src={CHARACTER_URL} 
              alt="Character Mobile"
-             className="absolute -right-12 bottom-0 h-[65%] w-auto object-contain opacity-60 drop-shadow-lg" 
+             className="absolute -right-12 top-0 h-[65%] w-auto object-contain opacity-60 drop-shadow-lg" 
            />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-[#0f0f1a]/60 to-transparent"></div>
