@@ -1,209 +1,100 @@
-/* ================================== */
-/* 动画 (来自你原来的 <style> 块) */
-/* ================================== */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(100px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
+/* HeroCarousel.css */
 
-@keyframes slideOut {
-  from {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-100px) scale(0.95);
-  }
-}
-
-@keyframes scanline {
-  0% {
-    transform: translateY(-100vh);
-  }
-  100% {
-    transform: translateY(200vh);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.carousel-content {
-  animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.carousel-content.transitioning {
-  animation: slideOut 0.3s ease-out;
-}
-
-.scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 20px;
-  background: linear-gradient(transparent, rgba(0, 255, 255, 0.3), transparent);
-  animation: scanline 8s linear infinite;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.float-animation {
-  animation: float 3s ease-in-out infinite;
-  will-change: transform;
-}
-
-.button-hover-effect {
+/* 1. 核心容器：模拟舞台深邃感 */
+.stage-container {
+  background: radial-gradient(circle at 70% 50%, #1a1a2e 0%, #0f0f1a 100%);
   position: relative;
-  overflow: hidden;
 }
 
-.button-hover-effect::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(0, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.button-hover-effect:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.item-hover {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.item-hover:hover {
-  transform: translateX(10px) scale(1.02);
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-}
-
-
-/* ================================== */
-/* 样式 (从 style={{...}} 迁移) */
-/* ================================== */
-
-.cyber-card-container {
-  background: linear-gradient(135deg, rgba(10, 20, 40, 0.8), rgba(20, 10, 40, 0.8));
-  border: 2px solid rgba(0, 255, 255, 0.3);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 0 40px rgba(0, 255, 255, 0.3), 0 0 80px rgba(255, 0, 255, 0.2), inset 0 0 100px rgba(0, 0, 0, 0.5);
-}
-
-/* 浮动图标 */
-.cyber-float-icon {
-  text-shadow: 0 0 20px var(--glow-color);
-  color: var(--glow-color);
-}
-.cyber-float-icon.cyan { --glow-color: #00ffff; }
-.cyber-float-icon.magenta { --glow-color: #ff00ff; }
-
-
-/* 内容内框 */
-.cyber-content-box {
-  background: rgba(0, 20, 40, 0.6);
-  border: 2px solid rgba(0, 255, 255, 0.3);
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-}
-
-/* 赛博风格标题 */
-.cyber-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(1.2rem, 3.2vw, 1.8rem);
-  background: linear-gradient(135deg, #00ffff, #0099ff, #ff00ff);
+/* 2. 霓虹标题：发光文字 */
+.neon-title {
+  font-family: sans-serif; /* 建议换成你的项目字体 */
+  background: linear-gradient(to right, #fff, #b3ecff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8));
+  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
 }
 
-/* 列表项 */
-.cyber-list-item {
-  background: rgba(0, 50, 100, 0.4);
-  border: 1px solid rgba(0, 255, 255, 0.2);
+/* 3. 玻璃拟态列表项 (核心样式) */
+.glass-item {
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid rgba(0, 255, 255, 0.5); /* 左侧亮条 */
+  transition: all 0.3s ease;
 }
 
-/* 列表项数字 */
-.cyber-item-number {
-  /* 字体: 换成你标题同款的 Orbitron 字体，更具科技感 */
-  font-family: 'Orbitron', sans-serif;
+.glass-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: #00ffff;
+  transform: translateX(5px); /* 轻微右移交互 */
+}
+
+/* 4. 主按钮：流光渐变动画 */
+.idol-button {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  background-size: 200% 200%;
+  animation: gradientMove 3s ease infinite;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+.idol-button:hover {
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
+  transform: scale(1.02);
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 5. 进场动画：简单的上浮淡入 */
+.slide-enter {
+  animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 6. 舞台背景遮罩 (Stage Background Mask) - 核心技术 */
+/* 作用：让舞台背景图在向左和边缘延伸时平滑变为透明，确保不遮挡文字 */
+.stage-bg-mask {
+  /* 核心逻辑：使用 mask-image 混合模式 */
   
-  /* 字体粗细: Orbitron 字体需要加粗才好看 */
-  font-weight: 700; /* 你也可以试试 900 */
+  /* 1. 线性渐变：让左侧大范围渐隐 (0%透明 -> 50%才开始完全不透明) */
+  /* 这样可以彻底消除左侧的“直线”边界感 */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
+  mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
+
+  /* 2. 确保图片本身是作为背景铺满的 */
+  width: 100%;
+  height: 100%;
   
-  /* 颜色: 改为高级的“全息白” */
-  color: #ffffffe7;
-  
-  /* 阴影: 统一使用主题的青色 (cyan) 来发光，更强更亮 */
-  text-shadow: 0 0 12px rgba(0, 255, 255, 0.9);
-  
-  line-height: 1.5;
-
-  font-style: italic;
+  /* 3. 避免遮挡鼠标事件 (虽然是背景，习惯性加上) */
+  pointer-events: none;
 }
 
-/* 列表项文本 */
-.cyber-item-text {
-  font-family: 'Roboto Mono', monospace;
-  color: #00ffff;
-  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-  line-height: 1.5;
+/* 7. 人物浮动与呼吸感动画 (Floating Character Animation) */
+/* 作用：给放大的人物增加一点微妙的动态，使其看起来更生动 */
+.floating-character {
+  /* 在原有 transform 基础上叠加动画 */
+  animation: characterFloat 6s ease-in-out infinite;
 }
 
-/* 主要按钮 */
-.cyber-button-primary {
-  font-family: 'Roboto Mono', monospace;
-  background: linear-gradient(135deg, #00ffff, #0099ff, #ff00ff);
-  color: #fff;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(255, 0, 255, 0.3);
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  font-size: clamp(0.875rem, 2vw, 1rem);
-}
-
-/* 导航按钮 (左右) */
-.cyber-button-nav {
-  background: rgba(0, 50, 100, 0.3);
-  border: 1px solid rgba(0, 255, 255, 0.4);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-}
-
-/* 导航按钮图标 */
-.cyber-nav-icon {
-  color: #00ffff;
-  filter: drop-shadow(0 0 5px #00ffff);
-}
-
-/* 导航指示点 */
-.cyber-indicator-dot {
-  width: 0.75rem; /* 默认宽度 */
-  background: rgba(0, 255, 255, 0.3);
-  box-shadow: none;
-}
-.cyber-indicator-dot.active {
-  width: 2.5rem; /*激活宽度 */
-  background: linear-gradient(90deg, #00ffff, #ff00ff);
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+@keyframes characterFloat {
+  0%, 100% {
+    /* 保持原有的放大和位移，轻微向上浮动 */
+    transform: scale(1.35) translateY(48px) ; 
+    /* 阴影也随之轻微变化 */
+    filter: drop-shadow(0 20px 40px rgba(0, 255, 255, 0.5));
+  }
+  50% {
+    /* 轻微向下沉，创造呼吸感 */
+    transform: scale(1.35) translateY(55px);
+    /* 下沉时阴影变重 */
+    filter: drop-shadow(0 25px 50px rgba(0, 255, 255, 0.6));
+  }
 }

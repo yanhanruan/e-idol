@@ -129,10 +129,7 @@ const Header = () => {
     const leftButtonBaseClass = "w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110 group border border-white/5 relative";
 
     return (
-        <header className="sticky top-0 z-50 w-full h-16 md:h-12 bg-[#03030a] font-sans">
-            {/* --- Background Effects (恢复原版背景特效) --- */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#020205] z-0 pointer-events-none opacity-95"></div>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-16 bg-blue-900/10 blur-3xl z-0 pointer-events-none"></div>
+        <header className="sticky top-0 z-50 w-full h-15 py-1 md:py-0 md:h-14 bg-white/5 backdrop-blur-md border-b border-white/5 font-sans">  
 
             <div className="relative z-10 max-w-[1920px] h-full mx-auto px-4 md:px-8">
                 <div className="flex items-center justify-between h-full">

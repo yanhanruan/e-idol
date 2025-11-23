@@ -259,3 +259,191 @@ const GlitchDemo = () => {
 };
 
 export default GlitchDemo;
+
+// TODO
+
+// <!DOCTYPE html>
+// <html lang="zh-CN">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>Canvas UI Replication</title>
+//     <style>
+//         body {
+//             margin: 0;
+//             overflow: hidden;
+//             background-color: #050510; /* 深色背景以凸显光效 */
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             height: 100vh;
+//         }
+//         canvas {
+//             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+//         }
+//     </style>
+// </head>
+// <body>
+
+// <canvas id="myCanvas"></canvas>
+
+// <script>
+//     const canvas = document.getElementById('myCanvas');
+//     const ctx = canvas.getContext('2d');
+
+//     // 设置画布尺寸
+//     function resizeCanvas() {
+//         canvas.width = window.innerWidth;
+//         canvas.height = window.innerHeight;
+//         draw();
+//     }
+
+//     window.addEventListener('resize', resizeCanvas);
+
+//     // 绘制圆角矩形的辅助函数
+//     function roundRect(ctx, x, y, width, height, radius) {
+//         ctx.beginPath();
+//         ctx.moveTo(x + radius, y);
+//         ctx.lineTo(x + width - radius, y);
+//         ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+//         ctx.lineTo(x + width, y + height - radius);
+//         ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+//         ctx.lineTo(x + radius, y + height);
+//         ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+//         ctx.lineTo(x, y + radius);
+//         ctx.quadraticCurveTo(x, y, x + radius, y);
+//         ctx.closePath();
+//     }
+
+//     function draw() {
+//         const w = canvas.width;
+//         const h = canvas.height;
+//         const centerX = w / 2;
+//         const centerY = h / 2;
+
+//         // 清空画布
+//         ctx.clearRect(0, 0, w, h);
+
+//         // --- 0. 背景 (模拟原图的深色环境) ---
+//         // 为了让发光效果可见，我们需要一个深色背景
+//         const bgGradient = ctx.createLinearGradient(0, 0, 0, h);
+//         bgGradient.addColorStop(0, '#0a0b1e');
+//         bgGradient.addColorStop(1, '#1a102e');
+//         ctx.fillStyle = bgGradient;
+//         ctx.fillRect(0, 0, w, h);
+
+//         // --- 1. 主标题: IDOL STAGE LIVE ---
+//         ctx.save();
+//         ctx.textAlign = 'center';
+//         ctx.textBaseline = 'middle';
+        
+//         // 字体设置：粗体、无衬线
+//         // 根据屏幕宽度动态调整字体大小
+//         const titleSize = Math.min(w * 0.08, 80); 
+//         ctx.font = `900 ${titleSize}px "Arial", "Helvetica", sans-serif`;
+
+//         // 创建渐变色 (左边青色 -> 右边白色/粉色)
+//         const textWidth = ctx.measureText("IDOL STAGE LIVE").width;
+//         const gradient = ctx.createLinearGradient(centerX - textWidth/2, 0, centerX + textWidth/2, 0);
+//         gradient.addColorStop(0, '#6eeeff'); // 青色
+//         gradient.addColorStop(0.5, '#e0ffff'); // 浅青白
+//         gradient.addColorStop(1, '#ffddee'); // 浅粉白
+
+//         // 设置发光效果 (Neon Glow)
+//         ctx.shadowColor = "rgba(100, 220, 255, 0.8)";
+//         ctx.shadowBlur = 25;
+//         ctx.fillStyle = gradient;
+        
+//         // 绘制文字
+//         ctx.fillText("IDOL STAGE LIVE", centerX, centerY - 60);
+        
+//         // 再次绘制以增强高亮核心 (Optional)
+//         ctx.shadowBlur = 10;
+//         ctx.fillText("IDOL STAGE LIVE", centerX, centerY - 60);
+//         ctx.restore();
+
+//         // --- 2. 副标题: 未来への光、君と奏でるステージ。 ---
+//         ctx.save();
+//         ctx.textAlign = 'center';
+//         ctx.textBaseline = 'middle';
+//         const subTitleSize = Math.min(w * 0.03, 24);
+//         ctx.font = `bold ${subTitleSize}px "Microsoft YaHei", "Hiragino Sans GB", sans-serif`;
+//         ctx.fillStyle = "#ffffff";
+        
+//         // 轻微的阴影增加可读性
+//         ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+//         ctx.shadowBlur = 4;
+//         ctx.shadowOffsetX = 0;
+//         ctx.shadowOffsetY = 2;
+
+//         ctx.fillText("未来への光、君と奏でるステージ。", centerX, centerY + 10);
+//         ctx.restore();
+
+//         // --- 3. 按钮: 参加する ---
+//         const btnWidth = Math.min(w * 0.25, 200);
+//         const btnHeight = 50;
+//         const btnX = centerX - btnWidth / 2;
+//         const btnY = centerY + 60;
+//         const radius = 25; // 圆角半径 (高度的一半形成胶囊状)
+
+//         ctx.save();
+        
+//         // 3.1 按钮背景 (半透明深色)
+//         roundRect(ctx, btnX, btnY, btnWidth, btnHeight, radius);
+//         ctx.fillStyle = "rgba(20, 30, 50, 0.7)";
+//         ctx.fill();
+
+//         // 3.2 按钮边框 (发光渐变)
+//         // 创建边框渐变
+//         const borderGradient = ctx.createLinearGradient(btnX, btnY, btnX + btnWidth, btnY);
+//         borderGradient.addColorStop(0, '#00ccff');
+//         borderGradient.addColorStop(1, '#aa00ff');
+
+//         ctx.lineWidth = 2;
+//         ctx.strokeStyle = borderGradient;
+        
+//         // 边框发光
+//         ctx.shadowColor = "rgba(0, 200, 255, 0.6)";
+//         ctx.shadowBlur = 15;
+//         ctx.stroke();
+
+//         // 3.3 按钮文字
+//         ctx.shadowBlur = 0; //文字不需要太多发光，保持清晰
+//         ctx.fillStyle = "#ffffff";
+//         ctx.font = `bold 18px sans-serif`;
+//         ctx.textAlign = 'center';
+//         ctx.textBaseline = 'middle';
+//         ctx.fillText("参加する", centerX, btnY + btnHeight / 2);
+
+//         ctx.restore();
+//     }
+
+//     // 初始化
+//     resizeCanvas();
+
+//     // 添加简单的交互效果（鼠标移动增加辉光）
+//     canvas.addEventListener('mousemove', (e) => {
+//         // 这里可以添加悬停检测逻辑，为演示简单起见，我们仅重绘
+//         // 在实际应用中，会检测鼠标坐标是否在按钮区域内
+//         const rect = canvas.getBoundingClientRect();
+//         const x = e.clientX - rect.left;
+//         const y = e.clientY - rect.top;
+//         // 简单的重绘，实际项目中可以在这里改变按钮样式变量
+//         requestAnimationFrame(draw);
+//     });
+
+// </script>
+
+// </body>
+// </html>
+
+
+
+
+
+
+
+
+
+
+
