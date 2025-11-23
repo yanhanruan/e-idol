@@ -14,9 +14,19 @@ export default {
           '"PingFang SC"',            // 苹方-简 (Mac中文)
           '"Hiragino Sans"',          // 冬青黑体 (Mac日语/中文)
           '"Noto Sans JP"',           // Google Noto (日语)
-          '"Microsoft YaHei"',        // 微软雅黑 (Win中文)
           '"WenQuanYi Micro Hei"',    // 文泉驿 (Linux)
-          'sans-serif'
+          'sans-serif',
+          // cross systems
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          'Oxygen',
+          'Ubuntu',
+          'Cantarell',
+          '"Open Sans"',
+          '"Helvetica Neue"',
+          'sans-serif',
         ],
       },
       colors: {

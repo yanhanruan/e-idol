@@ -31,7 +31,7 @@ const LanguageSelector = ({ lang, setLang }) => {
     const selectedLanguage = languages.find(l => l.value === lang);
 
     // 恢复原版视觉：深色玻璃 + 边框 + 阴影 + Cyan文字悬停
-    const sharedClasses = "font-sans font-bold bg-[#050510]/80 border border-white/10 text-slate-300 shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-md group-hover:text-cyan-50 transition-all duration-300";
+    const sharedClasses = "font-sans bg-[#050510]/80 border border-white/10 text-slate-300 shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-md group-hover:text-cyan-50 transition-all duration-300";
 
     return (
         <div className="flex items-center" ref={dropdownRef}>
@@ -40,7 +40,7 @@ const LanguageSelector = ({ lang, setLang }) => {
                     onClick={() => setIsOpen(!isOpen)}
                     className={`
                         relative flex items-center justify-center
-                        focus:outline-none cursor-pointer 
+                        focus:outline-none font-medium cursor-pointer 
                         group hover:bg-[#0a0a20] hover:border-cyan-500/30 hover:shadow-[0_0_10px_rgba(34,211,238,0.2)]
                         ${sharedClasses}
                         
@@ -54,7 +54,7 @@ const LanguageSelector = ({ lang, setLang }) => {
                 >
                     {/* 手机端显示的图标 (Globe) */}
                     <span className="md:hidden flex items-center justify-center">
-                         <Globe className="w-4 h-4 group-hover:text-cyan-400 transition-colors" />
+                         <Globe className="w-4 h-4 group-hover:text-cyan-200/70 transition-colors" />
                     </span>
 
                     {/* 电脑端显示的内容 (文字 + Chevron) */}
@@ -87,9 +87,9 @@ const LanguageSelector = ({ lang, setLang }) => {
                                 <button
                                     onClick={() => handleSelect(language.value)}
                                     className={`
-                                        w-full text-left px-4 py-3 text-sm 
+                                        w-full text-left px-4 py-3 text-sm font-medium
                                         transition-all duration-200
-                                        font-sans font-bold tracking-wide
+                                        font-sans tracking-wide
                                         ${lang === language.value
                                             ? 'text-cyan-400 bg-cyan-900/20'
                                             : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5'
@@ -116,7 +116,7 @@ const Header = () => {
     const leftButtonBaseClass = "w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110 group border border-white/5 relative";
 
     return (
-        <header className="sticky top-0 z-50 w-full h-16 bg-[#03030a] font-sans font-bold">
+        <header className="sticky top-0 z-50 w-full h-16 md:h-12 bg-[#03030a] font-sans">
             {/* --- Background Effects (恢复原版背景特效) --- */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#020205] z-0 pointer-events-none opacity-95"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-16 bg-blue-900/10 blur-3xl z-0 pointer-events-none"></div>
@@ -152,7 +152,7 @@ const Header = () => {
                             backdropFilter: 'blur(10px)'
                         }}>
                             <Bell size={18} className="group-hover:scale-110 transition-transform" />
-                            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full text-[9px] flex items-center justify-center font-bold text-white shadow-sm" style={{
+                            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full text-[9px] flex items-center justify-center text-white shadow-sm" style={{
                                 background: 'linear-gradient(135deg, #ff0055, #ff3388)',
                                 boxShadow: '0 0 10px rgba(255, 0, 85, 0.6)'
                             }}>3</span>
@@ -174,7 +174,7 @@ const Header = () => {
                                     <span
                                         className={`text-sm tracking-wider transition-all duration-300 ease-out
                                             ${isActive
-                                                ? 'text-cyan-50 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]'
+                                                ? 'text-cyan-50 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]'
                                                 : 'text-slate-400 group-hover:text-slate-200'
                                             }
                                         `}
@@ -203,9 +203,9 @@ const Header = () => {
                             <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full opacity-70 blur-[2px] group-hover:opacity-100 group-hover:blur-[4px] transition duration-300"></div>
 
                             {/* Button Inner - 调整 padding 适应紧凑布局 (原版 py-2 -> py-1.5) */}
-                            <button className="relative px-6 py-1.5 bg-[#050510] rounded-full flex items-center justify-center overflow-hidden border border-white/10 hover:bg-[#0a0a20] transition-colors duration-300">
+                            <button className="relative px-5 py-1 bg-[#050510] rounded-full flex items-center justify-center overflow-hidden border border-white/10 hover:bg-[#0a0a20] transition-colors duration-300">
                                 {/* Inner Text Glow */}
-                                <span className="text-sm bg-gradient-to-r from-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
+                                <span className="text-sm font-semibold bg-gradient-to-r from-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
                                     {t.register}
                                 </span>
 
