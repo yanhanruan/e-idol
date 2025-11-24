@@ -9,7 +9,7 @@ const createGlowDiamondImage = () => {
   canvas.height = size;
   const ctx = canvas.getContext('2d');
   const center = size / 2;
-  const radius = 3; // 粒子实际大小 (菱形半径)
+  const radius = 2; // 粒子实际大小 (菱形半径)
 
   // 2. 强光晕配置
   // 核心不再是纯白，而是半透明，让它看起来“透”
@@ -113,8 +113,11 @@ const BackgroundDecorations = () => {
     let animationFrameId;
     let particles = [];
 
+    // --- 1. 智能配置：根据屏幕宽度决定数量 ---
+    const isMobile = window.innerWidth < 768; // 常见的手机/平板分界线
+
     const CONFIG = {
-      count: 20,              // --- 数量调整为 25 ---
+      count: isMobile ? 8 : 25,              // --- 手机优化 ---
       minSpeed: 0.1,          // 极慢
       maxSpeed: 0.3, 
       fadeDuration: 1500,     // --- 增加淡入时间 --- (让“随机出生”更自然，像是在呼吸)
