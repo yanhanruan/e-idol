@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, ChevronDown, Globe, User, Plus } from "lucide-react"; 
+import { Bell, ChevronDown, Globe, User, Plus, Menu, X } from "lucide-react";
 import { useTranslations } from '../../contexts/LanguageContext';
 import { useTransition } from '@src/contexts/TransitionContext';
 
-// --- Sub-component: LanguageSelector ---
+// --- Sub-component: LanguageSelector (保持完全原样) ---
 const LanguageSelector = ({ lang, setLang }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const { startTransition } = useTransition(); // 2. 获取触发器
+    const { startTransition } = useTransition(); 
 
     const languages = [
         { value: 'ja', label: '日本語' },
@@ -26,24 +26,17 @@ const LanguageSelector = ({ lang, setLang }) => {
     }, []);
 
     const handleSelect = (value) => {
-        // 如果点击的是当前语言，直接忽略
         if (value === lang) {
             setIsOpen(false);
             return;
         }
-
-        setIsOpen(false); // 先关闭下拉菜单，让截图画面更干净（可选）
-
-        // 3. 核心修改：用转场包裹状态更新
-        // 这行代码的意思是："先截个图，挡住屏幕，然后我再悄悄换语言"
+        setIsOpen(false); 
         startTransition(() => {
             setLang(value);
         });
     };
 
     const selectedLanguage = languages.find(l => l.value === lang);
-
-    // 恢复原版视觉：深色玻璃 + 边框 + 阴影 + Cyan文字悬停
     const sharedClasses = "font-sans bg-[#050510]/80 border border-white/10 text-slate-300 shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-md group-hover:text-cyan-50 transition-all duration-300";
 
     return (
@@ -56,21 +49,13 @@ const LanguageSelector = ({ lang, setLang }) => {
                         focus:outline-none font-medium cursor-pointer 
                         group hover:bg-[#0a0a20] hover:border-cyan-500/30 hover:shadow-[0_0_10px_rgba(34,211,238,0.2)]
                         ${sharedClasses}
-                        
-                        /* --- 响应式布局核心 --- */
-                        /* 手机端：圆形，纯图标，w-9 h-9 (36px) */
                         w-9 h-9 rounded-full 
-                        
-                        /* 电脑端：胶囊形，文字+图标，宽度适中 */
                         md:w-36 md:h-auto md:py-1.5 md:px-4 md:justify-between
                     `}
                 >
-                    {/* 手机端显示的图标 (Globe) */}
                     <span className="md:hidden flex items-center justify-center">
                          <Globe className="w-4 h-4 group-hover:text-cyan-200/70 transition-colors" />
                     </span>
-
-                    {/* 电脑端显示的内容 (文字 + Chevron) */}
                     <span className="hidden md:block truncate tracking-wide text-sm">
                         {selectedLanguage?.label}
                     </span>
@@ -81,8 +66,6 @@ const LanguageSelector = ({ lang, setLang }) => {
                         `}
                     />
                 </button>
-
-                {/* 下拉菜单 (保持原版样式) */}
                 {isOpen && (
                     <div
                         className={`
@@ -123,21 +106,43 @@ const LanguageSelector = ({ lang, setLang }) => {
 // --- Main Component: Header ---
 const Header = () => {
     const { lang, setLang, t } = useTranslations();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // 恢复原版内联样式逻辑，但应用到更紧凑的尺寸上
-    // 保留了 gradient 背景和 box-shadow 光晕
+    // 1. 创建 Refs 用于检测点击外部
+    const mobileMenuRef = useRef(null);
+    const mobileMenuBtnRef = useRef(null);
+
     const leftButtonBaseClass = "w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110 group border border-white/5 relative";
 
+    const navItems = ['home', 'process', 'pricing','castList','recruitment'];
+
+    // 2. 添加 useEffect 处理点击外部关闭菜单逻辑
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // 如果菜单是打开的，且点击的目标既不在菜单内，也不在触发按钮内
+            if (
+                isMobileMenuOpen &&
+                mobileMenuRef.current &&
+                !mobileMenuRef.current.contains(event.target) &&
+                mobileMenuBtnRef.current &&
+                !mobileMenuBtnRef.current.contains(event.target)
+            ) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isMobileMenuOpen]);
+
     return (
-        <header className="sticky top-0 z-50 w-full h-15 py-2 md:py-0 md:h-14 bg-white/5 backdrop-blur-md border-b border-white/5 font-sans">  
+        <header className="sticky top-0 z-50 w-full h-15 py-2 md:py-0 md:h-14 bg-[#172133]/90 backdrop-blur-md border-b border-white/5 font-sans">  
 
             <div className="relative z-10 max-w-[1920px] h-full mx-auto px-4 md:px-8">
                 <div className="flex items-center justify-between h-full">
 
-                    {/* --- LEFT SECTION: User/Action Icons --- */}
-                    {/* 恢复了原本的三色区分逻辑，但使用了 lucid-react 图标，并稍微缩小尺寸适应 h-16 */}
+                    {/* --- LEFT SECTION --- */}
                     <div className="flex items-center space-x-3">
-                        {/* User Button: Blue/Cyan Theme */}
                         <button className={leftButtonBaseClass} style={{
                             background: 'linear-gradient(135deg, rgba(0, 100, 150, 0.4), rgba(0, 50, 100, 0.4))',
                             boxShadow: '0 0 15px rgba(0, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
@@ -146,7 +151,6 @@ const Header = () => {
                             <User size={18} className="group-hover:scale-110 transition-transform" />
                         </button>
 
-                        {/* Add Button: Purple/Magenta Theme */}
                         <button className={leftButtonBaseClass} style={{
                             background: 'linear-gradient(135deg, rgba(100, 0, 150, 0.4), rgba(50, 0, 100, 0.4))',
                             boxShadow: '0 0 15px rgba(255, 0, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
@@ -155,7 +159,6 @@ const Header = () => {
                             <Plus size={18} className="group-hover:scale-110 transition-transform" />
                         </button>
 
-                        {/* Bell Button: Red/Pink Theme */}
                         <button className={leftButtonBaseClass} style={{
                             background: 'linear-gradient(135deg, rgba(150, 0, 100, 0.4), rgba(100, 0, 50, 0.4))',
                             boxShadow: '0 0 15px rgba(255, 0, 100, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
@@ -169,12 +172,10 @@ const Header = () => {
                         </button>
                     </div>
 
-                    {/* --- CENTER SECTION: Navigation --- */}
-                    {/* 居中 + 恢复原本的底部 Neon Underline 效果 */}
+                    {/* --- CENTER SECTION: Desktop Navigation --- */}
                     <nav className="hidden md:flex items-center space-x-12 absolute left-1/2 -translate-x-1/2 h-full">
-                        {['home', 'search', 'message'].map((item) => {
-                            const isActive = item === 'search';
-
+                        {navItems.map((item) => {
+                            const isActive = item === 'home';
                             return (
                                 <a
                                     key={item}
@@ -191,8 +192,6 @@ const Header = () => {
                                     >
                                         {t[item]}
                                     </span>
-
-                                    {/* Neon Underline (恢复原版，调整位置适应 h-16) */}
                                     <span
                                         className={`absolute bottom-3 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_#22d3ee] transition-all duration-300 ease-out
                                             ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}
@@ -203,29 +202,74 @@ const Header = () => {
                         })}
                     </nav>
 
-                    {/* --- RIGHT SECTION: Lang Selector & Register --- */}
-                    <div className="flex items-center space-x-4">
+                    {/* --- RIGHT SECTION --- */}
+                    <div className="flex items-center space-x-3 md:space-x-4">
                         <LanguageSelector t={t} lang={lang} setLang={setLang} />
 
-                        {/* Register Button - 恢复原版所有的光效和渐变边框 */}
-                        <div className="relative group">
-                            {/* Gradient Border Container */}
-                            <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full opacity-70 blur-[2px] group-hover:opacity-100 group-hover:blur-[4px] transition duration-300"></div>
+                        {/* Mobile Menu Toggle Button */}
+                        <button 
+                            ref={mobileMenuBtnRef} // 绑定 Ref
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-[#050510]/80 border border-white/10 text-slate-300 hover:text-cyan-400 transition-colors duration-300 focus:outline-none shadow-[0_0_15px_rgba(0,0,0,0.3)] ml-1"
+                        >
+                            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                        </button>
 
-                            {/* Button Inner - 调整 padding 适应紧凑布局 (原版 py-2 -> py-1.5) */}
+                        {/* Register Button */}
+                        <div className="relative group">
+                            <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full opacity-70 blur-[2px] group-hover:opacity-100 group-hover:blur-[4px] transition duration-300"></div>
                             <button className="relative px-5 py-1 bg-[#050510] rounded-full flex items-center justify-center overflow-hidden border border-white/10 hover:bg-[#0a0a20] transition-colors duration-300">
-                                {/* Inner Text Glow */}
                                 <span className="text-sm font-semibold bg-gradient-to-r from-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
                                     {t.register}
                                 </span>
-
-                                {/* Subtle shine effect on hover (原版保留) */}
                                 <div className="absolute top-0 -left-10 w-10 h-full bg-white/10 -skew-x-12 group-hover:translate-x-40 transition-transform duration-700 ease-in-out"></div>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* --- 4. Mobile Navigation Menu (下拉面板) --- */}
+            <div 
+                ref={mobileMenuRef} // 绑定 Ref
+                className={`
+                    md:hidden absolute top-full 
+                    right-0 w-1/2 min-w-[200px]  
+                    bg-[#172133]/90 backdrop-blur-xl 
+                    border-b border-l border-white/10 
+                    rounded-bl-2xl
+                    transition-all duration-300 ease-in-out origin-top-right overflow-hidden
+                    ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
+                `}
+            >
+                <div className="flex flex-col py-4 px-4 space-y-2">
+                    {navItems.map((item) => {
+                        const isActive = item === 'home';
+                        return (
+                            <a
+                                key={item}
+                                href="#"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className={`
+                                    relative px-4 py-3 rounded-lg text-sm font-medium tracking-wide transition-all duration-300
+                                    ${isActive 
+                                        ? 'bg-cyan-900/20 text-cyan-400 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.1)]' 
+                                        : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5 border border-transparent'
+                                    }
+                                `}
+                            >
+                                <div className="flex items-center justify-between">
+                                    {t[item]}
+                                    {isActive && (
+                                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+                                    )}
+                                </div>
+                            </a>
+                        );
+                    })}
+                </div>
+            </div>
+
         </header>
     );
 }

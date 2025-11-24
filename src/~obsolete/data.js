@@ -3,9 +3,11 @@
 // 国际化文本
 export const i18n = {
     ja: {
-      message: 'メッセージ',
-      search: '検索',
       home: 'ホーム',
+      process: 'ご利用の流れ',
+      pricing: '料金表',
+      castList:'キャスト一覧',
+      recruitment:'リクルート',
       login: 'ログイン',
       register: '登録',
       safeReview: '安心の相互評価制度',
@@ -56,9 +58,11 @@ export const i18n = {
       }
     },
     en: {
-      message: 'Message',
-      search: 'Search',
       home: 'Home',
+      process: 'process',
+      pricing: 'Pricing',
+      castList:'CastList',
+      recruitment:'Recruitment',
       login: 'Log in',
       register: 'Sign up',
       safeReview: 'Safe Mutual Rating System',
@@ -109,9 +113,11 @@ export const i18n = {
       }
     },
     zh: {
-      message: '消息',
-      search: '搜索',
-      home: '首页',
+      home: '主页',
+      process: '使用流程',
+      pricing: '价位表',
+      castList:'员工列表',
+      recruitment:'员工招募',
       login: '登录',
       register: '注册',
       safeReview: '安心的互相评价制度',
