@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, ChevronDown, Globe, User, Plus, Menu, X } from "lucide-react";
+import { Bell, Globe, User, Plus, Menu, X } from "lucide-react";
 import { useTranslations } from '../../contexts/LanguageContext';
 import { useTransition } from '@src/contexts/TransitionContext';
 
@@ -29,7 +29,7 @@ const LanguageSelector = () => {
             label={currentLabel}
             options={languages}
             onChange={(val) => startTransition(() => setLang(val))}
-            icon={<Globe />} // 传入图标用于移动端展示
+            icon={<Globe />} 
         />
     );
 };
@@ -55,61 +55,74 @@ const Header = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isMobileMenuOpen]);
 
-    // 左侧按钮通用样式
-    const leftBtnClass = `w-9 h-9 rounded-xl flex items-center justify-center text-white hover:scale-110 group border border-white/5 relative ${transitionStyle}`;
+    // 左侧按钮通用样式 [修改]: w-9 -> w-8 (32px) 更小巧
+    const leftBtnClass = `w-8 h-8 rounded-lg flex items-center justify-center text-white hover:scale-110 group border border-white/5 relative ${transitionStyle}`;
 
     return (
-        <header className="sticky top-0 z-50 w-full h-15 py-2 md:py-0 md:h-14 bg-white/5 backdrop-blur-md border-b border-white/5 font-sans">
-            <div className="relative z-10 max-w-[1920px] h-full mx-auto px-4 md:px-8">
+        // [修改]: md:h-14 -> md:h-12 (高度变矮)
+        <header className="sticky top-0 z-50 w-full h-14 md:h-12 py-2 md:py-0 bg-[#0a0a1aa4] backdrop-blur-md border-b border-white/5 font-sans">
+            {/* [修改]: max-w-[1920px] -> max-w-7xl (1280px) 收窄两边间距，更聚气 */}
+            {/* [修改]: md:px-8 -> md:px-6 */}
+            <div className="relative z-10 max-w-7xl h-full mx-auto px-4 md:px-6">
                 <div className="flex items-center justify-between h-full">
 
                     {/* --- Left Section: Action Icons --- */}
-                    <div className="flex items-center space-x-3">
+                    {/* [修改]: space-x-3 -> space-x-2 (图标靠得更近) */}
+                    <div className="flex items-center space-x-2">
                         <button className={leftBtnClass} style={{ background: 'linear-gradient(135deg, rgba(0, 100, 150, 0.4), rgba(0, 50, 100, 0.4))', boxShadow: '0 0 15px rgba(0, 255, 255, 0.15)' }}>
-                            <User size={18} />
+                            <User size={16} /> {/* [修改]: size 18 -> 16 */}
                         </button>
                         <button className={leftBtnClass} style={{ background: 'linear-gradient(135deg, rgba(100, 0, 150, 0.4), rgba(50, 0, 100, 0.4))', boxShadow: '0 0 15px rgba(255, 0, 255, 0.15)' }}>
-                            <Plus size={18} />
+                            <Plus size={16} />
                         </button>
                         <button className={leftBtnClass} style={{ background: 'linear-gradient(135deg, rgba(150, 0, 100, 0.4), rgba(100, 0, 50, 0.4))', boxShadow: '0 0 15px rgba(255, 0, 100, 0.15)' }}>
-                            <Bell size={18} />
-                            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full text-[9px] flex items-center justify-center text-white bg-gradient-to-br from-[#ff0055] to-[#ff3388] shadow-[0_0_10px_rgba(255,0,85,0.6)]">3</span>
+                            <Bell size={16} />
+                            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full text-[8px] flex items-center justify-center text-white bg-gradient-to-br from-[#ff0055] to-[#ff3388] shadow-[0_0_10px_rgba(255,0,85,0.6)]">3</span>
                         </button>
                     </div>
 
                     {/* --- Center Section: Desktop Nav --- */}
-                    <nav className="hidden md:flex items-center space-x-12 absolute left-1/2 -translate-x-1/2 h-full">
+                    {/* [修改]: space-x-12 -> space-x-8 (拉近导航间距) */}
+                    <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2 h-full">
                         {navItems.map((item) => {
                             const isActive = item === 'home';
                             return (
-                                <a key={item} href="#" className="group relative flex flex-col items-center justify-center h-full px-2 outline-none">
-                                    <span className={`text-sm tracking-wider ${transitionStyle} ${isActive ? 'text-cyan-50 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                // [修改]: px-2 -> px-1
+                                <a key={item} href="#" className="group relative flex flex-col items-center justify-center h-full px-1 outline-none">
+                                    {/* [修改]: text-sm -> text-xs (12px) 字体变小 */}
+                                    {/* [关键修改]: whitespace-nowrap 强制不换行，防止文字竖排 */}
+                                    <span className={`text-xs font-medium tracking-widest whitespace-nowrap ${transitionStyle} ${isActive ? 'text-cyan-50 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'text-slate-400 group-hover:text-slate-200'}`}>
                                         {t[item]}
                                     </span>
-                                    <span className={`absolute bottom-3 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_#22d3ee] ${transitionStyle} ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}`}></span>
+                                    {/* 下划线指示条 */}
+                                    <span className={`absolute bottom-2 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_#22d3ee] ${transitionStyle} ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}`}></span>
                                 </a>
                             );
                         })}
                     </nav>
 
                     {/* --- Right Section: Lang, Menu, Register --- */}
-                    <div className="flex items-center space-x-3 md:space-x-4">
+                    {/* [修改]: space-x-4 -> space-x-3 */}
+                    <div className="flex items-center space-x-3">
                         <LanguageSelector t={t} lang={lang} setLang={setLang} />
 
                         {/* Mobile Menu Toggle */}
                         <button 
                             ref={btnRef}
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className={`md:hidden flex items-center justify-center w-9 h-9 rounded-full text-slate-300 hover:text-cyan-400 ml-1 ${glassStyle} ${transitionStyle}`}
+                            className={`md:hidden flex items-center justify-center w-8 h-8 rounded-full text-slate-300 hover:text-cyan-400 ml-1 ${glassStyle} ${transitionStyle}`}
                         >
                             {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
                         </button>
 
                         {/* Register Button */}
-                        <CyberButton 
-                            text={t.register} 
-                            onClick={() => console.log('register')} 
-                        />
+                        {/* 如果 CyberButton 支持 className 覆盖，可以加上 text-xs */}
+                        <div className="scale-90 origin-right"> {/* [修改]: 直接用 scale-90 暴力缩小右侧按钮 */}
+                            <CyberButton 
+                                text={t.register} 
+                                onClick={() => console.log('register')} 
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -119,7 +132,7 @@ const Header = () => {
                 ref={menuRef}
                 className={`
                     md:hidden absolute top-full right-0 w-1/2 min-w-[200px]
-                    bg-[#050510]/95 backdrop-blur-xl border-b border-l border-white/10 rounded-bl-2xl shadow-[-10px_10px_30px_rgba(0,0,0,0.8)]
+                    bg-[#0a0a1ad1] backdrop-blur-xl border-b border-l border-white/10 rounded-bl-2xl shadow-[-10px_10px_30px_rgba(0,0,0,0.5)]
                     origin-top-right overflow-hidden
                     ${transitionStyle}
                     ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}

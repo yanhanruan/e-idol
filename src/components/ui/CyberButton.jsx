@@ -21,7 +21,7 @@ const CyberButton = ({ text, children, onClick, className = "" }) => {
         className="relative px-5 py-1 bg-[#050510] rounded-full flex items-center justify-center border border-white/10 hover:bg-[#0a0a20] transition-colors duration-300 overflow-hidden w-full h-full"
       >
         {/* 文字渐变 */}
-        <span className="text-sm font-semibold bg-gradient-to-r from-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
+        <span className="text-sm md:text-xs font-semibold bg-gradient-to-r from-cyan-100 to-white bg-clip-text text-transparent drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
           {content}
         </span>
         

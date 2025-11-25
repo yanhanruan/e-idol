@@ -108,7 +108,7 @@ const BackgroundDecorations = () => {
     const isMobile = window.innerWidth < 768;
 
     const CONFIG = {
-      count: isMobile ? 8 : 25,
+      count: isMobile ? 8 : 20,
       // 速度单位：像素/秒
       minSpeed: 10, 
       maxSpeed: 25, 

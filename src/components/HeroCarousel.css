@@ -86,15 +86,15 @@
 
 @keyframes characterFloat {
   0%, 100% {
-    /* 保持原有的放大和位移，轻微向上浮动 */
-    transform: scale(1.35) translateY(48px) ; 
-    /* 阴影也随之轻微变化 */
+    /* [修改]: 从 scale(1.35) 改为 scale(1.1)，大幅减小体积 */
+    /* [修改]: translateY(48px) 改为 30px，减小位移幅度 */
+    transform: scale(1.35) translateY(30px); 
     filter: drop-shadow(0 20px 40px rgba(0, 255, 255, 0.5));
   }
   50% {
-    /* 轻微向下沉，创造呼吸感 */
-    transform: scale(1.35) translateY(55px);
-    /* 下沉时阴影变重 */
+    /* [修改]: scale(1.35) 改为 scale(1.1) */
+    /* [修改]: translateY(55px) 改为 38px */
+    transform: scale(1.35) translateY(38px);
     filter: drop-shadow(0 25px 50px rgba(0, 255, 255, 0.6));
   }
 }

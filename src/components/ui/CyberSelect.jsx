@@ -52,7 +52,7 @@ const CyberSelect = ({ value, label, options, onChange, icon }) => {
                     {icon ? React.cloneElement(icon, { className: "w-4 h-4 group-hover:text-cyan-200/70" }) : label?.slice(0,2)}
                 </span>
                 
-                <span className="hidden md:block truncate tracking-wide text-sm">{label}</span>
+                <span className="hidden md:block truncate tracking-wide text-sm md:text-xs">{label}</span>
                 
                 <ChevronDown className={`hidden md:block w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
@@ -60,7 +60,7 @@ const CyberSelect = ({ value, label, options, onChange, icon }) => {
             {/* 下拉菜单面板 */}
             <div className={`
                 absolute top-full right-0 mt-2 w-36 rounded-xl overflow-hidden
-                border border-white/10 bg-[#0a0a1a] shadow-[0_0_30px_rgba(0,0,0,0.8)] origin-top-right
+                border border-white/10 bg-[#0a0a1ad1] shadow-[0_0_30px_rgba(0,0,0,0.8)] origin-top-right
                 ${transitionStyle}
                 ${isOpen ? 'max-h-[200px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95 pointer-events-none'}
             `}>
@@ -69,7 +69,7 @@ const CyberSelect = ({ value, label, options, onChange, icon }) => {
                         {i > 0 && <div className="mx-2 h-[1px] bg-white/5" />}
                         <button
                             onClick={() => handleSelect(opt.value)}
-                            className={`w-full text-left px-4 py-3 text-sm font-medium font-sans tracking-wide transition-colors duration-200 
+                            className={`w-full text-left px-4 py-3 text-sm md:text-xs font-medium font-sans tracking-wide transition-colors duration-200 
                                 ${value === opt.value ? 'text-cyan-400 bg-cyan-900/20' : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5'}`}
                         >
                             {opt.label}
