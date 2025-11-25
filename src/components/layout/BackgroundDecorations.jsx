@@ -1,35 +1,25 @@
 import React, { useEffect, useRef } from 'react';
 
-// --- 核心视觉调整：柔和光晕菱形 ---
+// --- 素材生成逻辑 (保持不变) ---
 const createGlowDiamondImage = () => {
   const canvas = document.createElement('canvas');
-  // 1. 扩大画板：为了容纳巨大的柔和光晕，画板必须足够大，否则光晕会被切成方形
   const size = 128; 
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext('2d');
   const center = size / 2;
-  const radius = 2; // 粒子实际大小 (菱形半径)
+  const radius = 2;
 
-  // 2. 强光晕配置
-  // 核心不再是纯白，而是半透明，让它看起来“透”
   ctx.fillStyle = 'rgba(255, 255, 255, 0.4)'; 
-  
-  // 3. 制造明显的辉光
-  // Blur 值很大 (20)，且颜色饱和度高
   ctx.shadowBlur = 20;
-  ctx.shadowColor = 'rgba(34, 211, 238, 1)'; // 强青色光晕
+  ctx.shadowColor = 'rgba(34, 211, 238, 1)';
 
-  // 4. 绘制菱形
   ctx.translate(center, center);
-  ctx.rotate(Math.PI / 4); // 旋转45度
+  ctx.rotate(Math.PI / 4);
   ctx.beginPath();
-  // 绘制实心矩形(即旋转后的菱形)
   ctx.rect(-radius, -radius, radius * 2, radius * 2);
   ctx.fill();
 
-  // 5. [可选] 二次叠加增强核心
-  // 为了让最中心稍微亮一点点，避免看起来像一团模糊的雾
   ctx.shadowBlur = 0;
   ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
   ctx.beginPath();
@@ -42,61 +32,61 @@ const createGlowDiamondImage = () => {
 class Particle {
   constructor(w, h, config) {
     this.config = config;
-    this.init(w, h); // 移除 isInitial 参数，统一逻辑
+    this.init(w, h);
   }
 
   init(w, h) {
     this.x = Math.random() * w;
-    
-    // --- 核心逻辑修改：全屏随机出生 ---
-    // 无论是初始化还是重生，都在屏幕任意高度生成
-    // 配合 fade-in 动画，这会让粒子看起来是“慢慢浮现”的，而不是突然弹出来
     this.y = Math.random() * h;
-    
     this.scale = 1.0;
     
-    // 保持极慢的速度
+    // 速度单位改为：像素/每秒 (Pixels Per Second)
+    // 之前是 0.1~0.3 像素/每帧。假设60fps，相当于 6~18 px/s
+    // 我们设定为 10 ~ 25 px/s，保证极慢但可见
     this.speed = Math.random() * (this.config.maxSpeed - this.config.minSpeed) + this.config.minSpeed;
     
     this.opacity = 0;
     this.state = 'fadingIn';
-    this.fadeStep = 1 / (this.config.fadeDuration / 16.6);
+    // 淡入速度也基于时间 (1秒完成)
+    this.fadeDuration = this.config.fadeDuration; 
+    this.lifeTime = 0; // 记录存活时间
   }
 
-  update(h) {
-    this.y -= this.speed;
+  // --- 关键修改：接收 deltaTime (时间增量) ---
+  update(h, dt) {
+    // 1. 基于时间的移动： 速度 * (经过的秒数)
+    // 这样无论 60Hz 还是 120Hz 还是卡顿，移动距离都是平滑的
+    const moveStep = this.speed * (dt / 1000); 
+    this.y -= moveStep;
+    this.lifeTime += dt;
 
     if (this.state === 'fadingIn') {
-      this.opacity += this.fadeStep;
+      // 计算当前透明度： 存活时间 / 总淡入时间
+      this.opacity = Math.min(1, this.lifeTime / this.fadeDuration);
       if (this.opacity >= 1) {
-        this.opacity = 1;
         this.state = 'alive';
       }
     } else if (this.state === 'alive') {
-      // 随机消亡
-      if (Math.random() < this.config.deathChance) {
+      // 随机消亡 (概率需要根据 dt 调整，保证不同帧率下概率一致)
+      // 这里的简化处理：每秒约 5% 概率死亡
+      if (Math.random() < this.config.deathChance * (dt / 16)) {
         this.state = 'fadingOut';
       }
-      
-      // 边界检查：只有当粒子完全跑出屏幕很远才判定为死亡
-      // 因为现在可以在任意位置出生，如果太靠近顶部出生，很快就会飞出去，这没关系
       if (this.y < -100) return false;
     } else if (this.state === 'fadingOut') {
-      this.opacity -= this.fadeStep;
+      // 简单的线性递减
+      this.opacity -= 0.001 * dt; // 约1秒淡出
       if (this.opacity <= 0) return false;
     }
     return true;
   }
 
   draw(ctx, particleImage) {
-    // 呼吸感 (Twinkle)
     const twinkle = Math.random() * 0.05; 
     ctx.globalAlpha = Math.max(0, this.opacity - twinkle);
-    
-    // 绘制离屏图片
-    // 因为离屏Canvas很大(128px)以容纳光晕，绘制时保持这个尺寸，让光晕自然铺开
-    // 视觉上的“粒子”看起来还是很小，但占据的像素空间包含了光晕
     const drawSize = 128 * this.scale;
+    // Math.floor 优化：有时强制整数坐标能解决某些特定机型的抖动，
+    // 但配合 DPR 优化后，直接用浮点数通常更丝滑。
     ctx.drawImage(particleImage, this.x - drawSize/2, this.y - drawSize/2, drawSize, drawSize);
   }
 }
@@ -112,53 +102,74 @@ const BackgroundDecorations = () => {
     const ctx = canvas.getContext('2d');
     let animationFrameId;
     let particles = [];
+    let lastTime = 0; // 用于计算时间增量
 
-    // --- 1. 智能配置：根据屏幕宽度决定数量 ---
-    const isMobile = window.innerWidth < 768; // 常见的手机/平板分界线
+    // 判断移动端
+    const isMobile = window.innerWidth < 768;
 
     const CONFIG = {
-      count: isMobile ? 8 : 25,              // --- 手机优化 ---
-      minSpeed: 0.1,          // 极慢
-      maxSpeed: 0.3, 
-      fadeDuration: 1500,     // --- 增加淡入时间 --- (让“随机出生”更自然，像是在呼吸)
-      deathChance: 0.001,     // 低消亡率
+      count: isMobile ? 8 : 25,
+      // 速度单位：像素/秒
+      minSpeed: 10, 
+      maxSpeed: 25, 
+      fadeDuration: 1500,
+      deathChance: 0.001,
     };
 
-    // 生成素材
     particleImageRef.current = createGlowDiamondImage();
 
+    // --- 核心优化 1: 高清屏 (Retina/High-DPI) 适配 ---
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // 获取设备像素比 (通常是 2 或 3)
+      const dpr = window.devicePixelRatio || 1;
+      
+      // 设置 Canvas 的内部“物理分辨率” (变大)
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      
+      // 设置 Canvas 的 CSS“显示尺寸” (保持不变)
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      
+      // 关键：缩放绘图上下文，让我们依然可以用逻辑像素坐标思考
+      ctx.scale(dpr, dpr);
     };
+    
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // 初始化
+    // 初始化 (注意：这里传入的是逻辑宽高，因为我们已经 scale 了 context)
     for (let i = 0; i < CONFIG.count; i++) {
-      particles.push(new Particle(canvas.width, canvas.height, CONFIG));
+      particles.push(new Particle(window.innerWidth, window.innerHeight, CONFIG));
     }
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // 使用 screen 混合模式，确保光晕通透
+    const animate = (timestamp) => {
+      if (!lastTime) lastTime = timestamp;
+      // 计算两帧之间的时间差 (ms)
+      const deltaTime = timestamp - lastTime;
+      lastTime = timestamp;
+
+      // 限制最大 dt，防止切换标签页回来后粒子瞬移
+      const safeDt = Math.min(deltaTime, 64);
+
+      // 清空画布 (使用逻辑尺寸)
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.globalCompositeOperation = 'screen'; 
 
       particles.forEach(p => {
-        const isAlive = p.update(canvas.height);
+        // --- 核心优化 2: 传入 dt 确保平滑 ---
+        const isAlive = p.update(window.innerHeight, safeDt);
         if (isAlive) {
           p.draw(ctx, particleImageRef.current);
         } else {
-          // 死亡后，重新随机生成在全屏任意位置
-          p.init(canvas.width, canvas.height);
+          p.init(window.innerWidth, window.innerHeight);
         }
       });
 
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    animate();
+    animationFrameId = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
