@@ -1,52 +1,65 @@
+// src/components/layout/Header.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Bell, Globe, User, Plus, Menu, X } from "lucide-react";
+import { Link, useLocation } from "wouter"; // [新增]: 引入路由组件
 import { useTranslations } from '../../contexts/LanguageContext';
-import { useTransition } from '@src/contexts/TransitionContext';
+import { useTransition } from '../../contexts/TransitionContext'; // 修正引用路径，根据实际情况调整
 
 import CyberButton from '../ui/CyberButton';
 import CyberSelect from '../ui/CyberSelect';
 
-// --- 常量定义：样式复用 ---
+// --- 常量定义 ---
 const glassStyle = "bg-[#050510]/80 backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]";
 const transitionStyle = "transition-all duration-300 ease-in-out";
-const navItems = ['home', 'process', 'pricing', 'castList', 'recruitment'];
+
+// [新增]: 定义导航项对应的 URL 路径配置
+// 键名对应 translations.js 中的 key，值为路由路径
+const navConfig = {
+    home: '/',
+    process: '/process',
+    pricing: '/pricing',
+    castList: '/castList',
+    recruitment: '/recruitment'
+};
+
+const navItems = Object.keys(navConfig); // ['home', 'process'...]
 
 const LanguageSelector = () => {
     const { lang, setLang } = useTranslations();
     const { startTransition } = useTransition();
-
     const languages = [
         { value: 'ja', label: '日本語' },
         { value: 'en', label: 'English' },
         { value: 'zh', label: '简体中文' }
     ];
-
     const currentLabel = languages.find(l => l.value === lang)?.label;
 
     return (
-        <CyberSelect 
+        <CyberSelect
             value={lang}
             label={currentLabel}
             options={languages}
             onChange={(val) => startTransition(() => setLang(val))}
-            icon={<Globe />} 
+            icon={<Globe />}
         />
     );
 };
 
-// --- Main Component: Header ---
 const Header = () => {
     const { lang, setLang, t } = useTranslations();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    
+
+    // [新增]: 获取当前路径，用于高亮判断
+    const [location] = useLocation();
+
     const menuRef = useRef(null);
     const btnRef = useRef(null);
 
     // 点击外部关闭手机菜单
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (isMobileMenuOpen && 
-                menuRef.current && !menuRef.current.contains(e.target) && 
+            if (isMobileMenuOpen &&
+                menuRef.current && !menuRef.current.contains(e.target) &&
                 btnRef.current && !btnRef.current.contains(e.target)) {
                 setIsMobileMenuOpen(false);
             }
@@ -55,22 +68,17 @@ const Header = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isMobileMenuOpen]);
 
-    // 左侧按钮通用样式 [修改]: w-9 -> w-8 (32px) 更小巧
     const leftBtnClass = `w-8 h-8 rounded-lg flex items-center justify-center text-white hover:scale-110 group border border-white/5 relative ${transitionStyle}`;
 
     return (
-        // [修改]: md:h-14 -> md:h-12 (高度变矮)
         <header className="sticky top-0 z-50 w-full h-14 md:h-12 py-2 md:py-0 bg-[#0a0a1aa4] backdrop-blur-md border-b border-white/5 font-sans">
-            {/* [修改]: max-w-[1920px] -> max-w-7xl (1280px) 收窄两边间距，更聚气 */}
-            {/* [修改]: md:px-8 -> md:px-6 */}
             <div className="relative z-10 max-w-7xl h-full mx-auto px-4 md:px-6">
                 <div className="flex items-center justify-between h-full">
 
-                    {/* --- Left Section: Action Icons --- */}
-                    {/* [修改]: space-x-3 -> space-x-2 (图标靠得更近) */}
+                    {/* --- Left Icons --- */}
                     <div className="flex items-center space-x-2">
                         <button className={leftBtnClass} style={{ background: 'linear-gradient(135deg, rgba(0, 100, 150, 0.4), rgba(0, 50, 100, 0.4))', boxShadow: '0 0 15px rgba(0, 255, 255, 0.15)' }}>
-                            <User size={16} /> {/* [修改]: size 18 -> 16 */}
+                            <User size={16} />
                         </button>
                         <button className={leftBtnClass} style={{ background: 'linear-gradient(135deg, rgba(100, 0, 150, 0.4), rgba(50, 0, 100, 0.4))', boxShadow: '0 0 15px rgba(255, 0, 255, 0.15)' }}>
                             <Plus size={16} />
@@ -82,32 +90,39 @@ const Header = () => {
                     </div>
 
                     {/* --- Center Section: Desktop Nav --- */}
-                    {/* [修改]: space-x-12 -> space-x-8 (拉近导航间距) */}
                     <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2 h-full">
                         {navItems.map((item) => {
-                            const isActive = item === 'home';
+                            const path = navConfig[item];
+                            const isActive = location === path;
+
                             return (
-                                // [修改]: px-2 -> px-1
-                                <a key={item} href="#" className="group relative flex flex-col items-center justify-center h-full px-1 outline-none">
-                                    {/* [修改]: text-sm -> text-xs (12px) 字体变小 */}
-                                    {/* [关键修改]: whitespace-nowrap 强制不换行，防止文字竖排 */}
+                                <Link
+                                    key={item}
+                                    href={path}
+                                    // [关键修复]: 直接将样式赋给 Link 组件，Link 会渲染为带有这些样式的 <a> 标签
+                                    className="group relative flex flex-col items-center justify-center h-full px-1 outline-none cursor-pointer"
+                                >
+                                    {/* 内部不需要再包一个 <a> 了 */}
+
+                                    {/* 文字部分 */}
                                     <span className={`text-xs font-medium tracking-widest whitespace-nowrap ${transitionStyle} ${isActive ? 'text-cyan-50 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'text-slate-400 group-hover:text-slate-200'}`}>
                                         {t[item]}
                                     </span>
+
                                     {/* 下划线指示条 */}
+                                    {/* 因为 Link 现在拥有 h-full，所以 absolute bottom-2 会正确地定位在 Header 底部 */}
                                     <span className={`absolute bottom-2 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_#22d3ee] ${transitionStyle} ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}`}></span>
-                                </a>
+                                </Link>
                             );
                         })}
                     </nav>
 
-                    {/* --- Right Section: Lang, Menu, Register --- */}
-                    {/* [修改]: space-x-4 -> space-x-3 */}
+                    {/* --- Right Section --- */}
                     <div className="flex items-center space-x-3">
                         <LanguageSelector t={t} lang={lang} setLang={setLang} />
 
-                        {/* Mobile Menu Toggle */}
-                        <button 
+                        {/* Mobile Toggle */}
+                        <button
                             ref={btnRef}
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             className={`md:hidden flex items-center justify-center w-8 h-8 rounded-full text-slate-300 hover:text-cyan-400 ml-1 ${glassStyle} ${transitionStyle}`}
@@ -115,20 +130,18 @@ const Header = () => {
                             {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
                         </button>
 
-                        {/* Register Button */}
-                        {/* 如果 CyberButton 支持 className 覆盖，可以加上 text-xs */}
-                        <div className="scale-90 origin-right"> {/* [修改]: 直接用 scale-90 暴力缩小右侧按钮 */}
-                            <CyberButton 
-                                text={t.register} 
-                                onClick={() => console.log('register')} 
+                        <div className="scale-90 origin-right">
+                            <CyberButton
+                                text={t.register}
+                                onClick={() => console.log('register')}
                             />
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* --- Mobile Dropdown Menu --- */}
-            <div 
+            {/* --- Mobile Menu [核心修改] --- */}
+            <div
                 ref={menuRef}
                 className={`
                     md:hidden absolute top-full right-0 w-1/2 min-w-[200px]
@@ -140,17 +153,23 @@ const Header = () => {
             >
                 <div className="flex flex-col py-4 px-4 space-y-2">
                     {navItems.map((item) => {
-                        const isActive = item === 'home';
+                        const path = navConfig[item];
+                        const isActive = location === path;
+
                         return (
-                            <a key={item} href="#" onClick={() => setIsMobileMenuOpen(false)}
-                                className={`
-                                    relative px-4 py-3 rounded-lg text-sm font-medium tracking-wide flex items-center justify-between ${transitionStyle}
-                                    ${isActive ? 'bg-cyan-900/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5 border border-transparent'}
-                                `}
-                            >
-                                {t[item]}
-                                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>}
-                            </a>
+                            // 手机端点击后自动关闭菜单
+                            <Link key={item} href={path}>
+                                <a
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={`
+                                        relative px-4 py-3 rounded-lg text-sm font-medium tracking-wide flex items-center justify-between cursor-pointer ${transitionStyle}
+                                        ${isActive ? 'bg-cyan-900/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5 border border-transparent'}
+                                    `}
+                                >
+                                    {t[item]}
+                                    {isActive && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>}
+                                </a>
+                            </Link>
                         );
                     })}
                 </div>
