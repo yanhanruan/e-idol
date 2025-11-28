@@ -52,7 +52,52 @@ export const TRANSLATIONS = {
     serviceMethod: {
       online: 'オンライン',
       offline: 'オフライン'
-    }
+    },
+    processFlow: {
+      title: "ご利用の流れ",
+      subtitle: "HOW IT WORKS",
+      steps: [
+        {
+          id: "01",
+          title: "ゲームを選びます",
+          desc: "まずはご希望のゲームを選びましょう",
+          detail: "人気タイトルからマイナーなゲームまで、幅広いラインナップからお選びいただけます。",
+          iconName: "Gamepad2" // 实际项目中可映射到组件或图片路径
+        },
+        {
+          id: "02",
+          title: "キャストを選び、時間を予約します",
+          desc: "気に入りのキャストのタイムテーブルから、都合のいい日時を予約ましょう",
+          detail: "ゲームごとにランク・スキル・プランが表示されます。プロフィール詳細から音声サンプルも確認可能です。",
+          iconName: "AlarmClock"
+        },
+        {
+          id: "03",
+          title: "予約フォームを送信します",
+          desc: "日時が決まったら、予約フォームを送信しましょう",
+          detail: "特別なリクエストがある場合は、備考欄にご記入ください。運営が確認いたします。",
+          iconName: "FileText"
+        },
+        {
+          id: "04",
+          title: "入金します",
+          desc: "予約完了のメールが届き、集合場所の案内も届きます。",
+          detail: "場所がわからない場合は、当日公式Discordでご確認いただけます。安全な決済システムを採用しています。",
+          iconName: "CreditCard"
+        },
+        {
+          id: "05",
+          title: "当日を楽しみましょう",
+          desc: "当日は、待ち合わせ時間までに集合場所へ行きましょう",
+          detail: "キャストと素敵な時間を過ごしましょう♪ トラブルの際は運営がサポートします。",
+          iconName: "PartyPopper"
+        }
+      ],
+      areaInfo: {
+        title: "キャストの主な派遣地域",
+        desc: "関東地方「東京」「神奈川」「千葉」「埼玉」を中心にキャストを派遣しており、オンラインだけでも利用可能です。"
+      }
+    },
   },
   en: {
     home: 'Home',
@@ -107,6 +152,51 @@ export const TRANSLATIONS = {
     serviceMethod: {
       online: 'Online',
       offline: 'Offline'
+    },
+    processFlow: {
+      title: "How It Works",
+      subtitle: "PROCESS FLOW",
+      steps: [
+        {
+          id: "01",
+          title: "Choose the game",
+          desc: "Let’s start by choosing the game you want to play",
+          detail: "Select from a wide range of titles, from popular competitive games to casual co-op.",
+          iconName: "Gamepad2"
+        },
+        {
+          id: "02",
+          title: "Pick a cast & Reserve",
+          desc: "Pick a cast and choose a time that works for you",
+          detail: "Check ranks, skills, and plans. You can listen to voice samples on their profile.",
+          iconName: "AlarmClock"
+        },
+        {
+          id: "03",
+          title: "Submit Request",
+          desc: "Submit the reservation form after choosing a time",
+          detail: "Include any specific requests or coaching needs in the comments section.",
+          iconName: "FileText"
+        },
+        {
+          id: "04",
+          title: "Make Payment",
+          desc: "Pay the confirmed fee and receive meeting details",
+          detail: "You'll get a confirmation email with the location. Support is available via Discord.",
+          iconName: "CreditCard"
+        },
+        {
+          id: "05",
+          title: "Enjoy the day",
+          desc: "Arrive at the meeting spot on time",
+          detail: "Have a wonderful time with our cast! Our support team is always on standby.",
+          iconName: "PartyPopper"
+        }
+      ],
+      areaInfo: {
+        title: "Main Cast Areas",
+        desc: "Mainly Tokyo, Kanagawa, Chiba, and Saitama. Online-only sessions are also available."
+      }
     }
   },
   zh: {
@@ -162,6 +252,51 @@ export const TRANSLATIONS = {
     serviceMethod: {
       online: '线上',
       offline: '线下'
+    },
+    processFlow: {
+      title: "预约流程",
+      subtitle: "HOW IT WORKS",
+      steps: [
+        {
+          id: "01",
+          title: "选择游戏",
+          desc: "先选择你想玩的游戏",
+          detail: "从热门大作到经典小游戏，可以在游戏列表中筛选你感兴趣的项目。",
+          iconName: "Gamepad2"
+        },
+        {
+          id: "02",
+          title: "选择Cast并预约时间",
+          desc: "从喜欢的Cast时间表里挑选合适的日期和时间吧",
+          detail: "每款游戏下都会显示可选Cast、段位/水平和方案。建议提前查看Cast的语音介绍。",
+          iconName: "AlarmClock"
+        },
+        {
+          id: "03",
+          title: "提交预约表单",
+          desc: "选好时间后，填写预约表单",
+          detail: "如果有特殊的游玩需求（如练习特定角色），请在备注中说明。",
+          iconName: "FileText"
+        },
+        {
+          id: "04",
+          title: "付款",
+          desc: "确认费用无误后即可付款，随后收到集合指引。",
+          detail: "入金后会收到详细的集合地点邮件。如有不明，可随时咨询官方Discord客服。",
+          iconName: "CreditCard"
+        },
+        {
+          id: "05",
+          title: "当日享受游戏",
+          desc: "当天按时到达集合地点",
+          detail: "和Cast一起享受美好游戏时光吧♪ 全程官方保障，安全无忧。",
+          iconName: "PartyPopper"
+        }
+      ],
+      areaInfo: {
+        title: "Cast主要派遣区域",
+        desc: "E-idol主要在关东地区「东京」「神奈川」「千叶」「埼玉」派遣Cast，也可以预约线上陪玩。"
+      }
     }
   }
 };
