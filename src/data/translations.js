@@ -98,6 +98,32 @@ export const TRANSLATIONS = {
         desc: "関東地方「東京」「神奈川」「千葉」「埼玉」を中心にキャストを派遣しており、オンラインだけでも利用可能です。"
       }
     },
+    pricingPage: {
+      title: 'コインとメンバーシップ',
+      subtitle: 'パワーアップを選択',
+      description: 'お得なコインパックと会員プランで、最高のゲーム体験を。',
+      mostPopular: '一番人気',
+      selectPlan: '選択する',
+      secureTitle: '安全な決済',
+      secureDesc: 'すべての取引は暗号化され、安全に処理されます。問題が発生した場合は、24時間以内にサポートチームが対応します。',
+      plans: {
+        starter: {
+          name: 'スターター',
+          bonus: '+5% ボーナス',
+          features: ['基本バッジ', 'マッチング優先度: 通常', 'DM機能']
+        },
+        popular: {
+          name: 'プロゲーマー',
+          bonus: '+10% ボーナス',
+          features: ['光るプロフィール枠', 'マッチング優先度: 高', '音声自己紹介', '手数料 5% OFF']
+        },
+        elite: {
+          name: 'エリートVIP',
+          bonus: '+20% ボーナス',
+          features: ['専用クラウンバッジ', 'マッチング優先度: 最高', '24時間優先サポート', '手数料 10% OFF', 'カスタムテーマ色']
+        }
+      }
+    }
   },
   en: {
     home: 'Home',
@@ -196,6 +222,32 @@ export const TRANSLATIONS = {
       areaInfo: {
         title: "Main Cast Areas",
         desc: "Mainly Tokyo, Kanagawa, Chiba, and Saitama. Online-only sessions are also available."
+      }
+    },
+    pricingPage: {
+      title: 'Coins & Membership',
+      subtitle: 'Choose Your Power Up',
+      description: 'Get the best value with our coin packs and membership tiers.',
+      mostPopular: 'MOST POPULAR',
+      selectPlan: 'Select Plan',
+      secureTitle: 'SECURE PAYMENT',
+      secureDesc: 'All transactions are encrypted and secured. Our support team is available 24/7 to assist with any issues.',
+      plans: {
+        starter: {
+          name: 'Starter',
+          bonus: '+5% Bonus',
+          features: ['Basic Profile Badge', 'Matching Priority: Normal', 'Direct Messages']
+        },
+        popular: {
+          name: 'Pro Gamer',
+          bonus: '+10% Bonus',
+          features: ['Shiny Profile Frame', 'Matching Priority: High', 'Voice Introduction', 'Fee Discount 5%']
+        },
+        elite: {
+          name: 'Elite VIP',
+          bonus: '+20% Bonus',
+          features: ['Exclusive Crown Badge', 'Matching Priority: Top', '24/7 Priority Support', 'Fee Discount 10%', 'Custom Theme Color']
+        }
       }
     }
   },
@@ -296,6 +348,32 @@ export const TRANSLATIONS = {
       areaInfo: {
         title: "Cast主要派遣区域",
         desc: "E-idol主要在关东地区「东京」「神奈川」「千叶」「埼玉」派遣Cast，也可以预约线上陪玩。"
+      }
+    },
+    pricingPage: {
+      title: '金币 & 会员资格',
+      subtitle: '选择您的套餐',
+      description: '选择最适合你的充值方案，解锁更多特权与超值金币。',
+      mostPopular: '最受欢迎',
+      selectPlan: '立即购买',
+      secureTitle: '安全支付',
+      secureDesc: '所有交易均经过加密处理，确保安全。如遇任何问题，我们的客服团队将在24小时内为您解决。',
+      plans: {
+        starter: {
+          name: '新手包',
+          bonus: '+5% 赠送',
+          features: ['基础徽章', '匹配优先级: 普通', '私信功能']
+        },
+        popular: {
+          name: '专业版',
+          bonus: '+10% 赠送',
+          features: ['动态头像框', '匹配优先级: 高', '语音介绍权限', '手续费 5% OFF']
+        },
+        elite: {
+          name: '至尊版',
+          bonus: '+20% 赠送',
+          features: ['专属皇冠徽章', '匹配优先级: 极速', '24小时专属客服', '手续费 10% OFF', '自定义主页背景']
+        }
       }
     }
   }

@@ -86,7 +86,7 @@ const ProcessPage = () => {
               const isEven = index % 2 === 0;
 
               return (
-                <div key={index} className={`relative flex items-center md:justify-center md:-space-x-4 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                <div key={index} className={`relative flex items-center md:justify-center ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                   
                   {/* --- 卡片内容区 --- */}
                   <div className="w-full md:w-[35%] pl-12 md:pl-0">
