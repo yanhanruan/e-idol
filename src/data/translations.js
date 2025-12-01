@@ -123,6 +123,101 @@ export const TRANSLATIONS = {
           features: ['専用クラウンバッジ', 'マッチング優先度: 最高', '24時間優先サポート', '手数料 10% OFF', 'カスタムテーマ色']
         }
       }
+    },
+    recruitmentPage: {
+      title: "求人募集",
+      subtitle: "JOIN OUR TEAM",
+      hero: {
+        badge: "ゲーム好き歓迎！",
+        title: "安心・安全な付き添い\nゲームプレイキャスト募集",
+        desc: "セクハラ・過度なボディータッチ一切なし！\n簡単な手つなぎ・腕組みのみでOK。ゲームをして遊ぶだけで",
+        salaryPrefix: "2時間",
+        salaryAmount: "9,000円〜",
+        salarySuffix: "の高収入バイトです♪"
+      },
+      points: [
+        {
+          title: "安心安全",
+          desc: "風俗店ではありません。性的なサービスは一切ございませんのでご安心ください。",
+          icon: "ShieldCheck"
+        },
+        {
+          title: "ノルマなし",
+          desc: "シフトは自分の予定に合わせて自由組めます（副業・学生歓迎！）。",
+          icon: "Calendar"
+        },
+        {
+          title: "未経験OK",
+          desc: "学歴・職歴不問。「ゲーム・トレーニング制度」があるので、ランクが低くても大丈夫。",
+          icon: "Sparkles"
+        }
+      ],
+      requirements: {
+        title: "応募資格（必須条件）",
+        subtitle: "以下の条件をすべて満たす方のみご応募ください。",
+        items: [
+          { label: "年齢・属性", text: "18歳～35歳くらいまでの、心身ともに健康な男女" },
+          { label: "居住地", text: "東京23区内（主要駅）まで片道1時間以内でアクセス可能な方" },
+          { label: "勤務期間", text: "半年以上継続して活動ができ、週1日程度（1日2時間～）の時間が確保できる方" },
+          { label: "ゲーム愛", text: "ゲームが大好きで、向上心を持って取り組める方" },
+          { label: "人柄・接客", text: "誰とでも楽しく会話ができ、優しく丁寧なコミュニケーションがとれる方" },
+          { label: "誠実さ", text: "約束や時間を守り、責任感を持って仕事ができる方" }
+        ]
+      },
+      ideal: {
+        title: "求める人物像・スキル",
+        intro: "当店のキャストとして、以下のプロ意識を持てる方を歓迎します。",
+        sections: [
+          {
+            title: "清潔感・身だしなみ",
+            items: [
+              "お洒落が好きで、TPO（時・場所・場合）をわきまえた清潔感のある服装ができる方。",
+              "美意識が高く、トレンドや自分磨きに興味を持てる方。"
+            ]
+          },
+          {
+            title: "マインドセット",
+            items: [
+              "心身ともに健康で、自己管理がしっかりとできる方。",
+              "明るくポジティブな対応ができ、感情のコントロールができる方。"
+            ]
+          },
+          {
+            title: "コミュニケーション",
+            items: [
+              "報告・連絡・相談（ホウレンソウ）がスムーズにできる方。"
+            ]
+          }
+        ]
+      },
+      ng: {
+        title: "応募不適格条件",
+        subtitle: "（恐れ入りますが、以下に該当する方は応募をご遠慮ください）",
+        intro: "トラブル防止とお互いの時間を大切にするため、以下の項目に当てはまる方の採用は見送らせていただいております。",
+        cards: [
+          {
+            title: "短期間（6ヶ月未満）で辞める予定の方",
+            desc: "学業や本業が忙しすぎて、シフトや約束を守れない方も含みます。"
+          },
+          {
+            title: "24時間以内の返信ができない方",
+            desc: "音信不通になる方、レスポンスが極端に遅い方はお断りします。"
+          },
+          {
+            title: "プロ意識を持って業務に取り組めない方",
+            desc: "公私混同をする方、自身の感情や体調を業務・接客に持ち込んでしまう方。"
+          },
+          {
+            title: "身だしなみや衛生面に気を使えない方",
+            desc: "清潔感は接客において最も重要な要素の一つです。"
+          }
+        ]
+      },
+      message: {
+        title: "採用担当より",
+        text: "私たちは、キャストの皆様が安心して稼げる環境作りを徹底しています。「ゲームが好き」「人と話すのが好き」「お洒落も楽しみながら働きたい」そんなあなたからのご応募を心よりお待ちしております！",
+        button: "今すぐ応募する"
+      }
     }
   },
   en: {
@@ -249,7 +344,103 @@ export const TRANSLATIONS = {
           features: ['Exclusive Crown Badge', 'Matching Priority: Top', '24/7 Priority Support', 'Fee Discount 10%', 'Custom Theme Color']
         }
       }
-    }
+    },
+     recruitmentPage: {
+      title: "Recruitment",
+      subtitle: "JOIN OUR TEAM",
+      hero: {
+        badge: "Gamers Welcome!",
+        title: "Safe & Secure\nGameplay Cast Recruitment",
+        desc: "No harassment or excessive physical contact! Just simple hand-holding or arm-linking is okay. Earn by playing games.",
+        salaryPrefix: "From",
+        salaryAmount: "¥9,000",
+        salarySuffix: " per 2 hours ♪"
+      },
+      points: [
+        {
+          title: "Safe & Secure",
+          desc: "Not an adult entertainment service. No sexual services involved.",
+          icon: "ShieldCheck"
+        },
+        {
+          title: "No Quota",
+          desc: "Flexible shifts to match your schedule (Side jobs/Students welcome!).",
+          icon: "Calendar"
+        },
+        {
+          title: "No Experience OK",
+          desc: "Education/History doesn't matter. Training provided even for low ranks.",
+          icon: "Sparkles"
+        }
+      ],
+      requirements: {
+        title: "Requirements",
+        subtitle: "Please apply only if you meet all the following conditions.",
+        items: [
+          { label: "Age/Attribute", text: "Healthy men and women aged approx. 18-35." },
+          { label: "Location", text: "Access to Tokyo 23 wards within 1 hour one-way." },
+          { label: "Duration", text: "Can work for 6+ months, approx. 1 day/week (2 hours+)." },
+          { label: "Game Love", text: "Love games and willing to improve." },
+          { label: "Personality", text: "Can communicate happily and politely with anyone." },
+          { label: "Integrity", text: "Keep promises/time and work responsibly." }
+        ]
+      },
+      ideal: {
+        title: "Ideal Candidate",
+        intro: "We welcome those who have the following professionalism.",
+        sections: [
+          {
+            title: "Cleanliness",
+            items: [
+              "Likes fashion and dresses appropriately for TPO.",
+              "High aesthetic sense and interested in self-improvement."
+            ]
+          },
+          {
+            title: "Mindset",
+            items: [
+              "Physically and mentally healthy, good self-management.",
+              "Bright, positive, and can control emotions."
+            ]
+          },
+          {
+            title: "Communication",
+            items: [
+              "Can report, contact, and consult smoothly."
+            ]
+          }
+        ]
+      },
+      ng: {
+        title: "Disqualification Conditions",
+        subtitle: "(Please refrain from applying if applicable)",
+        intro: "To prevent trouble, we do not hire those who fit the following:",
+        cards: [
+          {
+            title: "Quitting soon (<6 months)",
+            desc: "Includes those too busy with school/work to keep shifts."
+          },
+          {
+            title: "Slow response (>24 hours)",
+            desc: "Those who lose contact or reply extremely late."
+          },
+          {
+            title: "Lack of Professionalism",
+            desc: "Mixing public/private matters, bringing emotions to work."
+          },
+          {
+            title: "Poor Grooming/Hygiene",
+            desc: "Cleanliness is one of the most important factors."
+          }
+        ]
+      },
+      message: {
+        title: "From the Recruiter",
+        text: "We ensure a safe environment for our casts. If you love games and talking to people, apply now!",
+        button: "Apply Now"
+      }
+    },
+
   },
   zh: {
     home: '主页',
@@ -374,6 +565,101 @@ export const TRANSLATIONS = {
           bonus: '+20% 赠送',
           features: ['专属皇冠徽章', '匹配优先级: 极速', '24小时专属客服', '手续费 10% OFF', '自定义主页背景']
         }
+      }
+    },
+    recruitmentPage: {
+      title: "人才招募",
+      subtitle: "JOIN OUR TEAM",
+      hero: {
+        badge: "欢迎游戏爱好者！",
+        title: "安心・安全的\n游戏陪玩Cast募集",
+        desc: "绝无色情服务或过度的身体接触！仅限简单的牵手或挽臂。只需玩游戏即可获得",
+        salaryPrefix: "2小时",
+        salaryAmount: "9,000日元起",
+        salarySuffix: "的高收入兼职♪"
+      },
+      points: [
+        {
+          title: "安心安全",
+          desc: "非风俗店。绝无任何性服务，请放心。",
+          icon: "ShieldCheck"
+        },
+        {
+          title: "无业绩压力",
+          desc: "排班根据自己的计划自由安排（欢迎副业/学生！）。",
+          icon: "Calendar"
+        },
+        {
+          title: "无需经验",
+          desc: "不问学历/职历。有“游戏培训制度”，段位低也没关系。",
+          icon: "Sparkles"
+        }
+      ],
+      requirements: {
+        title: "应聘资格（必须条件）",
+        subtitle: "请仅在满足以下所有条件的情况下应聘。",
+        items: [
+          { label: "年龄・属性", text: "18岁～35岁左右，身心健康的男女" },
+          { label: "居住地", text: "单程1小时内可到达东京23区（主要车站）的人" },
+          { label: "工作期间", text: "能持续活动半年以上，确保每周1天左右（1天2小时起）的时间" },
+          { label: "游戏爱", text: "热爱游戏，能以此为乐并有上进心的人" },
+          { label: "性格・接客", text: "能与任何人愉快交谈，沟通温柔有礼貌的人" },
+          { label: "诚实", text: "遵守约定和时间，能负责任地工作的人" }
+        ]
+      },
+      ideal: {
+        title: "期望的人物形象・技能",
+        intro: "作为本店的Cast，欢迎拥有以下专业意识的人。",
+        sections: [
+          {
+            title: "清洁感・仪容仪表",
+            items: [
+              "喜欢时尚，能根据TPO（时间・地点・场合）着装得体、有清洁感的人。",
+              "美意识高，对潮流和提升自己感兴趣的人。"
+            ]
+          },
+          {
+            title: "心态",
+            items: [
+              "身心健康，能做好自我管理的人。",
+              "应对开朗积极，能控制情绪的人。"
+            ]
+          },
+          {
+            title: "沟通",
+            items: [
+              "能顺利进行汇报・联络・商谈（报联商）的人。"
+            ]
+          }
+        ]
+      },
+      ng: {
+        title: "应聘不合格条件",
+        subtitle: "（很抱歉，符合以下情况的人请勿应聘）",
+        intro: "为了防止纠纷并珍惜彼此的时间，我们将不予录用以下人员。",
+        cards: [
+          {
+            title: "计划短期（6个月内）辞职",
+            desc: "包括学业或本职工作太忙，无法遵守排班或约定的人。"
+          },
+          {
+            title: "24小时内无法回复",
+            desc: "拒绝失联或回复极慢的人。"
+          },
+            {
+            title: "无法带着专业意识工作",
+            desc: "公私混淆，将个人情绪或身体状况带入工作/接客的人。"
+          },
+          {
+            title: "不注意仪容或卫生",
+            desc: "清洁感是接客中最重要的要素之一。"
+          }
+        ]
+      },
+      message: {
+        title: "来自招聘负责人",
+        text: "我们致力于为Cast创造一个可以安心赚钱的环境。「喜欢游戏」「喜欢与人交谈」「想一边享受时尚一边工作」，我们衷心期待这样的你来应聘！",
+        button: "立即应聘"
       }
     }
   }
