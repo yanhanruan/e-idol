@@ -1,7 +1,7 @@
 // src/components/layout/Header.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Bell, Globe, User, Plus, Menu, X } from "lucide-react";
-import { Link, useLocation } from "wouter"; // [新增]: 引入路由组件
+import { useLocation } from "wouter"; // [新增]: 引入路由组件
 import { useTranslations } from '../../contexts/LanguageContext';
 import { useTransition } from '../../contexts/TransitionContext'; // 修正引用路径，根据实际情况调整
 
@@ -49,8 +49,8 @@ const Header = () => {
     const { lang, setLang, t } = useTranslations();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // [新增]: 获取当前路径，用于高亮判断
-    const [location] = useLocation();
+    const [location, setLocation] = useLocation();
+    const { startTransition } = useTransition();
 
     const menuRef = useRef(null);
     const btnRef = useRef(null);
@@ -69,6 +69,20 @@ const Header = () => {
     }, [isMobileMenuOpen]);
 
     const leftBtnClass = `w-8 h-8 rounded-lg flex items-center justify-center text-white hover:scale-110 group border border-white/5 relative ${transitionStyle}`;
+
+    // [新增]: 统一的导航处理函数
+    const handleNavigation = (path) => {
+        // 如果点击的是当前页，不进行任何操作
+        if (location === path) return;
+
+        // 关闭手机菜单（如果打开的话）
+        setIsMobileMenuOpen(false);
+
+        // 启动过渡动画，并在回调中切换路由
+        startTransition(() => {
+            setLocation(path);
+        });
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full h-14 md:h-12 py-2 md:py-0 bg-[#0a0a1aa4] backdrop-blur-md border-b border-white/5 font-sans">
@@ -96,9 +110,10 @@ const Header = () => {
                             const isActive = location === path;
 
                             return (
-                                <Link
+                                <button
                                     key={item}
                                     href={path}
+                                    onClick={() => handleNavigation(path)}
                                     // [关键修复]: 直接将样式赋给 Link 组件，Link 会渲染为带有这些样式的 <a> 标签
                                     className="group relative flex flex-col items-center justify-center h-full px-1 outline-none cursor-pointer"
                                 >
@@ -112,7 +127,7 @@ const Header = () => {
                                     {/* 下划线指示条 */}
                                     {/* 因为 Link 现在拥有 h-full，所以 absolute bottom-2 会正确地定位在 Header 底部 */}
                                     <span className={`absolute bottom-2 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_#22d3ee] ${transitionStyle} ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}`}></span>
-                                </Link>
+                                </button>
                             );
                         })}
                     </nav>
@@ -158,9 +173,9 @@ const Header = () => {
 
                         return (
                             // 手机端点击后自动关闭菜单
-                            <Link key={item} href={path}>
+                            <div key={item} href={path}>
                                 <a
-                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    onClick={() => handleNavigation(path)}
                                     className={`
                                         relative px-4 py-3 rounded-lg text-sm font-medium tracking-wide flex items-center justify-between cursor-pointer ${transitionStyle}
                                         ${isActive ? 'bg-cyan-900/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5 border border-transparent'}
@@ -169,7 +184,7 @@ const Header = () => {
                                     {t[item]}
                                     {isActive && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>}
                                 </a>
-                            </Link>
+                            </div>
                         );
                     })}
                 </div>
