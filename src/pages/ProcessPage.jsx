@@ -61,7 +61,7 @@ const ProcessPage = () => {
           <span className="inline-block py-0.5 px-3 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold tracking-[0.2em] mb-3">
             {t.processFlow.subtitle}
           </span>
-          <h1 className="text-3xl md:text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+          <h1 className="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
             {t.processFlow.title}
           </h1>
         </div>

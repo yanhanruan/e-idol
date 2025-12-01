@@ -208,11 +208,8 @@ const CastListPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* ヘッダー */}
-        <div className="py-8 text-center">
-          <span className="inline-block py-1 px-4 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-400 text-xs font-bold tracking-wider mb-4">
-            CAST LIST
-          </span>
-          <h1 className="text-4xl md:text-5xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)] mb-2">
+        <div className="py-3 text-center">
+          <h1 className="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)] mb-2">
             {t.castList || 'キャスト一覧'}
           </h1>
           <p className="text-slate-400 text-sm">あなたにぴったりのキャストを見つけよう</p>

@@ -4,8 +4,8 @@ import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import "./HeroCarousel.css";
 
 // 保持引用不变
-import stageBgImage from "../assets/character-illustration/bg-only.png";
-import characterImage from "../assets/character-illustration/character-only.png";
+import stageBgImage from "../assets/character-illustration/bg-only-compress.jpg";
+import characterImage from "../assets/character-illustration/character-only.webp";
 
 const STAGE_BG_URL = stageBgImage;
 const CHARACTER_URL = characterImage;
@@ -59,7 +59,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }) => {
       <div className="hidden md:block absolute inset-0 z-0">
         {STAGE_BG_URL && (
           <>
-            <img src={STAGE_BG_URL} alt="Stage Environment" className="w-full h-full object-cover object-center" />
+            <img src={STAGE_BG_URL} alt="Stage Environment" className="w-full h-full object-cover object-center" fetchPriority="high" decoding="async" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f1a] via-[#0f0f1a]/90 to-transparent z-10"></div>
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0f0f1a] to-transparent z-10"></div>
           </>
@@ -76,6 +76,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }) => {
                // [修改]: max-h-[85%] -> max-h-[70%] (人物变小)
                // [修改]: translate-x-10 -> translate-x-20 (往右挪，给文字腾地方)
                className="max-h-[70%] w-auto object-contain transform translate-x-20 floating-character drop-shadow-[0_0_30px_rgba(0,255,255,0.3)]"
+               fetchPriority="high" decoding="async"
              />
            </div>
          )}
@@ -84,10 +85,10 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }) => {
       {/* 3. 手机端代码 (完全保持原样，不动) */}
       <div className="absolute inset-0 md:hidden z-0 overflow-hidden pointer-events-none">
         {STAGE_BG_URL && (
-           <img src={STAGE_BG_URL} alt="Stage Mobile" className="absolute inset-0 w-full h-full object-cover opacity-30 blur-[1px]" />
+           <img src={STAGE_BG_URL} alt="Stage Mobile" className="absolute inset-0 w-full h-full object-cover opacity-30 blur-[1px]" fetchPriority="high" decoding="async"/>
         )}
         {CHARACTER_URL && (
-           <img src={CHARACTER_URL} alt="Character Mobile" className="absolute -right-12 top-0 h-[65%] w-auto object-contain opacity-60 drop-shadow-lg" />
+           <img src={CHARACTER_URL} alt="Character Mobile" className="absolute -right-12 top-0 h-[65%] w-auto object-contain opacity-60 drop-shadow-lg" fetchPriority="high" decoding="async"/>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-[#0f0f1a]/60 to-transparent"></div>
       </div>

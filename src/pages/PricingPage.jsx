@@ -179,11 +179,11 @@ const PricingPage = () => {
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         
         {/* 标题 */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-6 md:mb-16">
           <span className="inline-block py-0.5 px-3 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold tracking-[0.2em] mb-4">
              STORE PACKAGES
           </span>
-          <h1 className="text-4xl md:text-5xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+          <h1 className="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
             {t.pricingPage.subtitle || "CHOOSE YOUR PLAN"}
           </h1>
           <p className="mt-4 text-slate-400 text-sm md:text-base max-w-2xl mx-auto">
