@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslations } from '../contexts/LanguageContext';
 import { Check, Star, Zap, Crown, Shield, Sparkles } from 'lucide-react';
 
+import PageTitle from '@src/components/ui/PageTitle';
+
 // 只需要替换 PricingCard 组件部分，其他不用变
 
 const PricingCard = ({ plan, isPopular }) => {
@@ -23,7 +25,7 @@ const PricingCard = ({ plan, isPopular }) => {
          2. [transform:translateZ(0)] -> 强制开启硬件加速图层，解决亚像素抖动
          3. will-change-transform -> 提前告知浏览器即将发生位移
       */}
-      <div 
+      <div
         className={`
           relative h-full overflow-hidden
           bg-[#0F1219]/90 backdrop-blur-md
@@ -47,23 +49,23 @@ const PricingCard = ({ plan, isPopular }) => {
           group-hover:shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)]
         `}
       >
-        
+
         {/* --- 头部视觉区 --- */}
         {/* [修复细节]: 添加 isolate 和 z-0 确保层级上下文独立 */}
         <div className={`h-28 relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${plan.theme.bgGradient} isolate`}>
-           
-           {/* [修复细节]: 将 absolute 层锁定为 translate-z-0，
+
+          {/* [修复细节]: 将 absolute 层锁定为 translate-z-0，
               防止父级移动时它因为宽度重算而"闪烁" 
            */}
-           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-white to-transparent pointer-events-none [transform:translateZ(0)]"></div>
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-white to-transparent pointer-events-none [transform:translateZ(0)]"></div>
 
-           {/* 装饰大图标 */}
-           <Icon size={100} className="text-white/5 absolute -right-6 -bottom-6 rotate-12 group-hover:rotate-6 transition-transform duration-700 ease-out [transform:translateZ(0)]" />
-           
-           {/* 核心图标 */}
-           <div className={`z-10 w-14 h-14 bg-slate-950/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/10 shadow-lg group-hover:scale-110 transition-transform duration-500 [transform:translateZ(0)] ${plan.theme.iconColor}`}>
-              <Icon size={28} />
-           </div>
+          {/* 装饰大图标 */}
+          <Icon size={100} className="text-white/5 absolute -right-6 -bottom-6 rotate-12 group-hover:rotate-6 transition-transform duration-700 ease-out [transform:translateZ(0)]" />
+
+          {/* 核心图标 */}
+          <div className={`z-10 w-14 h-14 bg-slate-950/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/10 shadow-lg group-hover:scale-110 transition-transform duration-500 [transform:translateZ(0)] ${plan.theme.iconColor}`}>
+            <Icon size={28} />
+          </div>
         </div>
 
         {/* --- 内容区 --- */}
@@ -74,7 +76,7 @@ const PricingCard = ({ plan, isPopular }) => {
               <span className="text-3xl font-black text-white tracking-tight">{plan.price}</span>
             </div>
             <div className={`text-sm font-bold mt-2 ${plan.theme.text}`}>
-              {plan.coins} COINS 
+              {plan.coins} COINS
               {plan.bonus && <span className="ml-1 text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-white font-normal">{plan.bonus}</span>}
             </div>
           </div>
@@ -109,17 +111,17 @@ const PricingCard = ({ plan, isPopular }) => {
 
 // --- 主页面 ---
 const PricingPage = () => {
-  const { t } = useTranslations();
+  const r = useTranslations().t.pricingPage;
 
   // 数据配置 (已简化 Theme 结构，移除冗余类)
   const plans = [
     {
       id: 'starter',
-      name: t.pricingPage.plans.starter.name,
+      name: r.plans.starter.name,
       price: '¥1,000',
       coins: '1,000',
-      bonus: t.pricingPage.plans.starter.bonus,
-      features: t.pricingPage.plans.starter.features,
+      bonus: r.plans.starter.bonus,
+      features: r.plans.starter.features,
       icon: Star,
       theme: {
         border: 'border-slate-700/50',
@@ -131,12 +133,12 @@ const PricingPage = () => {
     },
     {
       id: 'popular',
-      name: t.pricingPage.plans.popular.name,
+      name: r.plans.popular.name,
       price: '¥3,000',
       coins: '3,300',
-      bonus: t.pricingPage.plans.popular.bonus,
+      bonus: r.plans.popular.bonus,
       isPopular: true,
-      features: t.pricingPage.plans.popular.features,
+      features: r.plans.popular.features,
       icon: Zap,
       theme: {
         border: 'border-purple-500/30',
@@ -149,11 +151,11 @@ const PricingPage = () => {
     },
     {
       id: 'elite',
-      name: t.pricingPage.plans.elite.name,
+      name: r.plans.elite.name,
       price: '¥10,000',
       coins: '12,000',
-      bonus: t.pricingPage.plans.elite.bonus,
-      features: t.pricingPage.plans.elite.features,
+      bonus: r.plans.elite.bonus,
+      features: r.plans.elite.features,
       icon: Crown,
       theme: {
         border: 'border-cyan-500/30',
@@ -167,29 +169,19 @@ const PricingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0E14] text-white font-sans relative overflow-hidden py-2">
-      
+    <div className="min-h-screen text-white font-sans relative overflow-hidden">
+
       {/* 背景装饰 */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-         <div className="absolute top-[-10%] left-[10%] w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px]" />
-         <div className="absolute bottom-[0%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px]" />
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+        <div className="absolute top-[-10%] left-[10%] w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[0%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px]" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        
+
         {/* 标题 */}
-        <div className="text-center mb-6 md:mb-16">
-          <span className="inline-block py-0.5 px-3 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold tracking-[0.2em] mb-4">
-             STORE PACKAGES
-          </span>
-          <h1 className="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-            {t.pricingPage.subtitle || "CHOOSE YOUR PLAN"}
-          </h1>
-          <p className="mt-4 text-slate-400 text-sm md:text-base max-w-2xl mx-auto">
-             {t.pricingPage.title}
-          </p>
-        </div>
+        <PageTitle subtitle={r.subtitle} title={r.title} comment={r.comment} />
 
         {/* 卡片 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 items-start">
@@ -200,10 +192,10 @@ const PricingPage = () => {
 
         {/* 底部声明 */}
         <div className="mt-20 text-center opacity-60">
-           <div className="flex items-center justify-center gap-2 text-slate-500">
-             <Shield className="w-4 h-4" />
-             <span className="text-[10px] font-mono uppercase tracking-widest">Secure Payment Gateway // SSL Encrypted</span>
-           </div>
+          <div className="flex items-center justify-center gap-2 text-slate-500">
+            <Shield className="w-4 h-4" />
+            <span className="text-[10px] font-mono uppercase tracking-widest">Secure Payment Gateway // SSL Encrypted</span>
+          </div>
         </div>
 
       </div>

@@ -20,10 +20,10 @@ export const TransitionProvider = ({ children }) => {
 
     // 2. 动画结束清理点：650ms
     // CSS 动画总长 600ms。
-    // 设置 650ms 卸载组件，给一点微小的缓冲，防止黑色层消失得太突兀。
+    // 设置 800ms 卸载组件，给一点微小的缓冲，防止黑色层消失得太突兀。
     setTimeout(() => {
         setIsAnimating(false);
-    }, 650); 
+    }, 800); 
   }, [isAnimating]);
 
   return (

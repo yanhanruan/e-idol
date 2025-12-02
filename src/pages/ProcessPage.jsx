@@ -2,6 +2,8 @@ import React, { useState, useMemo, useContext, createContext, useEffect } from '
 import { Gamepad2, AlarmClock, FileText, CreditCard, PartyPopper, MapPin, ChevronDown, CheckCircle2 } from 'lucide-react';
 import { useTranslations } from '@src/contexts/LanguageContext';
 
+import PageTitle from '@src/components/ui/PageTitle';
+
 // 图标映射表
 const IconMap = {
   Gamepad2, AlarmClock, FileText, CreditCard, PartyPopper
@@ -9,14 +11,13 @@ const IconMap = {
 
 
 const ProcessPage = () => {
-  const { t } = useTranslations();
-  
-  const containerClass = "min-h-screen bg-[#0B0E14] text-white font-sans relative overflow-hidden pb-10 ";
+  const r = useTranslations().t.processFlow;
+
   // [修改 2]: 将 max-w-5xl 改为 max-w-4xl，使PC端更紧凑，两侧留白更多
   const contentWidth = "max-w-4xl mx-auto px-6 sm:px-8 relative z-10";
 
   return (
-    <div className={containerClass}>
+    <div>
       
       {/* 注入电流动画样式 */}
       <style>{`
@@ -47,24 +48,9 @@ const ProcessPage = () => {
         }
       `}</style>
 
-      {/* 背景装饰 */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-         <div className="absolute top-[-20%] left-[20%] w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px]" />
-         <div className="absolute bottom-[10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px]" />
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-      </div>
 
       <div className={contentWidth}>
-        
-        {/* [修改 1]: 头部区域减小 padding，字体也稍微缩小 */}
-        <div className="px-3 py-5 text-center">
-          <span className="inline-block py-0.5 px-3 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold tracking-[0.2em] mb-3">
-            {t.processFlow.subtitle}
-          </span>
-          <h1 className="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-            {t.processFlow.title}
-          </h1>
-        </div>
+        <PageTitle subtitle={r.subtitle} title={r.title}/>
 
         {/* 流程图主体 */}
         <div className="relative">
@@ -81,7 +67,7 @@ const ProcessPage = () => {
 
           {/* [修改 2]: 减小卡片之间的垂直间距 space-y-12 -> space-y-8 */}
           <div className="space-y-8 md:space-y-12">
-            {t.processFlow.steps.map((step, index) => {
+            {r.steps.map((step, index) => {
               const Icon = IconMap[step.iconName] || Gamepad2;
               const isEven = index % 2 === 0;
 
@@ -150,8 +136,8 @@ const ProcessPage = () => {
              </div>
              
              <div className="max-w-xl w-full text-center bg-gradient-to-b from-slate-800/40 to-slate-900/40 border border-slate-700/50 p-6 rounded-2xl backdrop-blur-md">
-                <h3 className="text-lg font-bold text-white mb-2">{t.processFlow.areaInfo.title}</h3>
-                <p className="text-slate-400 text-xs mb-4">{t.processFlow.areaInfo.desc}</p>
+                <h3 className="text-lg font-bold text-white mb-2">{r.areaInfo.title}</h3>
+                <p className="text-slate-400 text-xs mb-4">{r.areaInfo.desc}</p>
                 <div className="flex flex-wrap justify-center gap-2">
                    {["Tokyo", "Kanagawa", "Chiba", "Saitama", "Online"].map((city) => (
                      <span key={city} className="px-3 py-1 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors cursor-default">

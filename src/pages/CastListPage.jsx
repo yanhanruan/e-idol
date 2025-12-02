@@ -6,6 +6,8 @@ import {
   Calendar, Award, Volume2, Heart, Users
 } from 'lucide-react';
 
+import PageTitle from '@src/components/ui/PageTitle';
+
 // Mock Cast 数据
 const MOCK_CASTS = [
   {
@@ -196,7 +198,7 @@ const CastListPage = () => {
     });
 
   return (
-    <div className="min-h-screen bg-[#0B0E14] text-white pb-16 relative overflow-hidden">
+    <div className="min-h-screen text-white pb-16 relative overflow-hidden">
       
       {/* 背景装飾 */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
@@ -207,13 +209,8 @@ const CastListPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
-        {/* ヘッダー */}
-        <div className="py-3 text-center">
-          <h1 className="text-3xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)] mb-2">
-            {t.castList || 'キャスト一覧'}
-          </h1>
-          <p className="text-slate-400 text-sm">あなたにぴったりのキャストを見つけよう</p>
-        </div>
+        {/* title */}
+        <PageTitle title={t.castList} comment={"あなたにぴったりのキャストを見つけよう"}/>
 
         {/* フィルター＆検索バー */}
         <div className="mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-4">

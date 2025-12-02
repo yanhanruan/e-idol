@@ -55,7 +55,7 @@ export const TRANSLATIONS = {
     },
     processFlow: {
       title: "ご利用の流れ",
-      subtitle: "HOW IT WORKS",
+      subtitle: "How it works",
       steps: [
         {
           id: "01",
@@ -99,8 +99,9 @@ export const TRANSLATIONS = {
       }
     },
     pricingPage: {
-      title: 'コインとメンバーシップ',
-      subtitle: 'パワーアップを選択',
+      subtitle: "パッケージを保管する",
+      title: 'パワーアップを選択',
+      comment: 'コインとメンバーシップ',
       description: 'お得なコインパックと会員プランで、最高のゲーム体験を。',
       mostPopular: '一番人気',
       selectPlan: '選択する',
@@ -222,7 +223,7 @@ export const TRANSLATIONS = {
   },
   en: {
     home: 'Home',
-    process: 'process',
+    process: 'Process',
     pricing: 'Pricing',
     castList: 'CastList',
     recruitment: 'Recruitment',
@@ -275,7 +276,7 @@ export const TRANSLATIONS = {
       offline: 'Offline'
     },
     processFlow: {
-      title: "How It Works",
+      title: "How it works",
       subtitle: "PROCESS FLOW",
       steps: [
         {
@@ -320,8 +321,9 @@ export const TRANSLATIONS = {
       }
     },
     pricingPage: {
-      title: 'Coins & Membership',
-      subtitle: 'Choose Your Power Up',
+      subtitle: "STORE PACKAGES",
+      title: 'Choose Your Power Up',
+      comment: 'Coins & Membership',
       description: 'Get the best value with our coin packs and membership tiers.',
       mostPopular: 'MOST POPULAR',
       selectPlan: 'Select Plan',
@@ -345,7 +347,7 @@ export const TRANSLATIONS = {
         }
       }
     },
-     recruitmentPage: {
+    recruitmentPage: {
       title: "Recruitment",
       subtitle: "JOIN OUR TEAM",
       hero: {
@@ -498,7 +500,7 @@ export const TRANSLATIONS = {
     },
     processFlow: {
       title: "预约流程",
-      subtitle: "HOW IT WORKS",
+      subtitle: "How it works",
       steps: [
         {
           id: "01",
@@ -542,8 +544,9 @@ export const TRANSLATIONS = {
       }
     },
     pricingPage: {
-      title: '金币 & 会员资格',
-      subtitle: '选择您的套餐',
+      subtitle: "金币 & 会员资格",
+      title: '选择您的套餐',
+      comment: '商店包装',
       description: '选择最适合你的充值方案，解锁更多特权与超值金币。',
       mostPopular: '最受欢迎',
       selectPlan: '立即购买',
@@ -646,7 +649,7 @@ export const TRANSLATIONS = {
             title: "24小时内无法回复",
             desc: "拒绝失联或回复极慢的人。"
           },
-            {
+          {
             title: "无法带着专业意识工作",
             desc: "公私混淆，将个人情绪或身体状况带入工作/接客的人。"
           },

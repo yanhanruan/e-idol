@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslations } from '../contexts/LanguageContext';
-import { 
-  ShieldCheck, 
-  Calendar, 
-  Sparkles, 
-  CheckCircle2, 
-  XCircle, 
-  AlertTriangle, 
+import {
+  ShieldCheck,
+  Calendar,
+  Sparkles,
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
   HeartHandshake,
   UserCheck,
   Clock,
@@ -14,6 +14,8 @@ import {
   Gamepad2,
   Heart
 } from 'lucide-react';
+
+import PageTitle from '@src/components/ui/PageTitle';
 
 const IconMap = {
   ShieldCheck, Calendar, Sparkles, UserCheck, Clock, MapPin, Gamepad2, Heart
@@ -27,48 +29,45 @@ const RecruitmentPage = () => {
   const contentWidth = "max-w-4xl mx-auto px-6 sm:px-8 relative z-10";
 
   return (
-    <div className="min-h-screen bg-[#0B0E14] text-white font-sans relative overflow-hidden pb-2 pt-4">
-      
+    <div className="min-h-screen text-white font-sans relative overflow-hidden pb-2">
+
       {/* 背景装饰 (保持原有的氛围，但稍微减弱一点以免抢眼) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] mix-blend-screen" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[80px] mix-blend-screen" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
       </div>
-
+      {/* TODO unify page spacing */}
       <div className={contentWidth}>
-        
-        {/* --- 1. HERO SECTION (更加紧凑) --- */}
-        <div className="text-center mb-12 md:mb-16 relative">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/30 backdrop-blur-md mb-5">
-             <Gamepad2 size={14} className="text-cyan-400" />
-             <span className="text-[10px] md:text-xs font-bold tracking-widest text-cyan-300 uppercase">{r.hero.badge}</span>
-          </div>
-          
-          {/* 字号缩小：text-6xl -> text-4xl/5xl */}
-          <h1 className="text-3xl md:text-4xl font-black mb-4 leading-tight tracking-tight">
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-200 pb-1">
-              {r.hero.title}
-            </span>
-          </h1>
 
+
+        <PageTitle
+          subtitle={
+            <>
+              <Gamepad2 size={14} className="text-cyan-400" />
+              <span >{r.hero.badge}</span>
+            </>
+          }
+          title={r.hero.title}
+          comment={r.hero.desc}
+        />
+        {/* --- 1. HERO SECTION (更加紧凑) --- */}
+        {/* FIXME: refactor this part */}
+        <div className="text-center mb-12 md:mb-16 relative">
           <div className="max-w-2xl mx-auto mb-8">
-             <p className="text-slate-400 text-sm md:text-base leading-relaxed whitespace-pre-line mb-6">
-               {r.hero.desc}
-             </p>
-             
-             {/* 薪资区域：更加精致的边框风格 */}
-             <div className="inline-block relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-cyan-500/50 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                <div className="relative bg-[#13161c]/80 backdrop-blur border border-slate-700/50 px-6 py-3 rounded-lg flex items-baseline gap-2 shadow-xl">
-                   <span className="text-slate-500 font-bold text-xs">{r.hero.salaryPrefix}</span>
-                   {/* 薪资数字缩小 */}
-                   <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 tracking-tight">
-                     {r.hero.salaryAmount}
-                   </span>
-                   <span className="text-slate-500 font-bold text-xs">{r.hero.salarySuffix}</span>
-                </div>
-             </div>
+
+            {/* 薪资区域：更加精致的边框风格 */}
+            <div className="inline-block relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-cyan-500/50 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+              <div className="relative bg-[#13161c]/80 backdrop-blur border border-slate-700/50 px-6 py-3 rounded-lg flex items-baseline gap-2 shadow-xl">
+                <span className="text-slate-500 font-bold text-xs">{r.hero.salaryPrefix}</span>
+                {/* 薪资数字缩小 */}
+                <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 tracking-tight">
+                  {r.hero.salaryAmount}
+                </span>
+                <span className="text-slate-500 font-bold text-xs">{r.hero.salarySuffix}</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -99,101 +98,101 @@ const RecruitmentPage = () => {
           </div>
 
           <div className="bg-slate-900/20 border border-slate-800 rounded-xl overflow-hidden backdrop-blur-sm">
-             <div className="grid divide-y divide-slate-800/50">
-                {r.requirements.items.map((item, idx) => (
-                  <div key={idx} className="p-4 md:grid md:grid-cols-12 md:gap-4 hover:bg-slate-800/30 transition-colors group">
-                     <div className="md:col-span-3 mb-1 md:mb-0">
-                       <span className="flex items-center gap-2 text-cyan-500/80 group-hover:text-cyan-400 font-bold text-xs uppercase tracking-wide">
-                         <CheckCircle2 size={14} />
-                         {item.label}
-                       </span>
-                     </div>
-                     <div className="md:col-span-9">
-                       <p className="text-slate-300 text-sm font-medium leading-normal">{item.text}</p>
-                     </div>
+            <div className="grid divide-y divide-slate-800/50">
+              {r.requirements.items.map((item, idx) => (
+                <div key={idx} className="p-4 md:grid md:grid-cols-12 md:gap-4 hover:bg-slate-800/30 transition-colors group">
+                  <div className="md:col-span-3 mb-1 md:mb-0">
+                    <span className="flex items-center gap-2 text-cyan-500/80 group-hover:text-cyan-400 font-bold text-xs uppercase tracking-wide">
+                      <CheckCircle2 size={14} />
+                      {item.label}
+                    </span>
                   </div>
-                ))}
-             </div>
+                  <div className="md:col-span-9">
+                    <p className="text-slate-300 text-sm font-medium leading-normal">{item.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* --- 4. IDEAL CANDIDATE (更小的卡片) --- */}
         <div className="mb-16">
-           <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">{r.ideal.title}</h2>
-              <p className="text-slate-400 text-sm max-w-xl mx-auto">{r.ideal.intro}</p>
-           </div>
-           
-           <div className="grid md:grid-cols-3 gap-4">
-              {r.ideal.sections.map((section, idx) => (
-                <div key={idx} className="bg-[#13161c] border border-slate-800 p-5 rounded-xl relative overflow-hidden group hover:border-slate-700 transition-colors">
-                   <div className="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition-opacity">
-                      <HeartHandshake size={48} className="text-purple-400" />
-                   </div>
-                   <h3 className="text-base font-bold text-white mb-3 border-b border-slate-800 pb-2 flex items-center gap-2">
-                     <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
-                     {section.title}
-                   </h3>
-                   <ul className="space-y-2">
-                     {section.items.map((text, i) => (
-                       <li key={i} className="flex items-start gap-2 text-slate-400 text-xs leading-relaxed">
-                         <span className="mt-1.5 w-0.5 h-0.5 rounded-full bg-slate-500 flex-shrink-0" />
-                         {text}
-                       </li>
-                     ))}
-                   </ul>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-white mb-2">{r.ideal.title}</h2>
+            <p className="text-slate-400 text-sm max-w-xl mx-auto">{r.ideal.intro}</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {r.ideal.sections.map((section, idx) => (
+              <div key={idx} className="bg-[#13161c] border border-slate-800 p-5 rounded-xl relative overflow-hidden group hover:border-slate-700 transition-colors">
+                <div className="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <HeartHandshake size={48} className="text-purple-400" />
                 </div>
-              ))}
-           </div>
+                <h3 className="text-base font-bold text-white mb-3 border-b border-slate-800 pb-2 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                  {section.title}
+                </h3>
+                <ul className="space-y-2">
+                  {section.items.map((text, i) => (
+                    <li key={i} className="flex items-start gap-2 text-slate-400 text-xs leading-relaxed">
+                      <span className="mt-1.5 w-0.5 h-0.5 rounded-full bg-slate-500 flex-shrink-0" />
+                      {text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* --- 5. DISQUALIFIERS (警告区域优化) --- */}
         <div className="mb-16 relative">
-           {/* 减弱红色背景的强度 */}
-           <div className="absolute inset-0 bg-red-900/5 rounded-2xl -z-10 blur-xl"></div>
-           <div className="bg-[#1a0f0f]/40 border border-red-900/20 rounded-2xl p-6 backdrop-blur-md">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-red-900/20 pb-4">
-                 <div>
-                    <h2 className="text-xl font-bold text-red-100/90 flex items-center gap-2">
-                       <AlertTriangle size={20} className="text-red-500/80" />
-                       {r.ng.title}
-                    </h2>
-                 </div>
-                 <p className="text-red-200/40 text-[10px] md:text-right max-w-sm leading-tight">
-                    {r.ng.intro}
-                 </p>
+          {/* 减弱红色背景的强度 */}
+          <div className="absolute inset-0 bg-red-900/5 rounded-2xl -z-10 blur-xl"></div>
+          <div className="bg-[#1a0f0f]/40 border border-red-900/20 rounded-2xl p-6 backdrop-blur-md">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-red-900/20 pb-4">
+              <div>
+                <h2 className="text-xl font-bold text-red-100/90 flex items-center gap-2">
+                  <AlertTriangle size={20} className="text-red-500/80" />
+                  {r.ng.title}
+                </h2>
               </div>
+              <p className="text-red-200/40 text-[10px] md:text-right max-w-sm leading-tight">
+                {r.ng.intro}
+              </p>
+            </div>
 
-              <div className="grid sm:grid-cols-2 gap-3">
-                 {r.ng.cards.map((card, idx) => (
-                   <div key={idx} className="bg-red-950/10 border border-red-900/10 p-3 rounded-lg flex gap-3 hover:bg-red-950/20 transition-colors">
-                      <div className="flex-shrink-0 mt-0.5">
-                        <XCircle size={16} className="text-red-500/60" />
-                      </div>
-                      <div>
-                        <h4 className="text-red-100/90 font-bold text-xs mb-0.5">{card.title}</h4>
-                        <p className="text-red-200/50 text-[10px] leading-relaxed">{card.desc}</p>
-                      </div>
-                   </div>
-                 ))}
-              </div>
-           </div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {r.ng.cards.map((card, idx) => (
+                <div key={idx} className="bg-red-950/10 border border-red-900/10 p-3 rounded-lg flex gap-3 hover:bg-red-950/20 transition-colors">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <XCircle size={16} className="text-red-500/60" />
+                  </div>
+                  <div>
+                    <h4 className="text-red-100/90 font-bold text-xs mb-0.5">{card.title}</h4>
+                    <p className="text-red-200/50 text-[10px] leading-relaxed">{card.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* --- 6. MESSAGE / CTA (更简洁的底部) --- */}
         <div className="max-w-2xl mx-auto text-center pb-8">
-           <div className="w-12 h-12 bg-gradient-to-br from-cyan-900/50 to-purple-900/50 border border-cyan-500/20 rounded-full mx-auto flex items-center justify-center mb-4">
-              <Heart size={20} className="text-cyan-200" />
-           </div>
-           <h2 className="text-xl font-bold text-white mb-4">{r.message.title}</h2>
-           <p className="text-slate-400 text-sm mb-8 leading-relaxed italic">
-             {r.message.text}
-           </p>
-           
-           <button className="group relative px-6 py-3 bg-white text-black font-bold text-sm rounded-full overflow-hidden hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-             <span className="relative z-10">{r.message.button}</span>
-             <div className="absolute inset-0 bg-gradient-to-r from-cyan-300 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-           </button>
+          <div className="w-12 h-12 bg-gradient-to-br from-cyan-900/50 to-purple-900/50 border border-cyan-500/20 rounded-full mx-auto flex items-center justify-center mb-4">
+            <Heart size={20} className="text-cyan-200" />
+          </div>
+          <h2 className="text-xl font-bold text-white mb-4">{r.message.title}</h2>
+          <p className="text-slate-400 text-sm mb-8 leading-relaxed italic">
+            {r.message.text}
+          </p>
+
+          <button className="group relative px-6 py-3 bg-white text-black font-bold text-sm rounded-full overflow-hidden hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            <span className="relative z-10">{r.message.button}</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-300 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </button>
         </div>
 
       </div>
