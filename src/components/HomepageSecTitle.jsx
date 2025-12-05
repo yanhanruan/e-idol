@@ -12,7 +12,7 @@ const HomepageSecTitle = ({ icon: Icon, title, action, titleGradient = false }) 
       <div className="flex items-center space-x-3 md:space-x-4">
         {/* 统一的图标容器样式 */}
         <div 
-          className="w-14 h-14 rounded-2xl flex items-center justify-center relative shrink-0" 
+          className="w-8 h-8 rounded-md flex items-center justify-center relative shrink-0" 
           style={{
             background: 'linear-gradient(135deg, rgba(0, 150, 255, 0.3), rgba(255, 0, 150, 0.3))',
             border: '2px solid rgba(0, 255, 255, 0.5)',
@@ -22,13 +22,13 @@ const HomepageSecTitle = ({ icon: Icon, title, action, titleGradient = false }) 
         >
           {/* 渲染传入的 Icon 组件 */}
           <div className="animate-pulse" style={{ filter: 'drop-shadow(0 0 5px #fff)' }}>
-             {Icon && <Icon className="w-7 h-7 text-white" />}
+             {Icon && <Icon className="w-4 h-4 text-white" />}
           </div>
         </div>
 
         {/* 标题部分：根据 titleGradient 判断使用哪种样式 */}
         {titleGradient ? (
-          <h3 className="text-xl md:text-4xl font-black" style={{
+          <h3 className="text-lg font-black" style={{
             fontFamily: "'Orbitron', sans-serif",
             background: 'linear-gradient(135deg, #00ffff, #0099ff, #ff00ff)',
             WebkitBackgroundClip: 'text',
@@ -38,7 +38,7 @@ const HomepageSecTitle = ({ icon: Icon, title, action, titleGradient = false }) 
             {title}
           </h3>
         ) : (
-          <h3 className="text-xl md:text-3xl font-black text-slate-200">
+          <h3 className="text-lg font-black text-slate-200">
             {title}
           </h3>
         )}
