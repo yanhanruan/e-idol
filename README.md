@@ -120,3 +120,41 @@ If you are developing a production application, we recommend using TypeScript wi
 Next Step:
 
 把这种“杀伐决断”的劲头用到 AWS 备考 和 大厂面试 上。既然已经证明了你的技术很值钱，那就去把它卖给最识货、出价最高的买家（Google/Rakuten），而不是路边的草台班子。
+
+
+
+
+
+------
+
+### 🗺️ e-idol 全栈开发路线图 (基于你的需求图片
+
+#### **第一阶段：基建与核心用户系统 (Infrastructure & Auth)** 🔴 **(当前优先级最高)**
+
+- **目标：** 跑通数据库，实现用户注册、登录、鉴权。
+- **对应需求：** 账号管理、多端登录基础。
+- **技术点：** Docker, PostgreSQL, JWT (JSON Web Token), GORM Migration.
+
+#### **第二阶段：陪玩端核心业务 (Host Features)**
+
+- **目标：** 让陪玩员能设置资料和接单时间。
+- **对应需求：** 设置个人资料（头像/语音）、修改可接单时间、查看预约记录。
+- **技术点：** File Upload (头像上传), Time/Schedule Logic (排期逻辑).
+
+#### **第三阶段：订单与交易系统 (Orders & Transactions)**
+
+- **目标：** 实现从“下单”到“接单”的全流程。
+- **对应需求：** 顾客预约管理、查看预约内容、状态流转。
+- **技术点：** FSM (状态机: 待支付->待接单->进行中->完成), Transaction (数据库事务).
+
+#### **第四阶段：管理后台与统计 (Admin & Dashboard)**
+
+- **目标：** 只有管理员能看到的上帝视角。
+- **对应需求：** 账号管理（封号）、收入统计、Banner 更新。
+- **技术点：** Role-based Access Control (RBAC 权限控制), Aggregation (SQL 聚合查询).
+
+#### **第五阶段：高阶功能 (Advanced)**
+
+- **目标：** 提升体验和变现。
+- **对应需求：** 实时通知、多语言、月度会员（大航海）。
+- **技术点：** WebSocket (Socket.io), i18n, Stripe/WeChat Pay 接入.
