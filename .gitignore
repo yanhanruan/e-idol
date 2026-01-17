@@ -1,6 +1,9 @@
 # obsolete
 ./src/~obsolete
 
+# postgres
+postgres-data/
+
 # Logs
 logs
 *.log

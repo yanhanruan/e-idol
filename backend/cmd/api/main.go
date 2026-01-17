@@ -3,8 +3,9 @@ package main
 import (
 	"net/http"
 
-	// "e-idol-backend/internal/database"
-	// "e-idol-backend/internal/models"
+	"e-idol-backend/internal/database"
+	"e-idol-backend/internal/models"
+	"e-idol-backend/internal/routes"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -24,13 +25,17 @@ func main() {
 	}))
 
 	// Connect to database
-	// database.ConnectDB()
+	database.ConnectDB()
 
 	// Auto-migrate models
-	// err := database.DB.AutoMigrate(&models.User{})
-	// if err != nil {
-	// 	panic("Failed to auto-migrate database models")
-	// }
+	err := database.DB.AutoMigrate(&models.User{})
+	if err != nil {
+		panic("Failed to auto-migrate database models")
+	}
+
+	// Setup routes
+	api := router.Group("/api")
+	routes.AuthRoutes(api, database.DB)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {
