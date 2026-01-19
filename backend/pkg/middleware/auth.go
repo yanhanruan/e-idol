@@ -20,7 +20,6 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenString := authHeader[len("Bearer "):]
 
 		claims, err := utils.ValidateToken(tokenString)
->>>>>>>
 
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
@@ -28,6 +27,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		c.Set("userID", claims.ID)
 		c.Set("username", claims.Username)
 		c.Set("role", claims.Role)
 

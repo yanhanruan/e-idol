@@ -33,9 +33,13 @@ func main() {
 		panic("Failed to auto-migrate database models")
 	}
 
+	// Serve static files from the "uploads" directory
+	router.Static("/uploads", "./uploads")
+
 	// Setup routes
 	api := router.Group("/api")
 	routes.AuthRoutes(api, database.DB)
+	routes.UserRoutes(api, database.DB)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {
