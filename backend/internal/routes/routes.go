@@ -23,4 +23,14 @@ func UserRoutes(router *gin.RouterGroup, db *gorm.DB) {
 		user.GET("/profile", handlers.GetProfile(db))
 		user.PUT("/profile", handlers.UpdateProfile(db))
 	}
+
+	router.GET("/hosts", handlers.GetHostList(db))
+}
+
+func OrderRoutes(router *gin.RouterGroup, db *gorm.DB) {
+	orders := router.Group("/orders")
+	orders.Use(middleware.AuthMiddleware())
+	{
+		orders.POST("/", handlers.CreateOrder(db))
+	}
 }

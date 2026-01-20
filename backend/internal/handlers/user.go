@@ -28,6 +28,41 @@ func GetProfile(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
+func GetHostList(db *gorm.DB) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+        pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "10"))
+        gender := c.Query("gender")
+
+        var hosts []models.User
+        query := db.Model(&models.User{}).Where("role = ?", models.RoleHost)
+
+        if gender != "" {
+            query = query.Where("gender = ?", gender)
+        }
+
+        offset := (page - 1) * pageSize
+        if err := query.Offset(offset).Limit(pageSize).Find(&hosts).Error; err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch hosts"})
+            return
+        }
+
+        var result []gin.H
+        for _, host := range hosts {
+            result = append(result, gin.H{
+                "id":       host.ID,
+                "username": host.Username,
+                "avatar":   host.Avatar,
+                "bio":      host.Bio,
+                "gender":   host.Gender,
+                "price":    host.Price,
+            })
+        }
+
+        c.JSON(http.StatusOK, result)
+    }
+}
+
 func UpdateProfile(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID, exists := c.Get("userID")

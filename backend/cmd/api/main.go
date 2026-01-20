@@ -28,7 +28,7 @@ func main() {
 	database.ConnectDB()
 
 	// Auto-migrate models
-	err := database.DB.AutoMigrate(&models.User{})
+	err := database.DB.AutoMigrate(&models.User{}, &models.Order{})
 	if err != nil {
 		panic("Failed to auto-migrate database models")
 	}
@@ -40,6 +40,7 @@ func main() {
 	api := router.Group("/api")
 	routes.AuthRoutes(api, database.DB)
 	routes.UserRoutes(api, database.DB)
+	routes.OrderRoutes(api, database.DB)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {
