@@ -32,5 +32,7 @@ func OrderRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	orders.Use(middleware.AuthMiddleware())
 	{
 		orders.POST("/", handlers.CreateOrder(db))
+		orders.GET("/my-orders", handlers.GetMyOrders(db))
+		orders.PATCH("/:id/status", handlers.UpdateOrderStatus(db))
 	}
 }

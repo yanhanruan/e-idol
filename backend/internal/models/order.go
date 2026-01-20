@@ -12,6 +12,7 @@ const (
     StatusConfirmed OrderStatus = "confirmed"
     StatusCompleted OrderStatus = "completed"
     StatusCancelled OrderStatus = "cancelled"
+    StatusRejected  OrderStatus = "rejected"
 )
 
 type Order struct {

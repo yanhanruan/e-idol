@@ -61,3 +61,84 @@ func CreateOrder(db *gorm.DB) gin.HandlerFunc {
         c.JSON(http.StatusCreated, order)
     }
 }
+// TODO security check
+func GetMyOrders(db *gorm.DB) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        userID, _ := c.Get("userID")
+        userRole, _ := c.Get("role")
+
+        var orders []models.Order
+        query := db.Model(&models.Order{})
+
+        if userRole == string(models.RoleClient) {
+            query = query.Where("client_id = ?", userID).Preload("Host", func(db *gorm.DB) *gorm.DB {
+                return db.Select("id, username, avatar")
+            })
+        } else if userRole == string(models.RoleHost) {
+            query = query.Where("host_id = ?", userID).Preload("Client", func(db *gorm.DB) *gorm.DB {
+                return db.Select("id, username, avatar")
+            })
+        }
+
+        if err := query.Find(&orders).Error; err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch orders"})
+            return
+        }
+        c.JSON(http.StatusOK, orders)
+    }
+}
+
+type UpdateOrderStatusInput struct {
+    Status models.OrderStatus `json:"status" binding:"required"`
+}
+
+func UpdateOrderStatus(db *gorm.DB) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        orderID := c.Param("id")
+        var input UpdateOrderStatusInput
+        if err := c.ShouldBindJSON(&input); err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+            return
+        }
+
+        var order models.Order
+        if err := db.First(&order, orderID).Error; err != nil {
+            c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+            return
+        }
+
+        userID, _ := c.Get("userID")
+        userRole, _ := c.Get("role")
+
+        if order.ClientID != userID.(uint) && order.HostID != userID.(uint) {
+            c.JSON(http.StatusForbidden, gin.H{"error": "You are not authorized to update this order"})
+            return
+        }
+
+        currentStatus := order.Status
+        newStatus := input.Status
+
+        if userRole == string(models.RoleHost) {
+            if currentStatus == models.StatusPending && (newStatus == models.StatusConfirmed || newStatus == models.StatusRejected) {
+                order.Status = newStatus
+            } else {
+                c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status transition"})
+                return
+            }
+        } else if userRole == string(models.RoleClient) {
+            if currentStatus == models.StatusPending && newStatus == models.StatusCancelled {
+                order.Status = newStatus
+            } else {
+                c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status transition"})
+                return
+            }
+        }
+
+        if err := db.Save(&order).Error; err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order status"})
+            return
+        }
+
+        c.JSON(http.StatusOK, order)
+    }
+}
