@@ -2,6 +2,7 @@ package routes
 
 import (
 	"e-idol-backend/internal/handlers"
+	"e-idol-backend/internal/websocket"
 	"e-idol-backend/pkg/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -35,4 +36,13 @@ func OrderRoutes(router *gin.RouterGroup, db *gorm.DB) {
 		orders.GET("/my-orders", handlers.GetMyOrders(db))
 		orders.PATCH("/:id/status", handlers.UpdateOrderStatus(db))
 	}
+}
+
+func ChatRoutes(router *gin.RouterGroup, db *gorm.DB, hub *websocket.Hub) {
+	chat := router.Group("/chat")
+	chat.Use(middleware.AuthMiddleware())
+	{
+		chat.GET("/messages/history", handlers.GetMessageHistory(db))
+	}
+	router.GET("/ws", handlers.ServeWs(hub, db))
 }

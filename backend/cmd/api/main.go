@@ -6,6 +6,7 @@ import (
 	"e-idol-backend/internal/database"
 	"e-idol-backend/internal/models"
 	"e-idol-backend/internal/routes"
+	"e-idol-backend/internal/websocket"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -28,7 +29,7 @@ func main() {
 	database.ConnectDB()
 
 	// Auto-migrate models
-	err := database.DB.AutoMigrate(&models.User{}, &models.Order{})
+	err := database.DB.AutoMigrate(&models.User{}, &models.Order{}, &models.Message{})
 	if err != nil {
 		panic("Failed to auto-migrate database models")
 	}
@@ -37,10 +38,14 @@ func main() {
 	router.Static("/uploads", "./uploads")
 
 	// Setup routes
+	hub := websocket.NewHub()
+	go hub.Run()
+
 	api := router.Group("/api")
 	routes.AuthRoutes(api, database.DB)
 	routes.UserRoutes(api, database.DB)
 	routes.OrderRoutes(api, database.DB)
+	routes.ChatRoutes(api, database.DB, hub)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {
