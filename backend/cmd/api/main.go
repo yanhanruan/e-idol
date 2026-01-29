@@ -41,11 +41,7 @@ func main() {
 	hub := websocket.NewHub()
 	go hub.Run()
 
-	api := router.Group("/api")
-	routes.AuthRoutes(api, database.DB)
-	routes.UserRoutes(api, database.DB)
-	routes.OrderRoutes(api, database.DB)
-	routes.ChatRoutes(api, database.DB, hub)
+	routes.RegisterRoutes(router, database.DB, hub)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {

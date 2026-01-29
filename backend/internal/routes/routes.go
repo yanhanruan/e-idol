@@ -46,3 +46,13 @@ func ChatRoutes(router *gin.RouterGroup, db *gorm.DB, hub *websocket.Hub) {
 	}
 	router.GET("/ws", handlers.ServeWs(hub, db))
 }
+
+func RegisterRoutes(router *gin.Engine, db *gorm.DB, hub *websocket.Hub) {
+	api := router.Group("/api")
+
+	AuthRoutes(api, db)
+	UserRoutes(api, db)
+	OrderRoutes(api, db)
+	ChatRoutes(api, db, hub)
+	RegisterAdminRoutes(router, db)
+}
