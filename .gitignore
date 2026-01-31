@@ -1,6 +1,9 @@
 # obsolete
 ./src/~obsolete
 
+# private notes
+local-notes.md
+
 # postgres
 postgres-data/
 
