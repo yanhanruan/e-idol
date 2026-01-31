@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"e-idol-backend/internal/models"
-	"e-idol-backend/internal/websocket"
+	internalWebsocket "e-idol-backend/internal/websocket"
 	"e-idol-backend/pkg/utils"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func ServeWs(hub *websocket.Hub, db *gorm.DB) gin.HandlerFunc {
+func ServeWs(hub *internalWebsocket.Hub, db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Query("token")
 		if token == "" {
@@ -41,7 +41,7 @@ func ServeWs(hub *websocket.Hub, db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		client := &websocket.Client{
+		client := &internalWebsocket.Client{
 			Hub:    hub,
 			Conn:   conn,
 			Send:   make(chan []byte, 256),
