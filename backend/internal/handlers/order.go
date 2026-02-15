@@ -57,10 +57,16 @@ func CreateOrder(db *gorm.DB) gin.HandlerFunc {
 
 			// Check for overlapping orders for the same host.
 			var count int64
-			if err := tx.Model(&models.Order{}).
-				Where("host_id = ? AND status IN ?", input.HostID, []models.OrderStatus{models.StatusConfirmed, models.StatusPending}).
-				Where("start_time < ? AND start_time + (duration * interval '1 hour') > ?", orderEndTime, input.StartTime).
-				Count(&count).Error; err != nil {
+			query := tx.Model(&models.Order{}).
+				Where("host_id = ? AND status IN ?", input.HostID, []models.OrderStatus{models.StatusConfirmed, models.StatusPending})
+
+			if tx.Dialector.Name() == "sqlite" {
+				query = query.Where("start_time < ? AND datetime(start_time, '+' || duration || ' hours') > ?", orderEndTime, input.StartTime)
+			} else {
+				query = query.Where("start_time < ? AND start_time + (duration * interval '1 hour') > ?", orderEndTime, input.StartTime)
+			}
+
+			if err := query.Count(&count).Error; err != nil {
 				return err
 			}
 
