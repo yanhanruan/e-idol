@@ -1,28 +1,31 @@
-import { Play,Pause } from "lucide-react";
+import { Play, Pause } from "lucide-react";
 
 const AudioWaveButton = ({ isPlaying, onClick }) => {
   const waveConfig = [
     { duration: '1.2s', delay: '0s' },
     { duration: '1.0s', delay: '0.15s' },
     { duration: '1.3s', delay: '0.3s' },
-    // { duration: '1.1s', delay: '0.15s' },
-    // { duration: '1.2s', delay: '0s' },
+    { duration: '1.1s', delay: '0.15s' },
+    { duration: '1.2s', delay: '0s' },
   ];
 
   return (
     <button
       onClick={onClick}
-      className="flex px-3 py-1.5 md:px-4 md:py-2 items-center justify-center space-x-1 bg-gradient-to-r opacity-80 from-pink-400 to-purple-400 text-white rounded-full shadow-lg hover:scale-110 transition-transform duration-200 w-full"
+      // 改用暗黑半透明背景 + 霓虹青色边框 + 发光阴影，减少圆角弧度
+      className="flex px-3 py-1.5 md:px-4 md:py-2 items-center justify-center space-x-2 bg-black/50 backdrop-blur-sm text-cyan-400 rounded-md hover:scale-105 duration-300"
     >
       <div className="relative w-4 h-4 flex-shrink-0">
-        <Play className={`w-4 h-4 fill-white transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
-        <Pause className={`absolute top-0 left-0 w-4 h-4 fill-white transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-100' : 'opacity-0'}`} />
+        {/* 图标颜色改为霓虹青色 */}
+        <Play className={`w-4 h-4 fill-cyan-400 text-cyan-400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
+        <Pause className={`absolute top-0 left-0 w-4 h-4 fill-cyan-400 text-cyan-400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-100' : 'opacity-0'}`} />
       </div>
       <div className="flex items-center justify-center space-x-1 h-5 md:h-6">
         {waveConfig.map((bar, i) => (
           <div
             key={i}
-            className="w-1 bg-white rounded-full animate-wave"
+            // 波形图改为青色
+            className="w-[3px] bg-cyan-400 rounded-sm animate-wave shadow-[0_0_5px_rgba(34,211,238,0.8)]"
             style={{
               animationDuration: bar.duration,
               animationDelay: bar.delay,
@@ -63,36 +66,59 @@ const Tag = ({ children, color = "blue", paddingType = "service" }) => {
   );
 };
 
+const CyberTag = ({ children, color = "blue" }) => {
+  const styles = {
+    blue: "text-cyan-400 border-cyan-500/30 hover:bg-cyan-900/40",
+    purple: "text-purple-400 border-purple-500/30 hover:bg-purple-900/40",
+  };
+  
+  const accentColor = color === "blue" ? "bg-cyan-400" : "bg-purple-400";
+
+  return (
+    <div className={`
+      relative flex items-center gap-1.5 
+      px-2 py-0.5 /* 大幅减少内边距，原本是 py-1.5 */
+      border bg-black/50 backdrop-blur-sm
+      font-mono text-[10px] /* 缩小字号 */
+      tracking-wider uppercase font-bold
+      transition-all duration-300 cursor-default
+      /* 缩小切角尺寸 */
+      [clip-path:polygon(0_0,calc(100%-6px)_0,100%_6px,100%_100%,0_100%)]
+      ${styles[color] || styles.blue}
+    `}>
+      {/* 装饰方块也缩小 */}
+      <span className={`w-1 h-1 block ${accentColor} shadow-[0_0_4px_currentColor]`}></span>
+      {children}
+    </div>
+  );
+};
+
 
 const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) => (
-  
+
   // LAYER 0: 卡片容器 (Hover 目标) 和 背景光 (::before)
   // 这是从 ProductCard 移植过来的新父级 div。
   // 它负责 'group' 状态和 '::before' 辉光。
-  <div 
+  <div
     className={`
       group relative
-      // 将您原来的 hover:scale-105 和 transition 移到这个父容器
       transition-transform duration-300 ease-out
       hover:scale-105
-
-      // LAYER 1: 背景光 (::before)
-      // (从 ProductCard 复制)
-      before:content-[''] before:absolute before:inset-0 before:z-10
-      before:rounded-[var(--card-radius)] // 使用您卡片自己的圆角变量
-      before:blur-[30px]
-      before:bg-gradient-to-l before:from-[#7e0fff] before:to-[#0fffc1] // 您可以自定义颜色
-      before:bg-[200%_200%] before:opacity-0
-      before:transition-[opacity,transform] before:duration-400 before:ease-in-out
-
-      // 动画: 背景光 (在 group-hover 时触发)
-      hover:before:opacity-60 hover:before:scale-115 hover:before:animate-animateGlow
+      // LAYER 1: backgound gromming(::before)
+      before:inset-[6px]
+      before:blur-[14px]
+      before:bg-gradient-to-l
+      before:from-[#7e0fff80]
+      before:to-[#0fffc180]
+      before:bg-[140%_140%]
+      before:opacity-0
+      before:transition-opacity
+      before:duration-300
+      hover:before:opacity-30
+      hover:cursor-pointer
     `}
   >
-    {/* LAYER 2: 卡片内容 (可见层) 
-      这就是您 *原来* 的 UserCard 根 div。
-    */}
-    <div 
+    <div
       className={`
         ${size === 'full' ? 'user-card-full' : 'user-card-small'}
         
@@ -112,7 +138,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) =>
     >
       {/* 这是您原来的背景层, 保持不变 */}
       <div className={`absolute inset-0 bg-gradient-to-br ${user.color} opacity-30`}></div>
-      
+
 
       {/* LAYER 3: 光扫特效 (已修改)
         放在背景层之上, 内容层(z-10)之下。
@@ -161,7 +187,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) =>
               `}>
               {user.name}
             </p>
-            <div className="flex flex-col items-center ">
+            <div className="flex flex-col items-center shrink-0 w-22">
               <AudioWaveButton
                 isPlaying={playingAudio === idx}
                 onClick={() => toggleAudio(idx)}
@@ -170,51 +196,65 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = "full" }) =>
           </div>
           <div className="space-y-3 w-full " >
             <div className={`
-                flex flex-col justify-end bg-cover bg-center bg-no-repeat backdrop-blur-sm shadow-lg
-                min-h-[var(--content-min-height)]
+                flex flex-col justify-end bg-cover bg-center bg-no-repeat shadow-lg
                 rounded-[var(--content-radius)]
                 p-[var(--content-padding-base)] 
                 md:p-[var(--content-padding-md)]
                 h-60
                 brightness-90
-                 contrast-111
               `}
               style={{ backgroundImage: "url('/cyber.jpg')" }}
-              >
+            >
 
-              <div className="flex flex-wrap gap-1 md:gap-2">
+              {/* 游戏与段位区 */}
+              {/* 游戏与段位区：增加了 w-fit 防止拉伸，整体缩小尺寸 */}
+              <div className="flex flex-wrap gap-2 w-full mb-1">
                 {user.games.map((game, gIdx) => (
-                  <div key={gIdx} className="flex items-center justify-between gap-1">
-                    <span className={`
-                        font-bold text-slate-100
-                        [font-size:var(--font-rank-base)]
-                        md:text-[var(--font-rank-md)]
-                      `}>
+                  // 关键点：w-fit 让它只包裹内容，不再撑满一行
+                  <div key={gIdx} className="flex relative group w-fit">
+
+                    {/* 左侧：游戏名 (超迷你版) */}
+                    <div className={`
+        relative z-10 flex items-center justify-center
+        bg-[#fce300] text-black 
+        font-black uppercase 
+        text-[10px] leading-none tracking-wider /* 极小字号 */
+        px-1.5 py-1 
+        shadow-[0_0_5px_rgba(252,227,0,0.4)]
+        /* 切角也对应缩小，从8px改为4px，更精致 */
+        [clip-path:polygon(0_0,100%_0,100%_100%,4px_100%,0_calc(100%-4px))]
+        cursor-default
+      `}>
                       {t.games[game.name]}
-                    </span>
-                    <span className={`
-                        font-bold text-indigo-600 bg-white/50 rounded-full 
-                        [font-size:var(--font-rank-base)] 
-                        py-[var(--rank-tag-py)]
-                        px-[var(--rank-tag-px-base)]
-                        md:px-[var(--rank-tag-px-md)]
-                      `}>
+                    </div>
+
+                    {/* 右侧：段位 (超迷你版) */}
+                    <div className={`
+        flex items-center
+        bg-black/90 border-t border-b border-r border-[#fce300]/60 text-[#fce300] 
+        font-mono font-bold 
+        text-[10px] leading-none
+        px-2 py-1 
+        -ml-1.5 pl-2.5 /* 调整重叠距离 */
+        [clip-path:polygon(0_0,100%_0,100%_calc(100%-4px),calc(100%-4px)_100%,0_100%)]
+      `}>
                       {t.ranks[game.rank]}
-                    </span>
+                    </div>
+
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-2 w-full">
+              <div className="flex flex-wrap gap-x-2 gap-y-1 w-full">
                 {user.services.map((service, sIdx) => (
-                  <Tag key={sIdx} color="blue" paddingType="service">
+                  <CyberTag key={sIdx} color="blue" >
                     {t.serviceContent[service]}
-                  </Tag>
+                  </CyberTag>
                 ))}
                 {user.methods.map((method, mIdx) => (
-                  <Tag key={mIdx} color="purple" paddingType="service">
+                  <CyberTag key={mIdx} color="purple" >
                     {t.serviceMethod[method]}
-                  </Tag>
+                  </CyberTag>
                 ))}
               </div>
             </div>
