@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # =================
+      # Frontend (React + Vite)
+      # =================
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint frontend
+        run: npm run lint
+
+      - name: Build frontend
+        run: npm run build
+
+      # =================
+      # Backend (Go)
+      # =================
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Download Go modules
+        run: go mod tidy
+        working-directory: ./backend
+
+      - name: Build backend
+        run: go build ./...
+        working-directory: ./backend
