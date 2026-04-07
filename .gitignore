@@ -1,5 +1,6 @@
 # obsolete
 ./src/~obsolete
+*.txt
 
 # private notes
 local-notes.md
