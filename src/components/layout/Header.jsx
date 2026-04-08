@@ -13,7 +13,7 @@ const glassStyle = "bg-[#050510]/80 backdrop-blur-md border border-white/10 shad
 const transitionStyle = "transition-all duration-300 ease-in-out";
 
 // [新增]: 定义导航项对应的 URL 路径配置
-// 键名对应 translations.js 中的 key，值为路由路径
+// 键名对应 translations.ts 中的 key，值为路由路径
 const navConfig = {
     home: '/',
     process: '/process',

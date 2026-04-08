@@ -1,4 +1,6 @@
-export const USERS_DATA = [
+import type { FeaturedUser, GameCard, UserProfile } from '../types';
+
+export const USERS_DATA: UserProfile[] = [
   {
     name: 'メロン',
     avatar: '👾',
@@ -6,11 +8,11 @@ export const USERS_DATA = [
     online: true,
     games: [
       { name: 'apex', rank: 'master' },
-      { name: 'valorant', rank: 'diamond' }
+      { name: 'valorant', rank: 'diamond' },
     ],
     voice: 'mature',
     services: ['gaming', 'chatting'],
-    methods: ['online']
+    methods: ['online'],
   },
   {
     name: '春希',
@@ -19,23 +21,21 @@ export const USERS_DATA = [
     online: true,
     games: [
       { name: 'lol', rank: 'platinum' },
-      { name: 'apex', rank: 'gold' }
+      { name: 'apex', rank: 'gold' },
     ],
     voice: 'girl',
     services: ['gaming', 'teaching'],
-    methods: ['online']
+    methods: ['online'],
   },
   {
     name: 'こあんひ',
     avatar: '🤖',
     color: 'from-blue-200 to-indigo-200',
     online: false,
-    games: [
-      { name: 'valorant', rank: 'diamond' }
-    ],
+    games: [{ name: 'valorant', rank: 'diamond' }],
     voice: 'loli',
     services: ['chatting'],
-    methods: ['online', 'offline']
+    methods: ['online', 'offline'],
   },
   {
     name: 'ななち',
@@ -44,23 +44,21 @@ export const USERS_DATA = [
     online: true,
     games: [
       { name: 'splatoon', rank: 'master' },
-      { name: 'apex', rank: 'platinum' }
+      { name: 'apex', rank: 'platinum' },
     ],
     voice: 'girl',
     services: ['gaming'],
-    methods: ['online']
+    methods: ['online'],
   },
   {
     name: 'ヤッホ',
     avatar: '🕹️',
     color: 'from-slate-200 to-blue-200',
     online: false,
-    games: [
-      { name: 'monsterhunter', rank: 'master' }
-    ],
+    games: [{ name: 'monsterhunter', rank: 'master' }],
     voice: 'mature',
     services: ['gaming', 'teaching'],
-    methods: ['online']
+    methods: ['online'],
   },
   {
     name: 'uta',
@@ -69,23 +67,23 @@ export const USERS_DATA = [
     online: true,
     games: [
       { name: 'apex', rank: 'diamond' },
-      { name: 'lol', rank: 'platinum' }
+      { name: 'lol', rank: 'platinum' },
     ],
     voice: 'loli',
     services: ['gaming', 'chatting'],
-    methods: ['online', 'offline']
-  }
+    methods: ['online', 'offline'],
+  },
 ];
 
-import mhWildsImg from "@assets/game-logos/Monster-Hunter-Wilds.png"
-import apex from "@assets/game-logos/apex-3.svg"
-import lol from "@assets/game-logos/LOL.png"
-import valorant from "@assets/game-logos/valorant-red.svg"
-import splatoonslpy from "@assets/game-logos/splatoon.png"
-import mhr from "@assets/game-logos/monster-hunter.png"
-import dbd from "@assets/game-logos/DbD-mobile.png"
+import mhWildsImg from '@assets/game-logos/Monster-Hunter-Wilds.png';
+import apex from '@assets/game-logos/apex-3.svg';
+import lol from '@assets/game-logos/LOL.png';
+import valorant from '@assets/game-logos/valorant-red.svg';
+import splatoonslpy from '@assets/game-logos/splatoon.png';
+import mhr from '@assets/game-logos/monster-hunter.png';
+import dbd from '@assets/game-logos/DbD-mobile.png';
 
-export const GAMES_DATA = [
+export const GAMES_DATA: GameCard[] = [
   { name: 'モンハンワイルズ', image: mhWildsImg, color: 'from-slate-600 to-slate-700' },
   { name: 'Apex', image: apex, color: 'from-red-600 to-orange-600' },
   { name: 'LoL', image: lol, color: 'from-blue-600 to-indigo-600' },
@@ -93,21 +91,10 @@ export const GAMES_DATA = [
   { name: 'スプラ3', image: splatoonslpy, color: 'from-orange-500 to-pink-500' },
   { name: 'APEX mobile', image: apex, color: 'from-red-500 to-orange-500' },
   { name: 'MHR', image: mhr, color: 'from-green-700 to-emerald-700' },
-  { name: 'DbD', image: dbd, color: 'from-slate-100/80 to-slate-400/80' }
+  { name: 'DbD', image: dbd, color: 'from-slate-100/80 to-slate-400/80' },
 ];
 
-// export const GAMES_DATA = [
-//   { name: 'モンハンワイルズ', image: '🕹️', color: 'from-slate-600 to-slate-700' },
-//   { name: 'Apex', image: '🎯', color: 'from-red-600 to-orange-600' },
-//   { name: 'LoL', image: '⚔️', color: 'from-blue-600 to-indigo-600' },
-//   { name: 'VALORANT', image: '🔫', color: 'from-red-700 to-pink-700' },
-//   { name: 'スプラ3', image: '🦑', color: 'from-orange-500 to-pink-500' },
-//   { name: 'APEX mobile', image: '📱', color: 'from-red-500 to-orange-500' },
-//   { name: 'MHR', image: '🐉', color: 'from-green-700 to-emerald-700' },
-//   { name: 'DbD', image: '👻', color: 'from-slate-800 to-slate-900' }
-// ];
-
-export const FEATURED_USERS_DATA = [
+export const FEATURED_USERS_DATA: FeaturedUser[] = [
   {
     name: 'ちい💙ぷる',
     username: '@chiipuru',
@@ -117,7 +104,7 @@ export const FEATURED_USERS_DATA = [
     duration: 30,
     image: '👩‍🚀',
     bgColor: 'from-pink-900/90 via-purple-900/10 to-blue-900/90',
-    online: true
+    online: true,
   },
   {
     name: 'とある',
@@ -128,7 +115,7 @@ export const FEATURED_USERS_DATA = [
     duration: 30,
     image: '💠',
     bgColor: 'from-purple-900/90 via-orange-900/10 to-blue-900/90',
-    online: true
+    online: true,
   },
   {
     name: 'おと☄',
@@ -139,7 +126,7 @@ export const FEATURED_USERS_DATA = [
     duration: 30,
     image: '☄',
     bgColor: 'from-blue-900/90 via-green-900/10 to-purple-900/90',
-    online: false
+    online: false,
   },
   {
     name: 'れに',
@@ -150,6 +137,6 @@ export const FEATURED_USERS_DATA = [
     duration: 30,
     image: '🪐',
     bgColor: 'from-pink-900/90 via-purple-900/10 to-indigo-900/90',
-    online: true
-  }
+    online: true,
+  },
 ];
