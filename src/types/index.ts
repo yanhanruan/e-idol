@@ -49,3 +49,23 @@ export type TranslationValue =
 
 export type TranslationMap = Record<string, TranslationValue>;
 export type AppTranslations = Record<Locale, TranslationMap>;
+
+export interface LanguageContextValue {
+  t: TranslationMap;
+  lang: Locale;
+  setLang: (lang: Locale) => void;
+}
+
+export type TransitionCallback = (() => void) | undefined;
+
+export interface TransitionContextValue {
+  isAnimating: boolean;
+  startTransition: (stateUpdateCallback?: TransitionCallback) => void;
+}
+
+export type AudioElementsMap = Record<string, HTMLAudioElement>;
+
+export interface AudioPlayerState {
+  playingAudio: string | null;
+  toggleAudio: (userId: string) => void;
+}
