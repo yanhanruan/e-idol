@@ -1,67 +1,105 @@
-import React from 'react';
+import { AlertTriangle, Calendar, CheckCircle2, Clock, Gamepad2, Heart, HeartHandshake, MapPin, ShieldCheck, Sparkles, UserCheck, XCircle } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useTranslations } from '../contexts/LanguageContext';
-import {
+import PageTitle from '@src/components/ui/PageTitle';
+
+type RecruitmentIconName = 'ShieldCheck' | 'Calendar' | 'Sparkles' | 'UserCheck' | 'Clock' | 'MapPin' | 'Gamepad2' | 'Heart';
+
+interface RecruitmentPoint {
+  title: string;
+  desc: string;
+  icon: RecruitmentIconName;
+}
+
+interface RecruitmentRequirement {
+  label: string;
+  text: string;
+}
+
+interface RecruitmentSection {
+  title: string;
+  items: string[];
+}
+
+interface RecruitmentCard {
+  title: string;
+  desc: string;
+}
+
+interface RecruitmentPageTranslation {
+  hero: {
+    badge: string;
+    title: string;
+    desc: string;
+    salaryPrefix: string;
+    salaryAmount: string;
+    salarySuffix: string;
+  };
+  points: RecruitmentPoint[];
+  requirements: {
+    title: string;
+    subtitle: string;
+    items: RecruitmentRequirement[];
+  };
+  ideal: {
+    title: string;
+    intro: string;
+    sections: RecruitmentSection[];
+  };
+  ng: {
+    title: string;
+    intro: string;
+    cards: RecruitmentCard[];
+  };
+  message: {
+    title: string;
+    text: string;
+    button: string;
+  };
+}
+
+const IconMap: Record<RecruitmentIconName, LucideIcon> = {
   ShieldCheck,
   Calendar,
   Sparkles,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  HeartHandshake,
   UserCheck,
   Clock,
   MapPin,
   Gamepad2,
-  Heart
-} from 'lucide-react';
-
-import PageTitle from '@src/components/ui/PageTitle';
-
-const IconMap = {
-  ShieldCheck, Calendar, Sparkles, UserCheck, Clock, MapPin, Gamepad2, Heart
+  Heart,
 };
 
 const RecruitmentPage = () => {
   const { t } = useTranslations();
-  const r = t.recruitmentPage;
-
-  // 与 ProcessPage 保持一致的容器宽度，确保两侧留白
-  const contentWidth = "max-w-4xl mx-auto px-6 sm:px-8 relative z-10";
+  const r = t.recruitmentPage as unknown as RecruitmentPageTranslation;
+  const contentWidth = 'max-w-4xl mx-auto px-6 sm:px-8 relative z-10';
 
   return (
     <div className="min-h-screen text-white font-sans relative overflow-hidden pb-2">
-
-      {/* 背景装饰 (保持原有的氛围，但稍微减弱一点以免抢眼) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] mix-blend-screen" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[80px] mix-blend-screen" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
       </div>
-      {/* TODO unify page spacing */}
+
       <div className={contentWidth}>
-
-
         <PageTitle
           subtitle={
             <>
               <Gamepad2 size={14} className="text-cyan-400" />
-              <span >{r.hero.badge}</span>
+              <span>{r.hero.badge}</span>
             </>
           }
           title={r.hero.title}
           comment={r.hero.desc}
         />
-        {/* --- 1. HERO SECTION (更加紧凑) --- */}
-        {/* FIXME: refactor this part */}
+
         <div className="text-center mb-12 md:mb-16 relative">
           <div className="max-w-2xl mx-auto mb-8">
-
-            {/* 薪资区域：更加精致的边框风格 */}
             <div className="inline-block relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-cyan-500/50 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
               <div className="relative bg-[#13161c]/80 backdrop-blur border border-slate-700/50 px-6 py-3 rounded-lg flex items-baseline gap-2 shadow-xl">
                 <span className="text-slate-500 font-bold text-xs">{r.hero.salaryPrefix}</span>
-                {/* 薪资数字缩小 */}
                 <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 tracking-tight">
                   {r.hero.salaryAmount}
                 </span>
@@ -71,7 +109,6 @@ const RecruitmentPage = () => {
           </div>
         </div>
 
-        {/* --- 2. POINTS (3 Columns) - 卡片风格更新 --- */}
         <div className="grid md:grid-cols-3 gap-4 mb-16">
           {r.points.map((point, index) => {
             const Icon = IconMap[point.icon] || ShieldCheck;
@@ -87,7 +124,6 @@ const RecruitmentPage = () => {
           })}
         </div>
 
-        {/* --- 3. REQUIREMENTS (列表更紧凑) --- */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-6">
             <div className="h-6 w-1 bg-cyan-500 rounded-full shadow-[0_0_8px_#06b6d4]"></div>
@@ -116,7 +152,6 @@ const RecruitmentPage = () => {
           </div>
         </div>
 
-        {/* --- 4. IDEAL CANDIDATE (更小的卡片) --- */}
         <div className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-white mb-2">{r.ideal.title}</h2>
@@ -146,9 +181,7 @@ const RecruitmentPage = () => {
           </div>
         </div>
 
-        {/* --- 5. DISQUALIFIERS (警告区域优化) --- */}
         <div className="mb-16 relative">
-          {/* 减弱红色背景的强度 */}
           <div className="absolute inset-0 bg-red-900/5 rounded-2xl -z-10 blur-xl"></div>
           <div className="bg-[#1a0f0f]/40 border border-red-900/20 rounded-2xl p-6 backdrop-blur-md">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-red-900/20 pb-4">
@@ -158,9 +191,7 @@ const RecruitmentPage = () => {
                   {r.ng.title}
                 </h2>
               </div>
-              <p className="text-red-200/40 text-[10px] md:text-right max-w-sm leading-tight">
-                {r.ng.intro}
-              </p>
+              <p className="text-red-200/40 text-[10px] md:text-right max-w-sm leading-tight">{r.ng.intro}</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3">
@@ -179,22 +210,18 @@ const RecruitmentPage = () => {
           </div>
         </div>
 
-        {/* --- 6. MESSAGE / CTA (更简洁的底部) --- */}
         <div className="max-w-2xl mx-auto text-center pb-8">
           <div className="w-12 h-12 bg-gradient-to-br from-cyan-900/50 to-purple-900/50 border border-cyan-500/20 rounded-full mx-auto flex items-center justify-center mb-4">
             <Heart size={20} className="text-cyan-200" />
           </div>
           <h2 className="text-xl font-bold text-white mb-4">{r.message.title}</h2>
-          <p className="text-slate-400 text-sm mb-8 leading-relaxed italic">
-            {r.message.text}
-          </p>
+          <p className="text-slate-400 text-sm mb-8 leading-relaxed italic">{r.message.text}</p>
 
           <button className="group relative px-6 py-3 bg-white text-black font-bold text-sm rounded-full overflow-hidden hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
             <span className="relative z-10">{r.message.button}</span>
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-300 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
         </div>
-
       </div>
     </div>
   );
