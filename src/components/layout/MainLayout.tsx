@@ -1,15 +1,18 @@
+import type { ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import BackgroundDecorations from './BackgroundDecorations';
 
-const MainLayout = ({ children }) => {
+interface MainLayoutProps {
+  children: ReactNode;
+}
+
+const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <>
       <BackgroundDecorations />
       <Header />
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
       <Footer />
     </>
   );
