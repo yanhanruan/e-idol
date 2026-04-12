@@ -22,6 +22,22 @@ interface ProcessFlowTranslation {
   };
 }
 
+const DEFAULT_PROCESS_FLOW: ProcessFlowTranslation = {
+  subtitle: '',
+  title: '',
+  steps: [],
+  areaInfo: {
+    title: '',
+    desc: '',
+  },
+};
+
+const isProcessFlowTranslation = (value: unknown): value is ProcessFlowTranslation => {
+  if (!value || typeof value !== 'object') return false;
+  const data = value as Record<string, unknown>;
+  return typeof data.subtitle === 'string' && typeof data.title === 'string' && Array.isArray(data.steps) && typeof data.areaInfo === 'object' && data.areaInfo !== null;
+};
+
 const IconMap = {
   Gamepad2,
   AlarmClock,
@@ -31,7 +47,8 @@ const IconMap = {
 };
 
 const ProcessPage = () => {
-  const r = useTranslations().t.processFlow as unknown as ProcessFlowTranslation;
+  const processFlow = useTranslations().t.processFlow;
+  const r = isProcessFlowTranslation(processFlow) ? processFlow : DEFAULT_PROCESS_FLOW;
   const contentWidth = 'max-w-4xl mx-auto px-6 sm:px-8 relative z-10';
 
   return (

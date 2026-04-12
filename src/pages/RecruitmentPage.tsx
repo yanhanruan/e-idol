@@ -58,6 +58,44 @@ interface RecruitmentPageTranslation {
   };
 }
 
+const DEFAULT_RECRUITMENT_PAGE: RecruitmentPageTranslation = {
+  hero: {
+    badge: '',
+    title: '',
+    desc: '',
+    salaryPrefix: '',
+    salaryAmount: '',
+    salarySuffix: '',
+  },
+  points: [],
+  requirements: {
+    title: '',
+    subtitle: '',
+    items: [],
+  },
+  ideal: {
+    title: '',
+    intro: '',
+    sections: [],
+  },
+  ng: {
+    title: '',
+    intro: '',
+    cards: [],
+  },
+  message: {
+    title: '',
+    text: '',
+    button: '',
+  },
+};
+
+const isRecruitmentPageTranslation = (value: unknown): value is RecruitmentPageTranslation => {
+  if (!value || typeof value !== 'object') return false;
+  const data = value as Record<string, unknown>;
+  return typeof data.hero === 'object' && data.hero !== null && Array.isArray(data.points) && typeof data.requirements === 'object' && data.requirements !== null;
+};
+
 const IconMap: Record<RecruitmentIconName, LucideIcon> = {
   ShieldCheck,
   Calendar,
@@ -71,7 +109,8 @@ const IconMap: Record<RecruitmentIconName, LucideIcon> = {
 
 const RecruitmentPage = () => {
   const { t } = useTranslations();
-  const r = t.recruitmentPage as unknown as RecruitmentPageTranslation;
+  const recruitmentPage = t.recruitmentPage;
+  const r = isRecruitmentPageTranslation(recruitmentPage) ? recruitmentPage : DEFAULT_RECRUITMENT_PAGE;
   const contentWidth = 'max-w-4xl mx-auto px-6 sm:px-8 relative z-10';
 
   return (
