@@ -100,7 +100,7 @@ const BackgroundDecorations = () => {
     if (!ctx) return;
 
     let animationFrameId = 0;
-    let particles: Particle[] = [];
+    const particles: Particle[] = [];
     let lastTime = 0;
 
     const isMobile = window.innerWidth < 768;

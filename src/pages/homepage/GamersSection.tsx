@@ -1,14 +1,23 @@
 import { Heart } from "lucide-react";
 import UserCard from "@src/components/UserCard";
 import HomepageSecTitle from "@src/components/HomepageSecTitle";
+import type { UserCardTranslations } from "@src/components/UserCard";
+import type { UserProfile } from "@src/types";
 
-const GamersSection = ({ users, t, playingAudio, toggleAudio }) => {
+interface GamersSectionProps {
+  users: UserProfile[];
+  t: UserCardTranslations & { seeMore: string; selectGamer: string };
+  playingAudio: string | null;
+  toggleAudio: (userId: string) => void;
+}
+
+const GamersSection = ({ users, t, playingAudio, toggleAudio }: GamersSectionProps) => {
   const moreButton = (
     <button className="text-sm text-slate-300 bg-blue-1000 border-2 border-indigo-500/70 px-2 py-2.5 rounded-full transition font-bold shadow-md hover:shadow-lg hover:scale-105">
       {t.seeMore}
     </button>
   );
-  return(
+  return (
     <div className="mb-12">
       <HomepageSecTitle
         icon={Heart}
@@ -31,6 +40,6 @@ const GamersSection = ({ users, t, playingAudio, toggleAudio }) => {
       </div>
     </div>
   );
-}
+};
 
 export default GamersSection;
