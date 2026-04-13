@@ -1,7 +1,7 @@
 import { Pause, Play } from 'lucide-react';
 import type { GameKey, GameRank, ServiceContent, ServiceMethod } from '../types';
 
-interface UserCardTranslations {
+export interface UserCardTranslations {
   games: Record<GameKey, string>;
   ranks: Record<GameRank, string>;
   serviceContent: Record<ServiceContent, string>;
@@ -96,7 +96,7 @@ interface UserCardProps {
   idx: number;
   t: UserCardTranslations;
   playingAudio: number | string | null;
-  toggleAudio: (userId: number) => void;
+  toggleAudio: (userId: string) => void;
   size?: 'full' | 'small';
 }
 
@@ -164,7 +164,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
               {user.name}
             </p>
             <div className="flex flex-col items-center shrink-0 w-22">
-              <AudioWaveButton isPlaying={playingAudio === idx} onClick={() => toggleAudio(idx)} />
+              <AudioWaveButton isPlaying={playingAudio === String(idx)} onClick={() => toggleAudio(String(idx))} />
             </div>
           </div>
           <div className="space-y-3 w-full ">
