@@ -1,4 +1,5 @@
-// src/App.jsx
+// src/App.tsx
+import React from 'react';
 import { Switch, Route } from 'wouter';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { TransitionProvider } from './contexts/TransitionContext';
@@ -16,7 +17,7 @@ import PricingPage from './pages/PricingPage';
 import CastListPage from './pages/CastListPage';
 import RecruitmentPage from './pages/RecruitmentPage';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <LanguageProvider>
       <TransitionProvider>
