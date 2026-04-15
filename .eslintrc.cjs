@@ -54,26 +54,17 @@ module.exports = {
 
   // 6. 自动检测 React 版本
   settings: {
-    react: {
-      version: "detect",
+  react: { version: "detect" },
+  "import/resolver": {
+    typescript: {
+      alwaysTryTypes: true,
+      project: "./tsconfig.json",
     },
-    "import/resolver": {
-      alias: {
-        map: [
-          ['@src', path.resolve(__dirname, './src')],
-          ['@assets', path.resolve(__dirname, './src/assets')]
-        ],
-        extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"] // 保持扩展名
-      },
-      typescript: {
-        alwaysTryTypes: true,
-        project: "./tsconfig.json",
-      },
-      node: {
-        extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"]
-      }
-    },
+    node: {
+      extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    }
   },
+},
 
   // 7. 忽略文件
   ignorePatterns: ["dist", "node_modules", "build", ".vite"],

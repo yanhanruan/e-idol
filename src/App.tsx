@@ -1,5 +1,4 @@
 // src/App.tsx
-import React from 'react';
 import { Switch, Route } from 'wouter';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { TransitionProvider } from './contexts/TransitionContext';
