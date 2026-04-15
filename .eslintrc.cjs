@@ -12,19 +12,24 @@ module.exports = {
   // 2. 继承推荐配置 (这是 v8 的核心)
   extends: [
     "eslint:recommended", // ESLint 官方基础规则 (会开启 "no-undef" 规则)
+    "plugin:@typescript-eslint/recommended", 
     "plugin:react/recommended", // React 核心规则
     "plugin:react-hooks/recommended", // React Hooks 规则 (!!!)
     "plugin:import/recommended",
+    "plugin:import/typescript",  
   ],
 
   // 3. 插件列表
   plugins: [
+    "@typescript-eslint", 
     "react",
     "react-hooks",
     "react-refresh", // Vite 热更新
     "import",
   ],
 
+  // ↓ 新增 TypeScript 解析器
+  parser: "@typescript-eslint/parser",
   // 4. 解析器选项
   parserOptions: {
     ecmaVersion: "latest", // 使用最新 JS 语法
@@ -43,8 +48,8 @@ module.exports = {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "no-unused-vars":"warn",
-    // 其他您可以按需添加...
+    "no-unused-vars":"off",
+    "@typescript-eslint/no-unused-vars": "warn",
   },
 
   // 6. 自动检测 React 版本
@@ -59,6 +64,10 @@ module.exports = {
           ['@assets', path.resolve(__dirname, './src/assets')]
         ],
         extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"] // 保持扩展名
+      },
+      typescript: {
+        alwaysTryTypes: true,
+        project: "./tsconfig.json",
       },
       node: {
         extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"]
