@@ -23,7 +23,7 @@ const Footer = () => (
           opacity: 0.8,
         }}
       >
-        © 2025 e-Idol. All rights reserved. Made with 🌟
+        © 2026 e-Idol. All rights reserved. yOHO ✨
       </p>
     </div>
   </footer>
