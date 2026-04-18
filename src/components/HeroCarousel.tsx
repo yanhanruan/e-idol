@@ -24,6 +24,9 @@ const CHARACTER_URL = characterImage;
 const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
+  const [isStageLoaded, setIsStageLoaded] = useState(false);
+  const [isCharLoaded, setIsCharLoaded] = useState(false);
+
   const slides = useMemo<SlideItem[]>(
     () => [
       {
@@ -70,7 +73,14 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
       <div className="hidden md:block absolute inset-0 z-0">
         {STAGE_BG_URL && (
           <>
-            <img src={STAGE_BG_URL} alt="Stage Environment" className="w-full h-full object-cover object-center" fetchPriority="high" decoding="async" />
+            <img
+              src={STAGE_BG_URL}
+              alt="Stage Environment"
+              className={`w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out ${isStageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              onLoad={() => setIsStageLoaded(true)}
+              fetchPriority="high"
+              decoding="async"
+            />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f1a] via-[#0f0f1a]/90 to-transparent z-10"></div>
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0f0f1a] to-transparent z-10"></div>
           </>
@@ -83,7 +93,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
             <img
               src={CHARACTER_URL}
               alt="Mascot"
-              className="max-h-[70%] w-auto object-contain transform translate-x-20 floating-character drop-shadow-[0_0_30px_rgba(0,255,255,0.3)]"
+              className={`max-h-[70%] w-auto object-contain transform floating-character drop-shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-all duration-1000 ease-out ${isCharLoaded ? 'opacity-100 translate-x-20 translate-y-0' : 'opacity-0 translate-x-20 translate-y-4'}`}              onLoad={() => setIsCharLoaded(true)}
               fetchPriority="high"
               decoding="async"
             />
@@ -92,8 +102,8 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
       </div>
 
       <div className="absolute inset-0 md:hidden z-0 overflow-hidden pointer-events-none">
-        {STAGE_BG_URL && <img src={STAGE_BG_URL} alt="Stage Mobile" className="absolute inset-0 w-full h-full object-cover opacity-30 blur-[1px]" fetchPriority="high" decoding="async" />}
-        {CHARACTER_URL && <img src={CHARACTER_URL} alt="Character Mobile" className="absolute -right-12 top-0 h-[65%] w-auto object-contain opacity-60 drop-shadow-lg" fetchPriority="high" decoding="async" />}
+        {STAGE_BG_URL && <img src={STAGE_BG_URL} alt="Stage Mobile" className={`absolute inset-0 w-full h-full object-cover blur-[1px] transition-opacity duration-1000 ease-in-out ${isStageLoaded ? 'opacity-30' : 'opacity-0'}`} onLoad={() => setIsStageLoaded(true)} fetchPriority="high" decoding="async" />}
+        {CHARACTER_URL && <img src={CHARACTER_URL} alt="Character Mobile" className={`absolute -right-12 top-0 h-[65%] w-auto object-contain drop-shadow-lg transform transition-all duration-1000 ease-out ${isCharLoaded ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-4'}`} onLoad={() => setIsCharLoaded(true)} fetchPriority="high" decoding="async" />}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-[#0f0f1a]/60 to-transparent"></div>
       </div>
 
