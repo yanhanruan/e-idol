@@ -4,18 +4,23 @@
 
 
 
-body{
+body {
   background: #112 center no-repeat;
 }
 
 /* Added to your global .css file */
 @keyframes wave-stretch {
-  0%, 100% {
-    transform: scaleY(0.2); /* Start at 20% height */
+
+  0%,
+  100% {
+    transform: scaleY(0.2);
+    /* Start at 20% height */
     transform-origin: bottom;
   }
+
   50% {
-    transform: scaleY(1.0); /* Scale up to 100% height */
+    transform: scaleY(1.0);
+    /* Scale up to 100% height */
     transform-origin: bottom;
   }
 }
@@ -28,41 +33,68 @@ body{
 /* --- Mini version variables --- */
 .user-card-small {
   /* Size and spacing (reduced by 50%) */
-  --card-padding-base: 0.375rem;   /* p-1.5 */
-  --card-padding-sm: 0.625rem;     /* sm:p-2.5 */
-  --card-padding-lg: 0.75rem;      /* lg:p-3 */
-  --card-margin-x: 0.75rem;        /* mx-3 */
-  --card-border: 2px;              /* border-2 */
-  --card-radius: 0.75rem;        /* rounded-xl */
+  --card-padding-base: 0.375rem;
+  /* p-1.5 */
+  --card-padding-sm: 0.625rem;
+  /* sm:p-2.5 */
+  --card-padding-lg: 0.75rem;
+  /* lg:p-3 */
+  --card-margin-x: 0.75rem;
+  /* mx-3 */
+  --card-border: 2px;
+  /* border-2 */
+  --card-radius: 0.75rem;
+  /* rounded-xl */
 
-  --avatar-size-base: 2rem;        /* w-8, h-8 */
-  --avatar-size-md: 3rem;          /* md:w-12, md:h-12 */
-  --online-dot-size-base: 0.625rem;/* w-2.5, h-2.5 */
-  --online-dot-size-md: 0.875rem;  /* md:w-3.5, md:h-3.5 */
-  --online-dot-border: 1.5px;      /* border-[1.5px] */
+  --avatar-size-base: 2rem;
+  /* w-8, h-8 */
+  --avatar-size-md: 3rem;
+  /* md:w-12, md:h-12 */
+  --online-dot-size-base: 0.625rem;
+  /* w-2.5, h-2.5 */
+  --online-dot-size-md: 0.875rem;
+  /* md:w-3.5, md:h-3.5 */
+  --online-dot-border: 1.5px;
+  /* border-[1.5px] */
 
   --content-min-height: 150px;
-  --content-padding-base: 0.375rem;/* p-1.5 */
-  --content-padding-md: 0.5rem;    /* md:p-2 */
-  --content-radius: 0.5rem;        /* rounded-lg */
+  --content-padding-base: 0.375rem;
+  /* p-1.5 */
+  --content-padding-md: 0.5rem;
+  /* md:p-2 */
+  --content-radius: 0.5rem;
+  /* rounded-lg */
 
   /* Font sizes (reduced while maintaining readability) */
-  --font-avatar-base: 1.25rem;     /* text-xl */
-  --font-avatar-md: 1.875rem;      /* text-3xl */
-  --font-name-base: 1.15rem;       /* text-xs */
-  --font-name-md: 0.875rem;        /* text-sm */
-  --font-tag-base: 0.7rem;            /* Keep readable */
-  --font-tag-md: 0.7rem;           /* Keep readable */
-  --font-rank-base: 0.75rem;           /* Keep readable */
-  --font-rank-md: 0.7rem;          /* Keep readable */
+  --font-avatar-base: 1.25rem;
+  /* text-xl */
+  --font-avatar-md: 1.875rem;
+  /* text-3xl */
+  --font-name-base: 1.15rem;
+  /* text-xs */
+  --font-name-md: 0.875rem;
+  /* text-sm */
+  --font-tag-base: 0.7rem;
+  /* Keep readable */
+  --font-tag-md: 0.7rem;
+  /* Keep readable */
+  --font-rank-base: 0.75rem;
+  /* Keep readable */
+  --font-rank-md: 0.7rem;
+  /* Keep readable */
 
   /* Tag padding (reduced by 50%) */
-  --rank-tag-px-base: 0.25rem;     /* px-1 */
-  --rank-tag-px-md: 0.375rem;      /* md:px-1.5 */
-  --rank-tag-py: 0.125rem;         /* py-0.5 */
-  
-  --service-tag-px: 0.1875rem;     /* px-[3px] */
-  --service-tag-py: 0.125rem;      /* py-0.5 */
+  --rank-tag-px-base: 0.25rem;
+  /* px-1 */
+  --rank-tag-px-md: 0.375rem;
+  /* md:px-1.5 */
+  --rank-tag-py: 0.125rem;
+  /* py-0.5 */
+
+  --service-tag-px: 0.1875rem;
+  /* px-[3px] */
+  --service-tag-py: 0.125rem;
+  /* py-0.5 */
 }
 
 
@@ -75,54 +107,71 @@ body{
    60% - 100%: Slowly fade out (Fade Out)
 */
 @keyframes flash-black-simple {
-  0% { opacity: 0; }
-  20% { opacity: 1; } 
-  60% { opacity: 1; } 
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Apply animation class */
 /* Use cubic-bezier to make the fade in/out feel more natural instead of linear */
 .animate-flash-black {
   animation: flash-black-simple 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  will-change: opacity; /* Performance optimization: hint to GPU */
+  will-change: opacity;
+  /* Performance optimization: hint to GPU */
 }
 
 
 /* =========================================
-   Global Scrollbar Style Customization
+   Desktop Scrollbar Style Customization (> 768px)
    ========================================= */
+@media (min-width: 769px) {
+  /* 1. For WebKit browsers (Chrome, Edge, Safari) */
+  ::-webkit-scrollbar {
+    width: 10px; 
+    height: 10px;
+  }
 
-/* 1. For WebKit browsers (Chrome, Edge, Safari) */
-::-webkit-scrollbar {
-  width: 8px;  /* Width of vertical scrollbar */
-  height: 8px; /* Height of horizontal scrollbar */
-}
+  ::-webkit-scrollbar-track {
+    /* Semi-transparent background + frosted glass effect */
+    background: transparent; 
+  }
 
-/* Scrollbar track (background) */
-::-webkit-scrollbar-track {
-  background: #0d111a; /* Very dark blue-black that blends with your page background */
-  border-radius: 4px;
-}
+  ::-webkit-scrollbar-thumb {
+    /* Thumb (slider) color */
+    background-color: rgba(42, 48, 69, 0.7);
+    border-radius: 10px;
+    
+    /* Use transparent border + background-clip to make the thumb appear 
+       floating inside the track, without sticking to the edges */
+    border: 3px solid transparent; 
+    background-clip: padding-box; 
+  }
 
-/* Scrollbar thumb (the draggable part) */
-::-webkit-scrollbar-thumb {
-  background: #2a3045; /* Default state: slightly brighter deep blue/gray-blue */
-  border-radius: 4px;
-  /* Optional border for a more refined look: */
-  /* border: 2px solid #0d111a; */ 
-}
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(163, 194, 200, 0.345); 
+  }
 
-/* Hover effect on the scrollbar thumb */
-::-webkit-scrollbar-thumb:hover {
-  background: #00d9ff; /* Turns into your site's cyan color on hover — looks very cool! */
-  /* You can also change it to purple to match your buttons: background: #bd52ff; */
-}
-
-
-/* 2. For Firefox browser (Firefox has limited customization — only width and color) */
-html {
-  scrollbar-width: thin; /* Set to a thin scrollbar */
-  /* First color = thumb, second color = track */
-  scrollbar-color: #2a3045 #0d111a; 
+  /* 2. Firefox-specific compatibility handling 
+   * Using @supports (-moz-appearance: none) for strict isolation.
+   * This ensures Firefox reads the standard properties while preventing 
+   * Chrome from applying them (which would override the WebKit styles).
+   */
+  @supports (-moz-appearance: none) {
+    html {
+      scrollbar-width: auto; 
+      scrollbar-color: rgba(42, 48, 69, 0.8) rgba(13, 17, 26, 0.3); 
+    }
+  }
 }
