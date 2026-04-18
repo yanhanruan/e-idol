@@ -159,6 +159,9 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
                 font-black text-slate-100 
                 [font-size:var(--font-name-base)]
                 md:[font-size:var(--font-name-md)]
+                line-clamp-2  
+                break-words
+                balance-words
               `}
             >
               {user.name}
