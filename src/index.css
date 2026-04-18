@@ -8,26 +8,26 @@ body{
   background: #112 center no-repeat;
 }
 
-/* 添加到你的全局 .css 文件中 */
+/* Added to your global .css file */
 @keyframes wave-stretch {
   0%, 100% {
-    transform: scaleY(0.2); /* 从 20% 高度开始 */
+    transform: scaleY(0.2); /* Start at 20% height */
     transform-origin: bottom;
   }
   50% {
-    transform: scaleY(1.0); /* 缩放到 100% 高度 */
+    transform: scaleY(1.0); /* Scale up to 100% height */
     transform-origin: bottom;
   }
 }
 
-/* 创建一个功能类来使用这个动画 */
+/* Create a utility class to use this animation */
 .animate-wave-stretch {
   animation: wave-stretch 1.2s infinite ease-in-out;
 }
 
-/* --- 缩小版的变量 --- */
+/* --- Mini version variables --- */
 .user-card-small {
-  /* 尺寸和间距 (缩小 50%) */
+  /* Size and spacing (reduced by 50%) */
   --card-padding-base: 0.375rem;   /* p-1.5 */
   --card-padding-sm: 0.625rem;     /* sm:p-2.5 */
   --card-padding-lg: 0.75rem;      /* lg:p-3 */
@@ -46,17 +46,17 @@ body{
   --content-padding-md: 0.5rem;    /* md:p-2 */
   --content-radius: 0.5rem;        /* rounded-lg */
 
-  /* 字体大小 (缩小，但保证可读性) */
+  /* Font sizes (reduced while maintaining readability) */
   --font-avatar-base: 1.25rem;     /* text-xl */
   --font-avatar-md: 1.875rem;      /* text-3xl */
   --font-name-base: 1.15rem;       /* text-xs */
   --font-name-md: 0.875rem;        /* text-sm */
-  --font-tag-base: 0.7rem;            /* 保证可读 */
-  --font-tag-md: 0.7rem;           /* 保证可读 */
-  --font-rank-base: 0.75rem;           /* 保证可读 */
-  --font-rank-md: 0.7rem;          /* 保证可读 */
+  --font-tag-base: 0.7rem;            /* Keep readable */
+  --font-tag-md: 0.7rem;           /* Keep readable */
+  --font-rank-base: 0.75rem;           /* Keep readable */
+  --font-rank-md: 0.7rem;          /* Keep readable */
 
-  /* Tag 内边距 (缩小 50%) */
+  /* Tag padding (reduced by 50%) */
   --rank-tag-px-base: 0.25rem;     /* px-1 */
   --rank-tag-px-md: 0.375rem;      /* md:px-1.5 */
   --rank-tag-py: 0.125rem;         /* py-0.5 */
@@ -68,11 +68,11 @@ body{
 
 /* --- Global Transition Animation --- */
 
-/* 极简遮罩动画 */
-/* 逻辑：
-   0% - 20%: 快速淡入黑色 (Fade In)
-   20% - 60%: 保持纯黑 (Hold) -> 这段时间 JS 切换路由/语言
-   60% - 100%: 慢慢淡出 (Fade Out)
+/* Minimal black mask animation */
+/* Logic:
+   0% - 20%: Quick fade in to black (Fade In)
+   20% - 60%: Stay pure black (Hold) → During this time JS switches route/language
+   60% - 100%: Slowly fade out (Fade Out)
 */
 @keyframes flash-black-simple {
   0% { opacity: 0; }
@@ -81,47 +81,48 @@ body{
   100% { opacity: 0; }
 }
 
-/* 应用动画类 */
-/* 使用 cubic-bezier 让淡入淡出更自然，不像线性那么生硬 */
+/* Apply animation class */
+/* Use cubic-bezier to make the fade in/out feel more natural instead of linear */
 .animate-flash-black {
   animation: flash-black-simple 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  will-change: opacity; /* 性能优化：通知 GPU */
+  will-change: opacity; /* Performance optimization: hint to GPU */
 }
+
 
 /* =========================================
-   全局滚动条样式定制
+   Global Scrollbar Style Customization
    ========================================= */
 
-/* 1. 针对 WebKit 浏览器 (Chrome, Edge, Safari) */
+/* 1. For WebKit browsers (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-  width: 8px;  /* 纵向滚动条的宽度 */
-  height: 8px; /* 横向滚动条的高度 */
+  width: 8px;  /* Width of vertical scrollbar */
+  height: 8px; /* Height of horizontal scrollbar */
 }
 
-/* 滚动条的轨道 (背景) */
+/* Scrollbar track (background) */
 ::-webkit-scrollbar-track {
-  background: #0d111a; /* 使用极暗的蓝黑色，与你的页面背景融合 */
+  background: #0d111a; /* Very dark blue-black that blends with your page background */
   border-radius: 4px;
 }
 
-/* 滚动条的滑块 */
+/* Scrollbar thumb (the draggable part) */
 ::-webkit-scrollbar-thumb {
-  background: #2a3045; /* 默认状态下使用稍亮的深蓝色/灰蓝色 */
+  background: #2a3045; /* Default state: slightly brighter deep blue/gray-blue */
   border-radius: 4px;
-  /* 如果想要一点边框让它看起来更精致： */
+  /* Optional border for a more refined look: */
   /* border: 2px solid #0d111a; */ 
 }
 
-/* 鼠标悬浮在滑块上时的效果 */
+/* Hover effect on the scrollbar thumb */
 ::-webkit-scrollbar-thumb:hover {
-  background: #00d9ff; /* 悬浮时变成你网站上的青蓝色 (Cyan)！会非常酷 */
-  /* 如果你想更贴合按钮的紫色调，也可以换成： background: #bd52ff; */
+  background: #00d9ff; /* Turns into your site's cyan color on hover — looks very cool! */
+  /* You can also change it to purple to match your buttons: background: #bd52ff; */
 }
 
 
-/* 2. 针对 Firefox 浏览器 (火狐的自定义能力较弱，只能设置宽度和颜色) */
+/* 2. For Firefox browser (Firefox has limited customization — only width and color) */
 html {
-  scrollbar-width: thin; /* 设置为较细的滚动条 */
-  /* 第一个颜色是滑块颜色，第二个是轨道颜色 */
+  scrollbar-width: thin; /* Set to a thin scrollbar */
+  /* First color = thumb, second color = track */
   scrollbar-color: #2a3045 #0d111a; 
 }
