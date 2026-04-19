@@ -220,6 +220,11 @@ export const TRANSLATIONS: AppTranslations = {
         button: '今すぐ応募する',
       },
     },
+    chat: {
+      title: 'AIガイド準備完了',
+      welcome: 'プラットフォームへようこそ。あなたの専属AIガイドです。何かお手伝いできることはありますか？',
+      placeholder: 'コマンドを入力...',
+    },
   },
   en: {
     home: 'Home',
@@ -433,6 +438,11 @@ export const TRANSLATIONS: AppTranslations = {
         text: 'We ensure a safe environment for our casts. If you love games and talking to people, apply now!',
         button: 'Apply Now',
       },
+    },
+    chat: {
+      title: 'AI Guide Ready',
+      welcome: 'Welcome to the platform. I am your exclusive AI guide. How can I help you?',
+      placeholder: 'Enter command...',
     },
   },
   zh: {
@@ -653,6 +663,11 @@ export const TRANSLATIONS: AppTranslations = {
         text: '我们致力于为Cast创造一个可以安心赚钱的环境。「喜欢游戏」「喜欢与人交谈」「想一边享受时尚一边工作」，我们衷心期待这样的你来应聘！',
         button: '立即应聘',
       },
+    },
+    chat: {
+      title: 'AI 向导已就位',
+      welcome: '欢迎来到平台。我是您的专属 AI 向导，有什么可以帮您？',
+      placeholder: '输入指令...',
     },
   },
 };
