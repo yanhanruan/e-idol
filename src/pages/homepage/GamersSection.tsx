@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react";
+import { Headset } from "lucide-react";
 import UserCard from "@src/components/UserCard";
 import HomepageSecTitle from "@src/components/HomepageSecTitle";
 import type { UserCardTranslations } from "@src/components/UserCard";
@@ -20,7 +20,7 @@ const GamersSection = ({ users, t, playingAudio, toggleAudio }: GamersSectionPro
   return (
     <div className="mb-12">
       <HomepageSecTitle
-        icon={Heart}
+        icon={Headset}
         title={t.selectGamer}
         action={moreButton}
       />
