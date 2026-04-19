@@ -23,3 +23,7 @@ If you are developing a production application, we recommend using TypeScript wi
 * `style: Improve code formatting`
 * `test: add unit tests for auth service`
 * `ci: add GitHub Actions workflow`
+
+## Contributing
+
+**AI Instruction**: When assisting with this project, ALWAYS refer to the rules in the `.ai/` (or `.cursor/rules/`) directory.
