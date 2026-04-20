@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Bell, Globe, Menu, Plus, User, X } from 'lucide-react';
+import { Bell, Globe, LogOut, Menu, Plus, User, X } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { useTranslations } from '../../contexts/LanguageContext';
 import { useTransition } from '../../contexts/TransitionContext';
+import { useAuth } from '../../contexts/AuthContext';
 import type { Locale } from '../../types';
 import CyberButton from '../ui/CyberButton';
 import CyberSelect from '../ui/CyberSelect';
@@ -44,6 +45,7 @@ const LanguageSelector = () => {
 
 const Header = () => {
   const { t } = useTranslations();
+  const { isAuthenticated, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location, setLocation] = useLocation();
   const { startTransition } = useTransition();
@@ -136,7 +138,23 @@ const Header = () => {
             </button>
 
             <div className="scale-90 origin-right">
-              <CyberButton text={String(t.register)} onClick={() => console.log('register')} />
+              {isAuthenticated && user ? (
+                <div className="flex items-center gap-2">
+                  <span className="hidden md:block text-xs text-cyan-400 tracking-wide drop-shadow-[0_0_6px_rgba(34,211,238,0.4)]">
+                    {user.username}
+                  </span>
+                  <button
+                    onClick={() => { logout(); handleNavigation('/'); }}
+                    title="退出登录"
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-400 hover:scale-110 border border-white/5 relative ${transitionStyle}`}
+                    style={{ background: 'linear-gradient(135deg, rgba(150, 0, 0, 0.2), rgba(80, 0, 0, 0.2))' }}
+                  >
+                    <LogOut size={14} />
+                  </button>
+                </div>
+              ) : (
+                <CyberButton text={String(t.register)} onClick={() => handleNavigation('/login')} />
+              )}
             </div>
           </div>
         </div>

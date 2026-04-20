@@ -2,6 +2,7 @@
 import { Switch, Route } from 'wouter';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { TransitionProvider } from './contexts/TransitionContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 import MainLayout from './components/layout/MainLayout';
 import CyberTransition from './components/layout/CyberTransition';
@@ -15,39 +16,49 @@ import ProcessPage from './pages/ProcessPage';
 import PricingPage from './pages/PricingPage';
 import CastListPage from './pages/CastListPage';
 import RecruitmentPage from './pages/RecruitmentPage';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
 
 const App: React.FC = () => {
   return (
     <LanguageProvider>
-      <TransitionProvider>
-        <CyberTransition />
-        
-        {/* [关键修改]: MainLayout 移到了 Switch 外面 */}
-        {/* 这样 Header 就不会随路由切换而重新渲染了 */}
-        <MainLayout>
-          <Switch>
-            <Route path="/" component={HomePage} />
-            <Route path="/process" component={ProcessPage} />
-            <Route path="/pricing" component={PricingPage} />
-            <Route path="/castList" component={CastListPage} /> {/* 注意 URL 路径命名偏好，这里用了驼峰对应 navItems */}
-            <Route path="/recruitment" component={RecruitmentPage} />
-            
-            <Route path="/reservation" component={ReservationPage} />
-            <Route path="/test" component={TestPage} />
+      <AuthProvider>
+        <TransitionProvider>
+          <CyberTransition />
 
-            {/* 404 */}
+          {/* 登录/注册页面不使用 MainLayout（独立全屏页） */}
+          <Switch>
+            <Route path="/login" component={LoginPage} />
+            <Route path="/register" component={RegisterPage} />
+
+            {/* 其余页面使用 MainLayout */}
             <Route>
-              <div className="flex items-center justify-center min-h-[50vh] text-white">
-                <div className="text-center">
-                  <h2 className="text-5xl font-bold mb-4 text-red-500">404</h2>
-                  <p>Page Not Found</p>
-                </div>
-              </div>
+              <MainLayout>
+                <Switch>
+                  <Route path="/" component={HomePage} />
+                  <Route path="/process" component={ProcessPage} />
+                  <Route path="/pricing" component={PricingPage} />
+                  <Route path="/castList" component={CastListPage} />
+                  <Route path="/recruitment" component={RecruitmentPage} />
+                  <Route path="/reservation" component={ReservationPage} />
+                  <Route path="/test" component={TestPage} />
+
+                  {/* 404 */}
+                  <Route>
+                    <div className="flex items-center justify-center min-h-[50vh] text-white">
+                      <div className="text-center">
+                        <h2 className="text-5xl font-bold mb-4 text-red-500">404</h2>
+                        <p>Page Not Found</p>
+                      </div>
+                    </div>
+                  </Route>
+                </Switch>
+              </MainLayout>
             </Route>
           </Switch>
-        </MainLayout>
 
-      </TransitionProvider>
+        </TransitionProvider>
+      </AuthProvider>
     </LanguageProvider>
   );
 };
