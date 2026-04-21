@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import type { ReactElement } from 'react';
 
-const glassStyle = 'bg-[#050510]/80 backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]';
+const glassStyle = 'bg-cyber-glass backdrop-blur-md border border-cyber-border shadow-glass';
 const transitionStyle = 'transition-all duration-300 ease-in-out';
 
 interface SelectOption<T extends string = string> {
@@ -49,7 +49,7 @@ const CyberSelect = <T extends string = string>({ value, label, options, onChang
         className={`
           relative flex items-center justify-center font-sans font-medium cursor-pointer group 
           w-9 h-9 rounded-full md:w-36 md:h-auto md:py-1.5 md:px-4 md:justify-between
-          text-slate-300 hover:bg-[#0a0a20] hover:border-cyan-500/30 hover:shadow-[0_0_10px_rgba(34,211,238,0.2)] hover:text-cyan-50
+          text-slate-300 hover:bg-[#0a0a20] hover:border-cyan-500/30 hover:shadow-neon-cyan hover:text-cyan-50
           ${glassStyle} ${transitionStyle}
         `}
       >
@@ -62,7 +62,7 @@ const CyberSelect = <T extends string = string>({ value, label, options, onChang
       <div
         className={`
           absolute top-full right-0 mt-2 w-36 rounded-xl overflow-hidden
-          border border-white/10 bg-[#0a0a1ad1] shadow-[0_0_30px_rgba(0,0,0,0.8)] origin-top-right
+          border border-cyber-border bg-cyber-glassPanel shadow-[0_0_30px_rgba(0,0,0,0.8)] origin-top-right
           ${transitionStyle}
           ${isOpen ? 'max-h-[200px] opacity-100 scale-100' : 'max-h-0 opacity-0 scale-95 pointer-events-none'}
         `}

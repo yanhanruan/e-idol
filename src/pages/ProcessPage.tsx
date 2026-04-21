@@ -105,7 +105,7 @@ const ProcessPage = () => {
                         <div className="h-24 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
                           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-400 to-transparent"></div>
                           <Icon size={40} className="text-cyan-400/20 absolute -right-3 -bottom-3 md:-right-2 md:-bottom-2 rotate-12" />
-                          <div className="z-10 w-12 h-12 bg-slate-950/50 rounded-full flex items-center justify-center border border-cyan-500/30 shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+                          <div className="z-10 w-12 h-12 bg-slate-950/50 rounded-full flex items-center justify-center border border-cyan-500/30 shadow-neon-cyan">
                             <Icon size={24} className="text-cyan-400" />
                           </div>
                         </div>

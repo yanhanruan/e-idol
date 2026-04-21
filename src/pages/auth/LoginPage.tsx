@@ -90,7 +90,7 @@ const LoginPage = () => {
         {/* 卡片辉光边框 */}
         <div className="absolute -inset-[1px] bg-gradient-to-br from-cyan-500/20 via-transparent to-purple-600/20 rounded-2xl blur-[3px]" />
 
-        <div className="relative bg-[#0a0a1a]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]">
+        <div className="relative bg-[#0a0a1a]/90 backdrop-blur-xl border border-cyber-border rounded-2xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]">
           {/* Logo 区域 */}
           <div className="flex items-center justify-center gap-2 mb-8">
             <div className="relative">

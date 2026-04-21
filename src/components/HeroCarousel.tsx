@@ -134,7 +134,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
             </button>
 
             <div className="flex justify-between md:justify-start items-center w-full md:w-auto gap-4 px-2 md:px-0">
-              <button onClick={prevSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-white/10 hover:border-cyan-400 transition-[border-color] active:scale-95">
+              <button onClick={prevSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-cyber-border hover:border-cyan-400 transition-[border-color] active:scale-95">
                 <ChevronLeft className="w-5 h-5 text-cyan-300" />
               </button>
 
@@ -144,7 +144,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
                 ))}
               </div>
 
-              <button onClick={nextSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-white/10 hover:border-cyan-400 transition-[border-color] active:scale-95">
+              <button onClick={nextSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-cyber-border hover:border-cyan-400 transition-[border-color] active:scale-95">
                 <ChevronRight className="w-5 h-5 text-cyan-300" />
               </button>
             </div>

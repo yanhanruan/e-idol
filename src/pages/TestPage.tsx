@@ -417,7 +417,7 @@ const GlitchDemo: React.FC = () => {
           
           <div className="group relative">
              <div className="absolute -inset-0.5 bg-gradient-to-br from-[#ff0033] to-[#330000] rounded opacity-20 group-hover:opacity-100 blur transition duration-500"></div>
-             <div className="relative bg-black rounded border border-white/10">
+             <div className="relative bg-black rounded border border-cyber-border">
               <CyberPunkGlitchImage 
                 src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop" 
               />
@@ -429,7 +429,7 @@ const GlitchDemo: React.FC = () => {
 
           <div className="group relative">
              <div className="absolute -inset-0.5 bg-gradient-to-br from-cyan-500 to-blue-900 rounded opacity-20 group-hover:opacity-100 blur transition duration-500"></div>
-             <div className="relative bg-black rounded border border-white/10">
+             <div className="relative bg-black rounded border border-cyber-border">
               <CyberPunkGlitchImage 
                 src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop" 
               />

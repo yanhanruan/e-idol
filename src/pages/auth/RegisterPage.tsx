@@ -53,7 +53,7 @@ const RoleSelector = ({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative w-full flex items-center justify-between px-4 py-3 rounded-lg bg-[#050510] border border-white/10 text-sm text-cyan-50 focus:outline-none transition-all duration-200"
+        className="relative w-full flex items-center justify-between px-4 py-3 rounded-lg bg-[#050510] border border-cyber-border text-sm text-cyan-50 focus:outline-none transition-all duration-200"
       >
         <span>{current?.label}</span>
         <ChevronDown
@@ -64,7 +64,7 @@ const RoleSelector = ({
 
       {/* 下拉列表 */}
       {open && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-lg overflow-hidden border border-white/10 bg-[#0a0a1a] shadow-[0_8px_30px_rgba(0,0,0,0.8)]">
+        <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-lg overflow-hidden border border-cyber-border bg-[#0a0a1a] shadow-[0_8px_30px_rgba(0,0,0,0.8)]">
           {options.map((opt, i) => (
             <div key={opt.value}>
               {i > 0 && <div className="mx-3 h-[1px] bg-white/5" />}
@@ -199,7 +199,7 @@ const RegisterPage = () => {
         {/* 卡片辉光边框 */}
         <div className="absolute -inset-[1px] bg-gradient-to-br from-purple-600/20 via-transparent to-cyan-500/20 rounded-2xl blur-[3px]" />
 
-        <div className="relative bg-[#0a0a1a]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]">
+        <div className="relative bg-[#0a0a1a]/90 backdrop-blur-xl border border-cyber-border rounded-2xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]">
           {/* Logo 区域 */}
           <div className="flex items-center justify-center gap-2 mb-8">
             <div className="relative">

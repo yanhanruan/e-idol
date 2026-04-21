@@ -64,7 +64,7 @@ const PricingCard = ({ plan, isPopular = false }: PricingCardProps) => {
         <div className={`h-28 relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${plan.theme.bgGradient} isolate`}>
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-white to-transparent pointer-events-none [transform:translateZ(0)]"></div>
           <Icon size={100} className="text-white/5 absolute -right-6 -bottom-6 rotate-12 group-hover:rotate-6 transition-transform duration-700 ease-out [transform:translateZ(0)]" />
-          <div className={`z-10 w-14 h-14 bg-slate-950/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/10 shadow-lg group-hover:scale-110 transition-transform duration-500 [transform:translateZ(0)] ${plan.theme.iconColor}`}>
+          <div className={`z-10 w-14 h-14 bg-slate-950/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-cyber-border shadow-lg group-hover:scale-110 transition-transform duration-500 [transform:translateZ(0)] ${plan.theme.iconColor}`}>
             <Icon size={28} />
           </div>
         </div>

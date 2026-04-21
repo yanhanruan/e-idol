@@ -29,7 +29,7 @@ const CyberInput = ({ label, error, containerClassName = '', className = '', ...
           {...rest}
           className={`
             relative w-full px-4 py-3 rounded-lg
-            bg-[#050510] border border-white/10
+            bg-[#050510] border border-cyber-border
             text-sm text-cyan-50 placeholder:text-slate-600
             outline-none
             focus:border-cyan-500/50

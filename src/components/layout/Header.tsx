@@ -8,7 +8,7 @@ import type { Locale } from '../../types';
 import CyberButton from '../ui/CyberButton';
 import CyberSelect from '../ui/CyberSelect';
 
-const glassStyle = 'bg-[#050510]/80 backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]';
+const glassStyle = 'bg-cyber-glass backdrop-blur-md border border-cyber-border shadow-glass';
 const transitionStyle = 'transition-all duration-300 ease-in-out';
 
 const navConfig = {
@@ -116,14 +116,14 @@ const Header = () => {
                   <span
                     className={`text-xs font-medium tracking-widest whitespace-nowrap ${transitionStyle} ${
                       isActive ? 'text-cyan-50 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'text-slate-400 group-hover:text-slate-200'
-                    }`}
+                      }`}
                   >
                     {String(t[item])}
                   </span>
                   <span
                     className={`absolute bottom-2 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_#22d3ee] ${transitionStyle} ${
                       isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'
-                    }`}
+                      }`}
                   ></span>
                 </button>
               );
@@ -169,7 +169,7 @@ const Header = () => {
         ref={menuRef}
         className={`
           md:hidden absolute top-full right-0 w-1/2 min-w-[200px]
-          bg-[#0a0a1ad1] backdrop-blur-xl border-b border-l border-white/10 rounded-bl-2xl shadow-[-10px_10px_30px_rgba(0,0,0,0.5)]
+          bg-cyber-glassPanel backdrop-blur-xl border-b border-l border-cyber-border rounded-bl-2xl shadow-[-10px_10px_30px_rgba(0,0,0,0.5)]
           origin-top-right overflow-hidden
           ${transitionStyle}
           ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}

@@ -23,7 +23,7 @@ const GlobalChat = () => {
     setInput('');
   };
 
-  const glassPanelStyle = "bg-[#050510]/80 backdrop-blur-md border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)]";
+  const glassPanelStyle = "bg-cyber-glass backdrop-blur-md border border-cyber-border shadow-[0_0_20px_rgba(0,0,0,0.8)]";
 
   const chatT = (t.chat || {}) as Record<string, string>;
   const chatTitle = chatT.title || 'AI 向导已就位';
@@ -41,7 +41,7 @@ const GlobalChat = () => {
           ${isOpen ? 'scale-100 opacity-100 translate-y-0 h-[380px]' : 'scale-95 opacity-0 pointer-events-none translate-y-8 h-[380px]'}
         `}
       >
-        <div className="p-3 border-b border-white/10 flex justify-between items-center bg-white/5 rounded-t-xl">
+        <div className="p-3 border-b border-cyber-border flex justify-between items-center bg-white/5 rounded-t-xl">
           <div className="flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-primary-aqua animate-pulse" />
             <span className="font-bold tracking-wider text-transparent text-xs bg-clip-text bg-gradient-to-r from-base-white via-cyan-100 to-primary-aqua drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">
@@ -77,14 +77,14 @@ const GlobalChat = () => {
           ))}
         </div>
 
-        <div className="p-2 border-t border-white/10 bg-[#050510]/90 rounded-b-xl flex items-center gap-2">
+        <div className="p-2 border-t border-cyber-border bg-[#050510]/90 rounded-b-xl flex items-center gap-2">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder={chatPlaceholder} 
-            className="flex-1 text-xs bg-black/40 border border-white/10 focus:border-cyan-500/50 hover:border-white/20 rounded-full px-3 py-1.5 text-accent-slate100 outline-none transition-all placeholder:text-accent-slate200/50"
+            className="flex-1 text-xs bg-black/40 border border-cyber-border focus:border-cyan-500/50 hover:border-white/20 rounded-full px-3 py-1.5 text-accent-slate100 outline-none transition-all placeholder:text-accent-slate200/50"
           />
           
           <button 
@@ -108,7 +108,7 @@ const GlobalChat = () => {
           onClick={() => setIsOpen(!isOpen)}
           className={`
             relative z-10 w-8 h-8 rounded-full flex items-center justify-center
-            bg-[#050510] border border-white/10 hover:bg-[#0a0a20]
+            bg-[#050510] border border-cyber-border hover:bg-[#0a0a20]
             text-primary-aqua overflow-hidden
             transition-all duration-300 active:scale-95
           `}

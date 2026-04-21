@@ -8,6 +8,17 @@ body {
   background: #112 center no-repeat;
 }
 
+@layer components {
+  /* cyber button glow */
+  .cyber-glow-backdrop {
+    @apply absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full opacity-70 blur-[2px] transition-all duration-300;
+  }
+  /* enhance effect on hover */
+  .group:hover .cyber-glow-backdrop {
+    @apply opacity-100 blur-[4px];
+  }
+}
+
 /* Added to your global .css file */
 @keyframes wave-stretch {
 
