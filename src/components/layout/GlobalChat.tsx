@@ -31,20 +31,20 @@ const GlobalChat = () => {
   const chatPlaceholder = chatT.placeholder || '输入指令...';
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end font-sans">
+    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end font-sans pointer-events-none">
       {/* 聊天面板 */}
       <div 
         className={`
           mb-3 w-72 sm:w-80 md:w-88 flex flex-col rounded-xl
           origin-bottom-right transition-all duration-300 ease-shine
           ${glassPanelStyle}
-          ${isOpen ? 'scale-100 opacity-100 translate-y-0 h-[380px]' : 'scale-95 opacity-0 pointer-events-none translate-y-8 h-[380px]'}
+          ${isOpen ? 'scale-100 opacity-100 translate-y-0 h-[380px] pointer-events-auto' : 'scale-95 opacity-0 pointer-events-none translate-y-8 h-[380px]'}
         `}
       >
         <div className="p-3 border-b border-cyber-border flex justify-between items-center bg-white/5 rounded-t-xl">
           <div className="flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-primary-aqua animate-pulse" />
-            <span className="font-bold tracking-wider text-transparent text-xs bg-clip-text bg-gradient-to-r from-base-white via-cyan-100 to-primary-aqua drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">
+            <span className="font-bold tracking-wider text-accent-slate100 text-xs bg-clip-text bg-gradient-to-r from-base-white via-cyan-100 to-primary-aqua drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">
               {chatTitle}
             </span>
           </div>
@@ -89,26 +89,22 @@ const GlobalChat = () => {
           
           <button 
              onClick={handleSend}
-             className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-primary-aqua hover:bg-white/10 hover:scale-110 transition-all duration-200 active:scale-95"
+             className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-primary-aqua hover:bg-white/10 transition-colors duration-300 active:scale-95 group/send"
           >
-             <Send className="w-4 h-4" />
+             <Send className="w-4 h-4 transition-transform duration-300 group-hover/send:scale-110" />
           </button>
         </div>
       </div>
 
       {/* 触发按钮 */}
-      <div className="relative group">
-        <div className={`
-          absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 
-          rounded-full blur-[2px] transition duration-300
-          ${isOpen ? 'opacity-100 blur-[4px]' : 'opacity-70 group-hover:opacity-100 group-hover:blur-[4px]'}
-        `}></div>
+      <div className="relative group pointer-events-auto">
+        <div className={`cyber-glow-backdrop`}></div>
         
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className={`
             relative z-10 w-8 h-8 rounded-full flex items-center justify-center
-            bg-[#050510] border border-cyber-border hover:bg-[#0a0a20]
+            bg-[#050510] border border-cyber-border
             text-primary-aqua overflow-hidden
             transition-all duration-300 active:scale-95
           `}
