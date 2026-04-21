@@ -137,20 +137,25 @@ const Header = () => {
               {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
 
+            {/* login info */}
             <div className="scale-90 origin-right">
               {isAuthenticated && user ? (
-                <div className="flex items-center gap-2">
-                  <span className="hidden md:block text-xs text-cyan-400 tracking-wide drop-shadow-[0_0_6px_rgba(34,211,238,0.4)]">
+                <div className="flex items-center gap-3">
+
+                  {/* username */}
+                  <span className="hidden md:block text-sm font-medium text-slate-200 tracking-wide">
                     {user.username}
                   </span>
+
+                  {/* logout button */}
                   <button
                     onClick={() => { logout(); handleNavigation('/'); }}
-                    title="退出登录"
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-400 hover:scale-110 border border-white/5 relative ${transitionStyle}`}
-                    style={{ background: 'linear-gradient(135deg, rgba(150, 0, 0, 0.2), rgba(80, 0, 0, 0.2))' }}
+                    // title={String(t.logout)}
+                    className="relative group w-8 h-8 bg-[#050510] rounded-lg flex items-center justify-center border border-cyber-border text-slate-400 transition-all duration-300 hover:bg-[#0a0a20] hover:border-cyan-500/30 hover:shadow-neon-cyan overflow-hidden"
                   >
-                    <LogOut size={14} />
+                    <LogOut size={14} className="relative z-10 group-hover:text-cyan-400" />
                   </button>
+
                 </div>
               ) : (
                 <CyberButton text={String(t.register)} onClick={() => handleNavigation('/login')} />
