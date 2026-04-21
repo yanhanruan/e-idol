@@ -26,7 +26,6 @@ export default {
           'Cantarell',
           '"Open Sans"',
           '"Helvetica Neue"',
-          'sans-serif',
         ],
       },
       colors: {
@@ -36,6 +35,8 @@ export default {
           purple: '#c084fc',   // 按钮渐变终点
           neonPurple: '#7e0fff', // 卡片辉光左端
           aqua: '#0fffc1',       // 卡片辉光右端
+          cyan: '#22d3ee',       
+          blue: '#3b82f6',
         },
 
         // 辅助色 (标签渐变 / 文本)
@@ -45,21 +46,23 @@ export default {
           slate200: '#e2e8f0',  // 次文字
         },
 
-        // 渐变淡色标签
-        tag: {
-          blueFrom: '#dbeafeB3',
-          blueTo: '#cffafeB3',
-          purpleFrom: '#f3e8ffB3',
-          purpleTo: '#fbcfe8B3',
-          borderBlue: '#bfdbfdb3',
-          borderPurple: '#e9d5ffB3',
-        },
-
-        // 基础白色
-        base: {
-          white: '#ffffff',
-          whiteSoft: 'rgba(255,255,255,0.5)',
-        },
+        // 赛博风格
+        cyber: {
+          base: '#050510',    // 极暗底色
+          surface: '#0a0a20', // 组件表面/Hover色
+          panel: '#0a0a1a',   // 浮窗面板底色
+          border: 'rgba(255, 255, 255, 0.1)', // 统一替换 border-white/10
+          glass: 'rgba(5, 5, 16, 0.8)',       // 统一替换 bg-[#050510]/80 
+          glassPanel: 'rgba(10, 10, 26, 0.82)'// 统一替换 bg-[#0a0a1ad1] 
+        }
+      },
+      boxShadow: {
+        'neon-cyan': '0 0 10px rgba(34,211,238,0.2)',
+        'glass': '0 0 15px rgba(0,0,0,0.5)',
+        'panel': '0 0 30px rgba(0,0,0,0.8)',
+      },
+      dropShadow: {
+        'text-glow': '0 0 5px rgba(255,255,255,0.3)',
       },
       keyframes: {
         wave: {
@@ -154,15 +157,11 @@ export default {
             transform: 'translateY(0)'
           },
         },
-        
+
       },
       animation: {
         'dropdown-fade-in': 'dropdownFadeIn 120ms ease-out',
         wave: 'wave 1.2s ease-in-out infinite',
-        animateGlow: 'animateGlow 10s ease infinite',
-        autoLift: 'autoLift 5s ease-in-out infinite',
-        autoGlow: 'autoGlow 5s ease-in-out infinite',
-        autoShine: 'autoShine 5s ease-in-out infinite',
       },
       // Define the custom cubic-bezier for the shine
       ease: {
