@@ -68,7 +68,7 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMobileMenuOpen]);
 
-  const leftBtnClass = `w-8 h-8 rounded-lg flex items-center justify-center text-white hover:scale-110 group border border-white/5 relative ${transitionStyle}`;
+  const leftBtnClass = `w-8 h-8 rounded-lg flex items-center justify-center text-white hover:scale-110 group border border-white/5 relative transition-smooth`;
 
   const handleNavigation = (path: string) => {
     if (location === path) return;
@@ -114,14 +114,14 @@ const Header = () => {
               return (
                 <button key={item} onClick={() => handleNavigation(path)} className="group relative flex flex-col items-center justify-center h-full px-1 outline-none cursor-pointer">
                   <span
-                    className={`text-xs font-medium tracking-widest whitespace-nowrap ${transitionStyle} ${
-                      isActive ? 'text-cyan-50 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'text-slate-400 group-hover:text-slate-200'
+                    className={`text-xs font-medium tracking-widest whitespace-nowrap transition-smooth ${
+                      isActive ? 'text-cyan-50 font-bold drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'text-slate-400 group-hover:text-content-secondary'
                       }`}
                   >
                     {String(t[item])}
                   </span>
                   <span
-                    className={`absolute bottom-2 h-[2px] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-[0_0_15px_#22d3ee] ${transitionStyle} ${
+                    className={`absolute bottom-2 h-[2px] rounded-full bg-gradient-to-r from-primary-cyan400 to-blue-500 shadow-[0_0_15px_#22d3ee] transition-smooth ${
                       isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'
                       }`}
                   ></span>
@@ -133,7 +133,7 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <LanguageSelector />
 
-            <button ref={btnRef} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`md:hidden flex items-center justify-center w-8 h-8 rounded-full text-slate-300 hover:text-cyan-400 ml-1 ${glassStyle} ${transitionStyle}`}>
+            <button ref={btnRef} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`md:hidden flex items-center justify-center w-8 h-8 rounded-full text-slate-300 hover:text-primary-cyan400 ml-1 ${glassStyle} transition-smooth`}>
               {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
 
@@ -143,7 +143,7 @@ const Header = () => {
                 <div className="flex items-center gap-3">
 
                   {/* username */}
-                  <span className="hidden md:block text-sm font-medium text-slate-200 tracking-wide">
+                  <span className="hidden md:block text-sm font-medium text-content-secondary tracking-wide">
                     {user.username}
                   </span>
 
@@ -151,9 +151,9 @@ const Header = () => {
                   <button
                     onClick={() => { logout(); handleNavigation('/'); }}
                     // title={String(t.logout)}
-                    className="relative group w-8 h-8 bg-[#050510] rounded-lg flex items-center justify-center border border-cyber-border text-slate-400 transition-all duration-300 hover:bg-[#0a0a20] hover:border-cyan-500/30 hover:shadow-neon-cyan overflow-hidden"
+                    className="relative group w-8 h-8 bg-cyber-base rounded-lg flex items-center justify-center border border-cyber-border cyber-hover"
                   >
-                    <LogOut size={14} className="relative z-10 group-hover:text-cyan-400" />
+                    <LogOut size={16} className="relative z-10 text-slate-400 group-hover:text-primary-cyan400" />
                   </button>
 
                 </div>
@@ -171,7 +171,7 @@ const Header = () => {
           md:hidden absolute top-full right-0 w-1/2 min-w-[200px]
           bg-cyber-glassPanel backdrop-blur-xl border-b border-l border-cyber-border rounded-bl-2xl shadow-[-10px_10px_30px_rgba(0,0,0,0.5)]
           origin-top-right overflow-hidden
-          ${transitionStyle}
+          transition-smooth
           ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
         `}
       >
@@ -185,12 +185,12 @@ const Header = () => {
                 <button
                   onClick={() => handleNavigation(path)}
                   className={`
-                    relative px-4 py-3 rounded-lg text-sm font-medium tracking-wide flex items-center justify-between cursor-pointer w-full ${transitionStyle}
-                    ${isActive ? 'bg-cyan-900/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5 border border-transparent'}
+                    relative px-4 py-3 rounded-lg text-sm font-medium tracking-wide flex items-center justify-between cursor-pointer w-full transition-smooth
+                    ${isActive ? 'bg-cyan-900/20 text-primary-cyan400 border border-cyan-500/30' : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5 border border-transparent'}
                   `}
                 >
                   {String(t[item])}
-                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>}
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary-cyan400 shadow-[0_0_8px_#22d3ee]"></span>}
                 </button>
               </div>
             );

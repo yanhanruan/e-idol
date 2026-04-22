@@ -229,8 +229,8 @@ const CastListPage = () => {
   return (
     <div className="min-h-screen text-white pb-16 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-[-10%] right-[10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[20%] left-[-5%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px]" />
+        <div className="absolute top-[-10%] right-[10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-ambient-lg" />
+        <div className="absolute bottom-[20%] left-[-5%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-ambient-md" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
       </div>
 
@@ -251,10 +251,10 @@ const CastListPage = () => {
             <button
               onClick={() => setFilterOnline(!filterOnline)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
-                filterOnline ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400' : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-slate-600'
+                filterOnline ? 'bg-cyan-500/20 border-cyan-500/50 text-primary-cyan400' : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-slate-600'
               }`}
             >
-              <div className={`w-2 h-2 rounded-full ${filterOnline ? 'bg-cyan-400 animate-pulse' : 'bg-slate-600'}`} />
+              <div className={`w-2 h-2 rounded-full ${filterOnline ? 'bg-primary-cyan400 animate-pulse' : 'bg-slate-600'}`} />
               {(t.online as string) || 'オンライン'}
             </button>
 
@@ -302,7 +302,7 @@ const CastListPage = () => {
 
               <div className="p-5">
                 <div className="mb-3">
-                  <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors mb-1">{cast.name}</h3>
+                  <h3 className="text-xl font-bold text-white group-hover:text-primary-cyan300 transition-colors mb-1">{cast.name}</h3>
                   <p className="text-xs text-slate-400">{cast.title}</p>
                 </div>
 
@@ -315,7 +315,7 @@ const CastListPage = () => {
                     <Users size={16} />
                     <span className="text-xs">{cast.totalOrders}件</span>
                   </div>
-                  <div className="ml-auto text-cyan-400 font-bold text-lg">¥{cast.price.toLocaleString()}</div>
+                  <div className="ml-auto text-primary-cyan400 font-bold text-lg">¥{cast.price.toLocaleString()}</div>
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -336,7 +336,7 @@ const CastListPage = () => {
                   ))}
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40">
+                <button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-primary-cyan400 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40">
                   予約する
                 </button>
               </div>
@@ -366,7 +366,7 @@ const CastListPage = () => {
 
               <div className="p-6 space-y-6">
                 <div>
-                  <h3 className="text-lg font-bold text-cyan-400 mb-2 flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-primary-cyan400 mb-2 flex items-center gap-2">
                     <MessageSquare size={20} />
                     自己紹介
                   </h3>
@@ -374,7 +374,7 @@ const CastListPage = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
                     <Gamepad2 size={20} />
                     得意ゲーム
                   </h3>
@@ -392,7 +392,7 @@ const CastListPage = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
                     <Clock size={20} />
                     可接時段
                   </h3>
@@ -406,7 +406,7 @@ const CastListPage = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
                     <Heart size={20} />
                     お客様の声
                   </h3>
@@ -428,7 +428,7 @@ const CastListPage = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
                     <Gift size={20} />
                     応援ランキング TOP3
                   </h3>
@@ -445,13 +445,13 @@ const CastListPage = () => {
                           </div>
                           <span className="text-white font-medium">{supporter.name}</span>
                         </div>
-                        <span className="text-cyan-400 font-bold">¥{supporter.amount.toLocaleString()}</span>
+                        <span className="text-primary-cyan400 font-bold">¥{supporter.amount.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 text-lg">
+                <button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-primary-cyan400 text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 text-lg">
                   このキャストを予約する
                 </button>
               </div>

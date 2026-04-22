@@ -23,13 +23,13 @@ const CyberInput = ({ label, error, containerClassName = '', className = '', ...
       {/* 辉光边框容器 */}
       <div className="relative group">
         {/* 背景辉光层 */}
-        <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500/40 via-blue-500/30 to-purple-600/40 rounded-lg opacity-50 blur-[2px] group-focus-within:opacity-100 group-focus-within:blur-[3px] transition-all duration-300 pointer-events-none" />
+        <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500/40 via-blue-500/30 to-purple-600/40 rounded-lg opacity-50 blur-[2px] group-focus-within:opacity-100 group-focus-within:blur-xs transition-all duration-300 pointer-events-none" />
 
         <input
           {...rest}
           className={`
             relative w-full px-4 py-3 rounded-lg
-            bg-[#050510] border border-cyber-border
+            bg-cyber-base border border-cyber-border
             text-sm text-cyan-50 placeholder:text-slate-600
             outline-none
             focus:border-cyan-500/50

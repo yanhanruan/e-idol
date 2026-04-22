@@ -102,7 +102,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
       </div>
 
       <div className="absolute inset-0 md:hidden z-0 overflow-hidden pointer-events-none">
-        {STAGE_BG_URL && <img src={STAGE_BG_URL} alt="Stage Mobile" className={`absolute inset-0 w-full h-full object-cover blur-[1px] transition-opacity duration-1000 ease-in-out transform-gpu will-change-opacity ${isStageLoaded ? 'opacity-30' : 'opacity-0'}`} onLoad={() => setIsStageLoaded(true)} fetchPriority="high" decoding="async" />}
+        {STAGE_BG_URL && <img src={STAGE_BG_URL} alt="Stage Mobile" className={`absolute inset-0 w-full h-full object-cover blur-px transition-opacity duration-1000 ease-in-out transform-gpu will-change-opacity ${isStageLoaded ? 'opacity-30' : 'opacity-0'}`} onLoad={() => setIsStageLoaded(true)} fetchPriority="high" decoding="async" />}
         {CHARACTER_URL && <img src={CHARACTER_URL} alt="Character Mobile" className={`absolute -right-12 top-0 h-[65%] w-auto object-contain drop-shadow-lg transform transition-[opacity,transform] duration-1000 ease-out ${isCharLoaded ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-4'}`} onLoad={() => setIsCharLoaded(true)} fetchPriority="high" decoding="async" />}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f1a] via-[#0f0f1a]/60 to-transparent"></div>
       </div>
@@ -111,7 +111,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
         <div key={currentSlide} className={`flex flex-col space-y-6 md:space-y-5 ${isAnimating ? 'opacity-50 blur-sm' : 'slide-enter'} transition-all duration-300`}>
           <div>
             <div className="flex items-center space-x-2 mb-3">
-              <span className="px-3 py-1 rounded-full bg-white/10 text-[10px] md:text-xs font-bold tracking-widest border border-white/20 text-cyan-300 uppercase shadow-lg backdrop-blur-md">{slide.subtitle}</span>
+              <span className="px-3 py-1 rounded-full bg-white/10 text-[10px] md:text-xs font-bold tracking-widest border border-white/20 text-primary-cyan300 uppercase shadow-lg backdrop-blur-md">{slide.subtitle}</span>
               <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
             </div>
 
@@ -122,7 +122,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
           <div className="space-y-3 md:space-y-3">
             {slide.items.map((item, idx) => (
               <div key={idx} className="glass-item p-4 md:p-3 rounded-xl flex items-center space-x-4">
-                <span className="text-xl md:text-xl text-cyan-400 font-black font-mono italic">0{idx + 1}</span>
+                <span className="text-xl md:text-xl text-primary-cyan400 font-black font-mono italic">0{idx + 1}</span>
                 <p className="text-gray-100 text-sm md:text-xs font-medium">{item}</p>
               </div>
             ))}
@@ -134,18 +134,18 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
             </button>
 
             <div className="flex justify-between md:justify-start items-center w-full md:w-auto gap-4 px-2 md:px-0">
-              <button onClick={prevSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-cyber-border hover:border-cyan-400 transition-[border-color] active:scale-95">
-                <ChevronLeft className="w-5 h-5 text-cyan-300" />
+              <button onClick={prevSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-cyber-border hover:border-primary-cyan400 transition-[border-color] active:scale-95">
+                <ChevronLeft className="w-5 h-5 text-primary-cyan300" />
               </button>
 
               <div className="flex md:hidden space-x-2">
                 {slides.map((_, idx) => (
-                  <div key={idx} className={`h-1.5 rounded-full transition-all ${idx === currentSlide ? 'w-6 bg-cyan-400' : 'w-1.5 bg-white/30'}`} />
+                  <div key={idx} className={`h-1.5 rounded-full transition-all ${idx === currentSlide ? 'w-6 bg-primary-cyan400' : 'w-1.5 bg-white/30'}`} />
                 ))}
               </div>
 
-              <button onClick={nextSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-cyber-border hover:border-cyan-400 transition-[border-color] active:scale-95">
-                <ChevronRight className="w-5 h-5 text-cyan-300" />
+              <button onClick={nextSlide} className="p-3 md:p-2.5 rounded-full bg-white/5 border-[2px] border-cyber-border hover:border-primary-cyan400 transition-[border-color] active:scale-95">
+                <ChevronRight className="w-5 h-5 text-primary-cyan300" />
               </button>
             </div>
           </div>
@@ -159,7 +159,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
           <button
             key={idx}
             onClick={() => handleSlideChange(idx)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-8 bg-cyan-400 shadow-[0_0_10px_#00ffff]' : 'w-2 bg-white/20'}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentSlide ? 'w-8 bg-primary-cyan400 shadow-[0_0_10px_#00ffff]' : 'w-2 bg-white/20'}`}
           />
         ))}
       </div>

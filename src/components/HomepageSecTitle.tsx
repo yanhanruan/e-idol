@@ -40,7 +40,7 @@ const HomepageSecTitle = ({ icon: Icon, title, action, titleGradient = false }: 
             {title}
           </h3>
         ) : (
-          <h3 className="text-lg font-black text-slate-200">{title}</h3>
+          <h3 className="text-lg font-black text-content-secondary">{title}</h3>
         )}
       </div>
 

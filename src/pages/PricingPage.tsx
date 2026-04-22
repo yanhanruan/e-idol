@@ -96,7 +96,7 @@ const PricingCard = ({ plan, isPopular = false }: PricingCardProps) => {
 
           <button
             className={`
-            w-full py-3 text-xs font-bold uppercase tracking-[0.15em] rounded-lg transition-all duration-300
+            w-full py-3 text-xs font-bold uppercase tracking-sm rounded-lg transition-all duration-300
             ${plan.theme.btn}
           `}
           >
@@ -167,8 +167,8 @@ const PricingPage = () => {
         border: 'border-cyan-500/30',
         borderHover: 'border-cyan-500/80',
         bgGradient: 'from-teal-700/50 to-slate-900',
-        text: 'text-cyan-400',
-        iconColor: 'text-cyan-400',
+        text: 'text-primary-cyan400',
+        iconColor: 'text-primary-cyan400',
         btn: 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:shadow-[0_0_30px_rgba(34,211,238,0.4)]',
       },
     },
@@ -177,8 +177,8 @@ const PricingPage = () => {
   return (
     <div className="min-h-screen text-white font-sans relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-[-10%] left-[10%] w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[0%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px]" />
+        <div className="absolute top-[-10%] left-[10%] w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-ambient-lg" />
+        <div className="absolute bottom-[0%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-ambient-md" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
       </div>
 

@@ -71,15 +71,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#050510] flex items-center justify-center px-4 overflow-hidden">
+    <div className="relative min-h-screen bg-cyber-base flex items-center justify-center px-4 overflow-hidden">
       {/* 背景光晕装饰 */}
-      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-cyan-500/8 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-cyan-500/8 rounded-full blur-ambient-lg pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-ambient-lg pointer-events-none" />
 
       {/* 返回按钮 */}
       <button
         onClick={() => setLocation('/')}
-        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group z-20"
+        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-primary-cyan400 transition-colors duration-200 group z-20"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-200" />
         <span className="text-xs tracking-widest uppercase">返回首页</span>
@@ -88,16 +88,16 @@ const LoginPage = () => {
       {/* 玻璃态卡片 */}
       <div className="relative z-10 w-full max-w-md">
         {/* 卡片辉光边框 */}
-        <div className="absolute -inset-[1px] bg-gradient-to-br from-cyan-500/20 via-transparent to-purple-600/20 rounded-2xl blur-[3px]" />
+        <div className="absolute -inset-[1px] bg-gradient-to-br from-cyan-500/20 via-transparent to-purple-600/20 rounded-2xl blur-xs" />
 
         <div className="relative bg-[#0a0a1a]/90 backdrop-blur-xl border border-cyber-border rounded-2xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]">
           {/* Logo 区域 */}
           <div className="flex items-center justify-center gap-2 mb-8">
             <div className="relative">
-              <div className="absolute inset-0 bg-cyan-400/30 rounded-full blur-md" />
-              <Zap size={22} className="relative text-cyan-400" />
+              <div className="absolute inset-0 bg-primary-cyan400/30 rounded-full blur-md" />
+              <Zap size={22} className="relative text-primary-cyan400" />
             </div>
-            <span className="text-base font-bold tracking-[0.3em] bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent uppercase">
+            <span className="text-base font-bold tracking-lg bg-gradient-to-r from-primary-cyan400 to-blue-400 bg-clip-text text-transparent uppercase">
               E-IDOL
             </span>
           </div>
@@ -146,10 +146,7 @@ const LoginPage = () => {
 
             {/* 登录按钮 — 直接使用 CyberButton type="submit"，不嵌套原生 button */}
             <CyberButton
-              type="submit"
-              disabled={isLoading}
               className="w-full mt-2"
-              innerClassName="py-3 text-sm"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -168,7 +165,7 @@ const LoginPage = () => {
             <button
               type="button"
               onClick={() => setLocation('/register')}
-              className="ml-1 text-cyan-400 hover:text-cyan-300 hover:drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] transition-all duration-200 cursor-pointer"
+              className="ml-1 text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] transition-all duration-200 cursor-pointer"
             >
               {authT.goRegister || '立即注册'}
             </button>

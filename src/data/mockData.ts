@@ -53,7 +53,7 @@ export const USERS_DATA: UserProfile[] = [
   {
     name: 'ヤッホ',
     avatar: '🕹️',
-    color: 'from-slate-200 to-blue-200',
+    color: 'from-content-secondary to-blue-200',
     online: false,
     games: [{ name: 'monsterhunter', rank: 'master' }],
     voice: 'mature',
@@ -91,7 +91,7 @@ export const GAMES_DATA: GameCard[] = [
   { name: 'スプラ3', image: splatoonslpy, color: 'from-orange-500 to-pink-500' },
   { name: 'APEX mobile', image: apex, color: 'from-red-500 to-orange-500' },
   { name: 'MHR', image: mhr, color: 'from-green-700 to-emerald-700' },
-  { name: 'DbD', image: dbd, color: 'from-slate-100/80 to-slate-400/80' },
+  { name: 'DbD', image: dbd, color: 'from-content-primary/80 to-slate-400/80' },
 ];
 
 export const FEATURED_USERS_DATA: FeaturedUser[] = [

@@ -386,7 +386,7 @@ export const IdolStageLiveUI: React.FC = () => {
   }, [draw]);
 
   return (
-    <div className="w-full h-screen flex justify-center items-center overflow-hidden bg-[#050510]">
+    <div className="w-full h-screen flex justify-center items-center overflow-hidden bg-cyber-base">
       <canvas 
         ref={canvasRef} 
         className="shadow-[0_0_20px_rgba(0,0,0,0.5)] block w-full h-full"
@@ -408,7 +408,7 @@ const GlitchDemo: React.FC = () => {
           <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase text-white mb-2">
             PURE<span className="text-[#ff0033]">V8</span>
           </h1>
-          <p className="text-gray-500 text-xs tracking-[0.3em] uppercase max-w-lg mx-auto leading-relaxed">
+          <p className="text-gray-500 text-xs tracking-lg uppercase max-w-lg mx-auto leading-relaxed">
             Zero Artifacts • Absolute Displacement
           </p>
         </div>
@@ -434,7 +434,7 @@ const GlitchDemo: React.FC = () => {
                 src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop" 
               />
               <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end opacity-0 group-hover:opacity-100 transition duration-300">
-                 <span className="text-cyan-400 text-xs font-bold bg-black/80 backdrop-blur px-2 py-1 border border-cyan-400/30">NO_LINES</span>
+                 <span className="text-primary-cyan400 text-xs font-bold bg-black/80 backdrop-blur px-2 py-1 border border-primary-cyan400/30">NO_LINES</span>
               </div>
             </div>
           </div>

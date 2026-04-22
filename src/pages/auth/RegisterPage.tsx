@@ -53,7 +53,7 @@ const RoleSelector = ({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative w-full flex items-center justify-between px-4 py-3 rounded-lg bg-[#050510] border border-cyber-border text-sm text-cyan-50 focus:outline-none transition-all duration-200"
+        className="relative w-full flex items-center justify-between px-4 py-3 rounded-lg bg-cyber-base border border-cyber-border text-sm text-cyan-50 focus:outline-none transition-all duration-200"
       >
         <span>{current?.label}</span>
         <ChevronDown
@@ -73,7 +73,7 @@ const RoleSelector = ({
                 onClick={() => { onChange(opt.value); setOpen(false); }}
                 className={`w-full text-left px-4 py-3 text-sm transition-colors duration-150 ${
                   value === opt.value
-                    ? 'text-cyan-400 bg-cyan-900/20'
+                    ? 'text-primary-cyan400 bg-cyan-900/20'
                     : 'text-slate-400 hover:text-cyan-50 hover:bg-white/5'
                 }`}
               >
@@ -179,16 +179,16 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#050510] flex items-center justify-center px-4 py-12 overflow-hidden">
+    <div className="relative min-h-screen bg-cyber-base flex items-center justify-center px-4 py-12 overflow-hidden">
       {/* 背景光晕装饰 */}
-      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-cyan-500/8 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-ambient-lg pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-cyan-500/8 rounded-full blur-ambient-lg pointer-events-none" />
 
       {/* 返回按钮 */}
       <button
         type="button"
         onClick={() => setLocation('/')}
-        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors duration-200 group z-20"
+        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-primary-cyan400 transition-colors duration-200 group z-20"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-200" />
         <span className="text-xs tracking-widest uppercase">返回首页</span>
@@ -197,7 +197,7 @@ const RegisterPage = () => {
       {/* 玻璃态卡片 */}
       <div className="relative z-10 w-full max-w-md">
         {/* 卡片辉光边框 */}
-        <div className="absolute -inset-[1px] bg-gradient-to-br from-purple-600/20 via-transparent to-cyan-500/20 rounded-2xl blur-[3px]" />
+        <div className="absolute -inset-[1px] bg-gradient-to-br from-purple-600/20 via-transparent to-cyan-500/20 rounded-2xl blur-xs" />
 
         <div className="relative bg-[#0a0a1a]/90 backdrop-blur-xl border border-cyber-border rounded-2xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]">
           {/* Logo 区域 */}
@@ -206,7 +206,7 @@ const RegisterPage = () => {
               <div className="absolute inset-0 bg-purple-400/30 rounded-full blur-md" />
               <Zap size={22} className="relative text-purple-400" />
             </div>
-            <span className="text-base font-bold tracking-[0.3em] bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent uppercase">
+            <span className="text-base font-bold tracking-lg bg-gradient-to-r from-purple-400 to-primary-cyan400 bg-clip-text text-transparent uppercase">
               E-IDOL
             </span>
           </div>
@@ -302,7 +302,7 @@ const RegisterPage = () => {
             <button
               type="button"
               onClick={() => setLocation('/login')}
-              className="ml-1 text-cyan-400 hover:text-cyan-300 hover:drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] transition-all duration-200 cursor-pointer"
+              className="ml-1 text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] transition-all duration-200 cursor-pointer"
             >
               {authT.goLogin || '立即登录'}
             </button>

@@ -44,11 +44,11 @@ const GlobalChat = () => {
         <div className="p-3 border-b border-cyber-border flex justify-between items-center bg-white/5 rounded-t-xl">
           <div className="flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-primary-aqua animate-pulse" />
-            <span className="font-bold tracking-wider text-accent-slate100 text-xs bg-clip-text bg-gradient-to-r from-base-white via-cyan-100 to-primary-aqua drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">
+            <span className="font-bold tracking-wider text-content-primary text-xs bg-clip-text bg-gradient-to-r from-base-white via-cyan-100 to-primary-aqua drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">
               {chatTitle}
             </span>
           </div>
-          <button onClick={() => setIsOpen(false)} className="text-accent-slate200 hover:text-primary-aqua transition-colors">
+          <button onClick={() => setIsOpen(false)} className="text-content-secondary hover:text-primary-aqua transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -57,7 +57,7 @@ const GlobalChat = () => {
           
           {/* 1. 固定的欢迎语 UI (直接消费多语言变量，脱离 State) */}
           <div className="flex justify-start">
-            <div className="max-w-[85%] p-2.5 text-xs leading-relaxed tracking-wide bg-[#0a0a20]/50 border border-white/5 text-accent-slate100 rounded-xl rounded-tl-sm">
+            <div className="max-w-[85%] p-2.5 text-xs leading-relaxed tracking-wide bg-cyber-surface/50 border border-white/5 text-content-primary rounded-xl rounded-tl-sm">
               {chatWelcome}
             </div>
           </div>
@@ -69,7 +69,7 @@ const GlobalChat = () => {
                 max-w-[85%] p-2.5 text-xs leading-relaxed tracking-wide
                 ${msg.role === 'user' 
                   ? 'bg-cyan-900/30 border border-cyan-500/30 text-primary-aqua rounded-xl rounded-tr-sm shadow-[0_0_10px_rgba(34,211,238,0.1)]' 
-                  : 'bg-[#0a0a20]/50 border border-white/5 text-accent-slate100 rounded-xl rounded-tl-sm'}
+                  : 'bg-cyber-surface/50 border border-white/5 text-content-primary rounded-xl rounded-tl-sm'}
               `}>
                 {msg.text}
               </div>
@@ -77,14 +77,14 @@ const GlobalChat = () => {
           ))}
         </div>
 
-        <div className="p-2 border-t border-cyber-border bg-[#050510]/90 rounded-b-xl flex items-center gap-2">
+        <div className="p-2 border-t border-cyber-border bg-cyber-base/90 rounded-b-xl flex items-center gap-2">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder={chatPlaceholder} 
-            className="flex-1 text-xs bg-black/40 border border-cyber-border focus:border-cyan-500/50 hover:border-white/20 rounded-full px-3 py-1.5 text-accent-slate100 outline-none transition-all placeholder:text-accent-slate200/50"
+            className="flex-1 text-xs bg-black/40 border border-cyber-border focus:border-cyan-500/50 hover:border-white/20 rounded-full px-3 py-1.5 text-content-primary outline-none transition-all placeholder:text-content-secondary/50"
           />
           
           <button 
@@ -104,7 +104,7 @@ const GlobalChat = () => {
           onClick={() => setIsOpen(!isOpen)}
           className={`
             relative z-10 w-8 h-8 rounded-full flex items-center justify-center
-            bg-[#050510] border border-cyber-border
+            bg-cyber-base border border-cyber-border
             text-primary-aqua overflow-hidden
             transition-all duration-300 active:scale-95
           `}

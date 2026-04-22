@@ -87,7 +87,7 @@ const ProcessPage = () => {
         <div className="relative">
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] md:-ml-[1px] bg-slate-800/80 rounded-full overflow-hidden">
             <div
-              className="absolute left-0 w-full bg-gradient-to-b from-transparent via-cyan-400 to-transparent blur-[1px] shadow-[0_0_10px_#22d3ee]"
+              className="absolute left-0 w-full bg-gradient-to-b from-transparent via-primary-cyan400 to-transparent blur-px shadow-[0_0_10px_#22d3ee]"
               style={{ animation: 'electricFlow 3s ease-in-out infinite' }}
             ></div>
           </div>
@@ -103,16 +103,16 @@ const ProcessPage = () => {
                     <div className="group relative bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl p-1 hover:border-cyan-500/50 transition-all duration-500 hover:shadow-[0_0_20px_-5px_rgba(6,182,212,0.15)]">
                       <div className="relative rounded-lg overflow-hidden bg-[#0F1219]">
                         <div className="h-24 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
-                          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-400 to-transparent"></div>
-                          <Icon size={40} className="text-cyan-400/20 absolute -right-3 -bottom-3 md:-right-2 md:-bottom-2 rotate-12" />
+                          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary-cyan400 to-transparent"></div>
+                          <Icon size={40} className="text-primary-cyan400/20 absolute -right-3 -bottom-3 md:-right-2 md:-bottom-2 rotate-12" />
                           <div className="z-10 w-12 h-12 bg-slate-950/50 rounded-full flex items-center justify-center border border-cyan-500/30 shadow-neon-cyan">
-                            <Icon size={24} className="text-cyan-400" />
+                            <Icon size={24} className="text-primary-cyan400" />
                           </div>
                         </div>
 
                         <div className="p-4">
                           <div className="flex items-baseline justify-between mb-1">
-                            <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">{step.title}</h3>
+                            <h3 className="text-lg font-bold text-white group-hover:text-primary-cyan300 transition-colors">{step.title}</h3>
                             <span className="text-3xl font-black text-slate-800 group-hover:text-slate-700 transition-colors select-none italic">
                               {step.id}
                             </span>
@@ -146,7 +146,7 @@ const ProcessPage = () => {
                 {['Tokyo', 'Kanagawa', 'Chiba', 'Saitama', 'Online'].map((city) => (
                   <span
                     key={city}
-                    className="px-3 py-1 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-colors cursor-default"
+                    className="px-3 py-1 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-400 hover:border-cyan-500/50 hover:text-primary-cyan400 transition-colors cursor-default"
                   >
                     {city}
                   </span>

@@ -116,8 +116,8 @@ const RecruitmentPage = () => {
   return (
     <div className="min-h-screen text-white font-sans relative overflow-hidden pb-2">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] mix-blend-screen" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[80px] mix-blend-screen" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-ambient-md mix-blend-screen" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-ambient-sm mix-blend-screen" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
       </div>
 
@@ -125,7 +125,7 @@ const RecruitmentPage = () => {
         <PageTitle
           subtitle={
             <>
-              <Gamepad2 size={14} className="text-cyan-400" />
+              <Gamepad2 size={14} className="text-primary-cyan400" />
               <span>{r.hero.badge}</span>
             </>
           }
@@ -139,7 +139,7 @@ const RecruitmentPage = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-purple-600/50 to-cyan-500/50 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
               <div className="relative bg-[#13161c]/80 backdrop-blur border border-slate-700/50 px-6 py-3 rounded-lg flex items-baseline gap-2 shadow-xl">
                 <span className="text-slate-500 font-bold text-xs">{r.hero.salaryPrefix}</span>
-                <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 tracking-tight">
+                <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-cyan400 to-purple-400 tracking-tight">
                   {r.hero.salaryAmount}
                 </span>
                 <span className="text-slate-500 font-bold text-xs">{r.hero.salarySuffix}</span>
@@ -154,7 +154,7 @@ const RecruitmentPage = () => {
             return (
               <div key={index} className="group relative bg-slate-900/40 border border-slate-800/80 p-5 rounded-xl hover:border-cyan-500/30 hover:bg-slate-800/60 transition-all duration-300 hover:-translate-y-1">
                 <div className="w-10 h-10 bg-slate-800/80 rounded-lg flex items-center justify-center mb-3 group-hover:bg-cyan-900/20 transition-colors border border-slate-700/30">
-                  <Icon className="text-cyan-400/80 group-hover:text-cyan-400" size={20} />
+                  <Icon className="text-primary-cyan400/80 group-hover:text-primary-cyan400" size={20} />
                 </div>
                 <h3 className="text-base font-bold text-white mb-2">{point.title}</h3>
                 <p className="text-slate-400 text-xs leading-relaxed">{point.desc}</p>
@@ -177,7 +177,7 @@ const RecruitmentPage = () => {
               {r.requirements.items.map((item, idx) => (
                 <div key={idx} className="p-4 md:grid md:grid-cols-12 md:gap-4 hover:bg-slate-800/30 transition-colors group">
                   <div className="md:col-span-3 mb-1 md:mb-0">
-                    <span className="flex items-center gap-2 text-cyan-500/80 group-hover:text-cyan-400 font-bold text-xs uppercase tracking-wide">
+                    <span className="flex items-center gap-2 text-cyan-500/80 group-hover:text-primary-cyan400 font-bold text-xs uppercase tracking-wide">
                       <CheckCircle2 size={14} />
                       {item.label}
                     </span>
@@ -258,7 +258,7 @@ const RecruitmentPage = () => {
 
           <button className="group relative px-6 py-3 bg-white text-black font-bold text-sm rounded-full overflow-hidden hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
             <span className="relative z-10">{r.message.button}</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-300 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-cyan300 to-purple-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
         </div>
       </div>

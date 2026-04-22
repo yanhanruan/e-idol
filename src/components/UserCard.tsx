@@ -36,16 +36,16 @@ const AudioWaveButton = ({ isPlaying, onClick }: AudioWaveButtonProps) => {
   ];
 
   return (
-    <button onClick={onClick} className="flex px-3 py-1.5 md:px-4 md:py-2 items-center justify-center space-x-2 bg-black/50 backdrop-blur-sm text-cyan-400 rounded-md hover:scale-105 duration-300">
+    <button onClick={onClick} className="flex px-3 py-1.5 md:px-4 md:py-2 items-center justify-center space-x-2 bg-black/50 backdrop-blur-sm text-primary-cyan400 rounded-md hover:scale-105 duration-300">
       <div className="relative w-4 h-4 flex-shrink-0">
-        <Play className={`w-4 h-4 fill-cyan-400 text-cyan-400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
-        <Pause className={`absolute top-0 left-0 w-4 h-4 fill-cyan-400 text-cyan-400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-100' : 'opacity-0'}`} />
+        <Play className={`w-4 h-4 fill-primary-cyan400 text-primary-cyan400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
+        <Pause className={`absolute top-0 left-0 w-4 h-4 fill-primary-cyan400 text-primary-cyan400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-100' : 'opacity-0'}`} />
       </div>
       <div className="flex items-center justify-center space-x-1 h-5 md:h-6">
         {waveConfig.map((bar, i) => (
           <div
             key={i}
-            className="w-[3px] bg-cyan-400 rounded-sm animate-wave shadow-[0_0_5px_rgba(34,211,238,0.8)]"
+            className="w-[3px] bg-primary-cyan400 rounded-sm animate-wave shadow-[0_0_5px_rgba(34,211,238,0.8)]"
             style={{
               animationDuration: bar.duration,
               animationDelay: bar.delay,
@@ -66,11 +66,11 @@ interface CyberTagProps {
 
 const CyberTag = ({ children, color = 'blue' }: CyberTagProps) => {
   const styles = {
-    blue: 'text-cyan-400 border-cyan-500/30 hover:bg-cyan-900/40',
+    blue: 'text-primary-cyan400 border-cyan-500/30 hover:bg-cyan-900/40',
     purple: 'text-purple-400 border-purple-500/30 hover:bg-purple-900/40',
   };
 
-  const accentColor = color === 'blue' ? 'bg-cyan-400' : 'bg-purple-400';
+  const accentColor = color === 'blue' ? 'bg-primary-cyan400' : 'bg-purple-400';
 
   return (
     <div
@@ -81,7 +81,7 @@ const CyberTag = ({ children, color = 'blue' }: CyberTagProps) => {
       font-mono text-[10px]
       tracking-wider uppercase font-bold
       transition-all duration-300 cursor-default
-      [clip-path:polygon(0_0,calc(100%-6px)_0,100%_6px,100%_100%,0_100%)]
+      clip-chamfer-tr
       ${styles[color] || styles.blue}
     `}
     >
@@ -107,7 +107,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
       transition-transform duration-300 ease-out
       hover:scale-105
       before:inset-[6px]
-      before:blur-[14px]
+      before:blur-glow
       before:bg-gradient-to-l
       before:from-[#7e0fff80]
       before:to-[#0fffc180]
@@ -156,7 +156,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
               className={`
                 flex-1
                 text-center
-                font-black text-slate-100 
+                font-black text-content-primary 
                 [font-size:var(--font-name-base)]
                 md:[font-size:var(--font-name-md)]
                 line-clamp-2  
@@ -191,9 +191,8 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
                         bg-[#fce300] text-black 
                         font-black uppercase 
                         text-[10px] leading-none tracking-wider
-                        px-1.5 py-1 
-                        shadow-[0_0_5px_rgba(252,227,0,0.4)]
-                        [clip-path:polygon(0_0,100%_0,100%_100%,4px_100%,0_calc(100%-4px))]
+                        px-1.5 py-1      
+                        clip-chamfer-bl
                         cursor-default
                       `}
                     >
@@ -208,7 +207,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
                         text-[10px] leading-none
                         px-2 py-1 
                         -ml-1.5 pl-2.5
-                        [clip-path:polygon(0_0,100%_0,100%_calc(100%-4px),calc(100%-4px)_100%,0_100%)]
+                        clip-chamfer-br
                       `}
                     >
                       {t.ranks[game.rank]}

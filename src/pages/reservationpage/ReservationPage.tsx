@@ -81,7 +81,7 @@ const ReservationForm = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border border-slate-200 p-8 space-y-8">
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border border-content-secondary p-8 space-y-8">
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
               <User size={16} className="text-slate-400" />
@@ -317,7 +317,7 @@ const ReservationForm = () => {
                 <label
                   key={plan.id}
                   className={`block p-4 border-2 rounded-lg cursor-pointer transition ${
-                    formData.plan === plan.id ? 'border-indigo-400 bg-indigo-50' : 'border-slate-200 bg-white hover:border-slate-300'
+                    formData.plan === plan.id ? 'border-indigo-400 bg-indigo-50' : 'border-content-secondary bg-white hover:border-slate-300'
                   }`}
                 >
                   <input

@@ -8,8 +8,12 @@ body {
   background: #112 center no-repeat;
 }
 
-@layer components {
-  /* cyber button glow */
+@layer components{
+  
+}
+
+@layer utilities {
+  /* cyber button iridescent glow */
   .cyber-glow-backdrop {
     @apply absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full opacity-70 blur-[2px] transition-all duration-300;
   }
@@ -17,6 +21,16 @@ body {
   .group:hover .cyber-glow-backdrop {
     @apply opacity-100 blur-[4px];
   }
+  .cyber-hover{
+    @apply hover:bg-cyber-surface hover:border-cyan-500/30 hover:shadow-neon-cyan hover:text-cyan-50 transition-[background-color,border-color,box-shadow,color] duration-300 ease-in-out;
+  }
+  .cyber-glass {
+    @apply bg-cyber-glass backdrop-blur-md border border-cyber-border ;
+  }
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
 }
 
 /* Added to your global .css file */
