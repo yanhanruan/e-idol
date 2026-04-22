@@ -73,6 +73,7 @@ export default {
           panel: '#0a0a1a',   // 浮窗面板底色
           border: 'rgba(255, 255, 255, 0.1)', // 统一替换 border-white/10
           glass: 'rgba(5, 5, 16, 0.8)',       // 统一替换 bg-[#050510]/80 
+          glassPanel: 'rgba(10, 10, 26, 0.82)'// 统一替换 bg-[#0a0a1ad1] 
         }
       },
       zIndex: {
