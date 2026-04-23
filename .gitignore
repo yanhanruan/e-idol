@@ -1,3 +1,6 @@
+# environment info
+.env
+
 # obsolete
 ./src/~obsolete
 *.txt
