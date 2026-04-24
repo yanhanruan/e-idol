@@ -124,7 +124,7 @@
 
 ### 7.3 排版紧凑度 (Typography)
 
-- __字号体系__: 偏向使用较小字号实现精致感，如 `text-[10px]`, `text-xs`, `text-sm`。使用 CSS 变量进行跨断点响应式字号如 `[font-size:var(--font-name-base)]`。
+- __字号体系__: 偏向使用较小字号实现精致感，如 `text-2xs`, `text-xs`, `text-sm`。使用 CSS 变量进行跨断点响应式字号如 `[font-size:var(--font-name-base)]`。
 
 - __字距搭配__:
 
@@ -133,7 +133,7 @@
 
 - __行高搭配__:
 
-  - `leading-none` 搭配小字号标签（如 `text-[10px]`）确保标签高度紧凑无多余空白。
+  - `leading-none` 搭配小字号标签（如 `text-2xs`）确保标签高度紧凑无多余空白。
   - `leading-relaxed` 搭配聊天气泡或大段文本，提升阅读体验。
 
 - __字体族__: 混合使用 `font-sans`（主体）、`font-mono`（装饰性标签、特定数字）。
@@ -156,7 +156,7 @@
 | **页面级容器 / 外层布局**       | `py-8 px-4` (随屏幕增大 `sm:px-6 lg:px-8`) | `max-w-7xl mx-auto`, `w-full`           | -                                                            | 增加两侧安全区留白，从单列变为多列布局。       |
 | **导航栏 / 顶部 Header**        | 内部元素 `space-x-2` 到 `space-x-8`        | `h-14` (移动端) -> `md:h-12` (桌面端)   | `text-xs`, `font-medium`, `tracking-widest`                  | `md:flex` 展开导航，`md:hidden` 收起汉堡菜单。 |
 | **卡片内层 / 列表项**           | `p-3`, `space-y-2`, `gap-2`, `gap-3`       | 宽度通常由 Grid/Flex 控制，占满父容器。 | `text-sm`, 搭配响应式 CSS 变量控制字体。                     | 使用 `md:p-*` 放大内边距，提升呼吸感。         |
-| **标签 / 微小装饰 (Tag/Badge)** | `px-1.5 py-1`, `px-2 py-0.5`, `gap-1.5`    | 宽度自适应 `w-fit`, `flex-shrink-0`     | `text-[10px]`, `font-bold`, `leading-none`, `tracking-wider`, 常搭 `font-mono` | 基本保持一致，不随断点发生巨变。               |
+| **标签 / 微小装饰 (Tag/Badge)** | `px-1.5 py-1`, `px-2 py-0.5`, `gap-1.5`    | 宽度自适应 `w-fit`, `flex-shrink-0`     | `text-2xs`, `font-bold`, `leading-none`, `tracking-wider`, 常搭 `font-mono` | 基本保持一致，不随断点发生巨变。               |
 | **图标按钮 / 交互控件**         | 内部居中无特定 Padding                     | `w-8 h-8` (常规), `w-4 h-4` (图标本身)  | -                                                            | 桌面端增加 hover 效果 (`hover:scale-105`)。    |
 | **对话气泡 / 文本块**           | `p-2.5`                                    | `max-w-[85%]`                           | `text-xs`, `leading-relaxed`, `tracking-wide`                | 悬浮面板随屏幕变宽：`w-72 sm:w-80 md:w-88`。   |
 | **表单输入框 / Select**         | `px-3 py-1.5`                              | `flex-1` 或占据指定宽度                 | `text-xs`, `placeholder:text-content-secondary`              | -                                              |
