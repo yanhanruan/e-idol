@@ -71,103 +71,107 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-cyber-base flex items-center justify-center px-4 overflow-hidden">
-      {/* 背景光晕装饰 */}
-      <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-cyan-500/8 rounded-full blur-ambient-lg pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-ambient-lg pointer-events-none" />
+    <div className="relative min-h-screen bg-cyber-base flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden font-sans">
+      {/* Background Ambient Glows */}
+      <div className="absolute -top-1/4 -left-10 w-96 h-96 md:scale-125 bg-primary-cyan400/10 rounded-full blur-ambient-lg pointer-events-none" />
+      <div className="absolute -bottom-1/4 -right-10 w-96 h-96 md:scale-125 bg-primary-purple/10 rounded-full blur-ambient-lg pointer-events-none" />
 
-      {/* 返回按钮 */}
+      {/* Back Button */}
       <button
         onClick={() => setLocation('/')}
-        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-primary-cyan400 transition-colors duration-200 group z-20"
+        className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 text-content-muted hover:text-primary-cyan400 transition-colors duration-200 group z-20"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-200" />
-        <span className="text-xs tracking-widest uppercase">返回首页</span>
+        <span className="text-[10px] tracking-wider uppercase font-mono font-bold">BACK TO HOME</span>
       </button>
 
-      {/* 玻璃态卡片 */}
-      <div className="relative z-10 w-full max-w-md">
-        {/* 卡片辉光边框 */}
-        <div className="absolute -inset-[1px] bg-gradient-to-br from-cyan-500/20 via-transparent to-purple-600/20 rounded-2xl blur-xs" />
+      {/* Login Container */}
+      <div className="relative z-10 w-full max-w-sm md:w-88 transition-all duration-300">
+        <div className="absolute -inset-px bg-gradient-to-br from-primary-cyan400/20 via-transparent to-primary-purple/20 rounded-2xl blur-sm" />
 
-        <div className="relative bg-[#0a0a1a]/90 backdrop-blur-xl border border-cyber-border rounded-2xl p-8 shadow-[0_0_60px_rgba(0,0,0,0.8)]">
-          {/* Logo 区域 */}
-          <div className="flex items-center justify-center gap-2 mb-8">
-            <div className="relative">
-              <div className="absolute inset-0 bg-primary-cyan400/30 rounded-full blur-md" />
-              <Zap size={22} className="relative text-primary-cyan400" />
+        {/* Auth Panel - rounded-2xl for primary container */}
+        <div className="relative bg-cyber-glassPanel backdrop-blur-xl border border-cyber-border rounded-2xl p-6 md:p-8 shadow-panel">
+          
+          {/* Logo Section */}
+          <div className="flex items-center justify-center gap-2 mb-6 md:mb-2">
+            <div className="relative w-8 h-8 flex items-center justify-center">
+              <div className="absolute inset-0 bg-primary-cyan400/30 rounded-full blur-glow" />
+              <Zap size={18} className="relative text-primary-cyan400 drop-shadow-neon-cyan" />
             </div>
-            <span className="text-base font-bold tracking-lg bg-gradient-to-r from-primary-cyan400 to-blue-400 bg-clip-text text-transparent uppercase">
+            <span className="text-sm font-bold tracking-widest bg-gradient-to-r from-primary-cyan400 to-primary-blue bg-clip-text text-transparent uppercase font-mono">
               E-IDOL
             </span>
           </div>
 
-          {/* 标题 */}
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-cyan-50 tracking-wide mb-1">
-              {authT.loginTitle || '用户登录'}
+          {/* Title Section */}
+          <div className="text-center mb-8 md:mb-1">
+            <h1 className="text-xl font-bold text-content-primary tracking-md mb-1 transition-all">
+              {authT.loginTitle || 'USER LOGIN'}
             </h1>
-            <p className="text-xs text-slate-500 tracking-widest uppercase">
+            <p className="text-[10px] text-content-muted tracking-widest uppercase leading-none">
               {authT.loginSubtitle || 'SIGN IN TO YOUR ACCOUNT'}
             </p>
-            <div className="mt-3 mx-auto w-16 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent" />
+            <div className="mt-4 mx-auto w-12 h-px bg-gradient-to-r from-transparent via-primary-cyan400/60 to-transparent" />
           </div>
 
-          {/* 表单 */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          {/* Form Section - Regular Spacing gap-5 */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-5">
             <CyberInput
-              label={authT.username || '用户名'}
+              label={authT.username || 'USERNAME'}
               type="text"
-              placeholder={authT.usernamePlaceholder || '请输入用户名'}
+              placeholder={authT.usernamePlaceholder || 'Enter username'}
               value={form.username}
               onChange={handleChange('username')}
               autoComplete="username"
               disabled={isLoading}
+              className="text-xs"
             />
 
             <CyberInput
-              label={authT.password || '密码'}
+              label={authT.password || 'PASSWORD'}
               type="password"
-              placeholder={authT.passwordPlaceholder || '请输入密码'}
+              placeholder={authT.passwordPlaceholder || 'Enter password'}
               value={form.password}
               onChange={handleChange('password')}
               autoComplete="current-password"
               disabled={isLoading}
+              className="text-xs"
             />
 
-            {/* 错误提示 */}
             {errorMsg && (
-              <div className="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30">
-                <span className="text-xs text-red-400 drop-shadow-[0_0_6px_rgba(248,113,113,0.5)]">
+              <div className="px-3 py-2 rounded-lg bg-status-error/10 border border-status-error/30 mt-1">
+                <span className="text-[10px] text-status-error font-medium leading-relaxed">
                   {errorMsg}
                 </span>
               </div>
             )}
 
-            {/* 登录按钮 — 直接使用 CyberButton type="submit"，不嵌套原生 button */}
-            <CyberButton
-              className="w-full mt-2"
-            >
-              {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <Loader2 size={14} className="animate-spin" />
-                  {authT.loggingIn || '登录中...'}
-                </span>
-              ) : (
-                authT.loginBtn || '登 录'
-              )}
-            </CyberButton>
+            {/* Submit Button - rounded-full for core interaction */}
+            <div className="mt-2">
+              <CyberButton
+                className="w-full"
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <Loader2 size={14} className="animate-spin" />
+                    {authT.loggingIn || 'LOGGING IN...'}
+                  </span>
+                ) : (
+                  authT.loginBtn || 'SIGN IN'
+                )}
+              </CyberButton>
+            </div>
           </form>
 
-          {/* 跳转注册 */}
-          <p className="mt-6 text-center text-xs text-slate-500">
-            {authT.noAccount || '还没有账号？'}
+          {/* Footer Section */}
+          <p className="mt-8 text-center text-[10px] text-content-muted tracking-wide">
+            {authT.noAccount || "DON'T HAVE AN ACCOUNT?"}
             <button
               type="button"
               onClick={() => setLocation('/register')}
-              className="ml-1 text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] transition-all duration-200 cursor-pointer"
+              className="ml-1.5 text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-neon-cyan transition-all duration-200 cursor-pointer font-bold uppercase"
             >
-              {authT.goRegister || '立即注册'}
+              {authT.goRegister || 'REGISTER NOW'}
             </button>
           </p>
         </div>
