@@ -111,7 +111,7 @@ const HeroCarousel = ({ currentSlide, setCurrentSlide, t }: HeroCarouselProps) =
         <div key={currentSlide} className={`flex flex-col space-y-6 md:space-y-5 ${isAnimating ? 'opacity-50 blur-sm' : 'slide-enter'} transition-all duration-300`}>
           <div>
             <div className="flex items-center space-x-2 mb-3">
-              <span className="px-3 py-1 rounded-full bg-white/10 text-[10px] md:text-xs font-bold tracking-widest border border-white/20 text-primary-cyan300 uppercase shadow-lg backdrop-blur-md">{slide.subtitle}</span>
+              <span className="px-3 py-1 rounded-full bg-white/10 text-2xs md:text-xs font-bold tracking-widest border border-white/20 text-primary-cyan300 uppercase shadow-lg backdrop-blur-md">{slide.subtitle}</span>
               <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
             </div>
 

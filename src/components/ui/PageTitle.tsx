@@ -13,7 +13,7 @@ const PageTitle = ({ subtitle, title, comment, className = '' }: PageTitleProps)
   return (
     <div className={`px-3 py-5 text-center ${className}`}>
       {showSubtitle && (
-        <div className="whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-2 py-0.5 px-3 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-primary-cyan400 text-[10px] font-bold tracking-md mb-3 shadow-neon-cyan">
+        <div className="whitespace-nowrap shrink-0 inline-flex items-center justify-center gap-2 py-0.5 px-3 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-primary-cyan400 text-2xs font-bold tracking-md mb-3 shadow-neon-cyan">
           {subtitle}
         </div>
       )}

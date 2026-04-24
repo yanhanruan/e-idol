@@ -100,7 +100,7 @@ const Header = () => {
               style={{ background: 'linear-gradient(135deg, rgba(150, 0, 100, 0.4), rgba(100, 0, 50, 0.4))', boxShadow: '0 0 15px rgba(255, 0, 100, 0.15)' }}
             >
               <Bell size={16} />
-              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full text-[8px] flex items-center justify-center text-white bg-gradient-to-br from-[#ff0055] to-[#ff3388] shadow-[0_0_10px_rgba(255,0,85,0.6)]">
+              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full text-3xs flex items-center justify-center text-white bg-gradient-to-br from-[#ff0055] to-[#ff3388] shadow-[0_0_10px_rgba(255,0,85,0.6)]">
                 3
               </span>
             </button>

@@ -21,13 +21,13 @@ const FeaturedUserCard = ({ user, t }: FeaturedUserCardProps) => (
         <div className={`h-32 bg-gradient-to-br ${user.bgColor} flex items-center justify-center text-4xl relative`}>
             {user.image}
             {user.online && (
-                <div className="h-5 absolute top-2 right-2 z-20 inline-flex items-center space-x-1 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold border border-white/30 shadow-lg backdrop-blur-sm">
+                <div className="h-5 absolute top-2 right-2 z-20 inline-flex items-center space-x-1 bg-green-500 text-white text-2xs px-2 py-0.5 rounded-full font-bold border border-white/30 shadow-lg backdrop-blur-sm">
                     <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                     <span className="leading-none">{t.online as string}</span>
                 </div>
             )}
 
-            <div className="h-5 absolute top-2 left-2 z-20 inline-flex items-center space-x-1 text-white text-[10px] px-2 py-0.5 font-bold shadow-lg backdrop-blur-md">
+            <div className="h-5 absolute top-2 left-2 z-20 inline-flex items-center space-x-1 text-white text-2xs px-2 py-0.5 font-bold shadow-lg backdrop-blur-md">
                 <span>⏱️</span>
                 <span className="leading-none pt-0.5">{user.duration}分</span>
             </div>
@@ -42,20 +42,20 @@ const FeaturedUserCard = ({ user, t }: FeaturedUserCardProps) => (
                 filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.6))'
             }}>{user.name}</h4>
 
-            <p className="text-[10px] text-slate-500 mb-2 font-medium truncate">{user.username}</p>
+            <p className="text-2xs text-slate-500 mb-2 font-medium truncate">{user.username}</p>
 
             <div className="flex items-center space-x-0.5 mb-3">
                 {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                 ))}
                 <span className="text-xs text-slate-600 ml-1 font-bold">{user.rating}</span>
-                <span className="text-[10px] text-slate-400">({user.reviews})</span>
+                <span className="text-2xs text-slate-400">({user.reviews})</span>
             </div>
 
             <div className="flex items-center justify-between bg-gradient-to-r from-indigo-50/10 to-purple-50/10 p-2 rounded-lg">
                 <div className="flex items-baseline">
                     <span className="text-green-400/100 font-black text-lg">{user.price}</span>
-                    <span className="text-[10px] text-slate-500 ml-1 font-bold">{t.coins as string}</span>
+                    <span className="text-2xs text-slate-500 ml-1 font-bold">{t.coins as string}</span>
                 </div>
                 <MessageCircle className="w-4 h-4 text-indigo-500" />
             </div>

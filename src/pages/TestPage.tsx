@@ -441,7 +441,7 @@ const GlitchDemo: React.FC = () => {
 
         </div>
         
-        <div className="text-center text-gray-700 text-[10px] mt-12 pb-12 border-b border-gray-800">
+        <div className="text-center text-gray-700 text-2xs mt-12 pb-12 border-b border-gray-800">
           ALGORITHM V8: REMOVED ALL FILTERS & INVERSIONS
         </div>
       </div>

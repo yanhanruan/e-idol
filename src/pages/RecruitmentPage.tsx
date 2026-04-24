@@ -230,7 +230,7 @@ const RecruitmentPage = () => {
                   {r.ng.title}
                 </h2>
               </div>
-              <p className="text-red-200/40 text-[10px] md:text-right max-w-sm leading-tight">{r.ng.intro}</p>
+              <p className="text-red-200/40 text-2xs md:text-right max-w-sm leading-tight">{r.ng.intro}</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3">
@@ -241,7 +241,7 @@ const RecruitmentPage = () => {
                   </div>
                   <div>
                     <h4 className="text-red-100/90 font-bold text-xs mb-0.5">{card.title}</h4>
-                    <p className="text-red-200/50 text-[10px] leading-relaxed">{card.desc}</p>
+                    <p className="text-red-200/50 text-2xs leading-relaxed">{card.desc}</p>
                   </div>
                 </div>
               ))}

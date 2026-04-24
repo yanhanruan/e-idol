@@ -37,7 +37,7 @@ const PricingCard = ({ plan, isPopular = false }: PricingCardProps) => {
     <div className="group relative h-full">
       {isPopular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-          <div className="bg-purple-600 text-white text-[10px] font-bold px-4 py-1 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] border border-white/20 tracking-widest uppercase flex items-center gap-1">
+          <div className="bg-purple-600 text-white text-2xs font-bold px-4 py-1 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] border border-white/20 tracking-widest uppercase flex items-center gap-1">
             <Sparkles size={10} /> Recommended
           </div>
         </div>
@@ -77,7 +77,7 @@ const PricingCard = ({ plan, isPopular = false }: PricingCardProps) => {
             </div>
             <div className={`text-sm font-bold mt-2 ${plan.theme.text}`}>
               {plan.coins} COINS
-              {plan.bonus && <span className="ml-1 text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-white font-normal">{plan.bonus}</span>}
+              {plan.bonus && <span className="ml-1 text-2xs bg-white/10 px-1.5 py-0.5 rounded text-white font-normal">{plan.bonus}</span>}
             </div>
           </div>
 
@@ -193,7 +193,7 @@ const PricingPage = () => {
         <div className="mt-20 text-center opacity-60">
           <div className="flex items-center justify-center gap-2 text-slate-500">
             <Shield className="w-4 h-4" />
-            <span className="text-[10px] font-mono uppercase tracking-widest">Secure Payment Gateway // SSL Encrypted</span>
+            <span className="text-2xs font-mono uppercase tracking-widest">Secure Payment Gateway // SSL Encrypted</span>
           </div>
         </div>
       </div>

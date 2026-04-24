@@ -82,7 +82,7 @@ const LoginPage = () => {
         className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 text-content-muted hover:text-primary-cyan400 transition-colors duration-200 group z-20"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-200" />
-        <span className="text-[10px] tracking-wider uppercase font-mono font-bold">BACK TO HOME</span>
+        <span className="text-2xs tracking-wider uppercase font-mono font-bold">BACK TO HOME</span>
       </button>
 
       {/* Login Container */}
@@ -108,7 +108,7 @@ const LoginPage = () => {
             <h1 className="text-xl font-bold text-content-primary tracking-md mb-1 transition-all">
               {authT.loginTitle || 'USER LOGIN'}
             </h1>
-            <p className="text-[10px] text-content-muted tracking-widest uppercase leading-none">
+            <p className="text-2xs text-content-muted tracking-widest uppercase leading-none">
               {authT.loginSubtitle || 'SIGN IN TO YOUR ACCOUNT'}
             </p>
             <div className="mt-4 mx-auto w-12 h-px bg-gradient-to-r from-transparent via-primary-cyan400/60 to-transparent" />
@@ -140,7 +140,7 @@ const LoginPage = () => {
 
             {errorMsg && (
               <div className="px-3 py-2 rounded-lg bg-status-error/10 border border-status-error/30 mt-1">
-                <span className="text-[10px] text-status-error font-medium leading-relaxed">
+                <span className="text-2xs text-status-error font-medium leading-relaxed">
                   {errorMsg}
                 </span>
               </div>
@@ -164,7 +164,7 @@ const LoginPage = () => {
           </form>
 
           {/* Footer Section */}
-          <p className="mt-8 text-center text-[10px] text-content-muted tracking-wide">
+          <p className="mt-8 text-center text-2xs text-content-muted tracking-wide">
             {authT.noAccount || "DON'T HAVE AN ACCOUNT?"}
             <button
               type="button"

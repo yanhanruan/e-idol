@@ -78,7 +78,7 @@ const CyberTag = ({ children, color = 'blue' }: CyberTagProps) => {
       relative flex items-center gap-1.5 
       px-2 py-0.5
       border bg-black/50 backdrop-blur-sm
-      font-mono text-[10px]
+      font-mono text-2xs
       tracking-wider uppercase font-bold
       transition-all duration-300 cursor-default
       clip-chamfer-tr
@@ -190,7 +190,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
                         relative z-10 flex items-center justify-center
                         bg-[#fce300] text-black 
                         font-black uppercase 
-                        text-[10px] leading-none tracking-wider
+                        text-2xs leading-none tracking-wider
                         px-1.5 py-1      
                         clip-chamfer-bl
                         cursor-default
@@ -204,7 +204,7 @@ const UserCard = ({ user, idx, t, playingAudio, toggleAudio, size = 'full' }: Us
                         flex items-center
                         bg-black/90 border-t border-b border-r border-[#fce300]/60 text-[#fce300] 
                         font-mono font-bold 
-                        text-[10px] leading-none
+                        text-2xs leading-none
                         px-2 py-1 
                         -ml-1.5 pl-2.5
                         clip-chamfer-br

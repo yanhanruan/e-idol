@@ -118,7 +118,7 @@ const ProcessPage = () => {
                             </span>
                           </div>
                           <p className="text-slate-300 text-xs font-medium mb-2">{step.desc}</p>
-                          <p className="text-slate-500 text-[10px] leading-relaxed border-t border-slate-800 pt-2">{step.detail}</p>
+                          <p className="text-slate-500 text-2xs leading-relaxed border-t border-slate-800 pt-2">{step.detail}</p>
                         </div>
                       </div>
                     </div>
@@ -146,7 +146,7 @@ const ProcessPage = () => {
                 {['Tokyo', 'Kanagawa', 'Chiba', 'Saitama', 'Online'].map((city) => (
                   <span
                     key={city}
-                    className="px-3 py-1 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-400 hover:border-cyan-500/50 hover:text-primary-cyan400 transition-colors cursor-default"
+                    className="px-3 py-1 bg-slate-950 border border-slate-700 rounded text-2xs text-slate-400 hover:border-cyan-500/50 hover:text-primary-cyan400 transition-colors cursor-default"
                   >
                     {city}
                   </span>

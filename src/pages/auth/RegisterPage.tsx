@@ -182,7 +182,7 @@ const RegisterPage = () => {
         className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 text-content-muted hover:text-primary-cyan400 transition-colors duration-200 group z-20"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-200" />
-        <span className="text-[10px] tracking-wider uppercase font-mono">BACK TO HOME</span>
+        <span className="text-2xs tracking-wider uppercase font-mono">BACK TO HOME</span>
       </button>
 
       {/* Register Container */}
@@ -208,7 +208,7 @@ const RegisterPage = () => {
             <h1 className="text-xl font-bold text-content-primary tracking-md mb-1">
               {authT.registerTitle || 'CREATE ACCOUNT'}
             </h1>
-            <p className="text-[10px] text-content-muted tracking-widest uppercase leading-none">
+            <p className="text-2xs text-content-muted tracking-widest uppercase leading-none">
               {authT.registerSubtitle || 'START YOUR JOURNEY'}
             </p>
             <div className="mt-4 mx-auto w-12 h-px bg-gradient-to-r from-transparent via-primary-purple/60 to-transparent" />
@@ -254,7 +254,7 @@ const RegisterPage = () => {
 
             {/* Role Selection */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-bold tracking-wider text-content-muted uppercase font-mono">
+              <label className="text-2xs font-bold tracking-wider text-content-muted uppercase font-mono">
                 {authT.role || 'IDENTITY'}
               </label>
               <RoleSelector
@@ -267,7 +267,7 @@ const RegisterPage = () => {
             {/* Error Message */}
             {serverError && (
               <div className="px-3 py-2 rounded-lg bg-status-error/10 border border-status-error/30 mt-1">
-                <span className="text-[10px] text-status-error font-medium leading-relaxed">
+                <span className="text-2xs text-status-error font-medium leading-relaxed">
                   {serverError}
                 </span>
               </div>
@@ -291,7 +291,7 @@ const RegisterPage = () => {
           </form>
 
           {/* Footer Section */}
-          <p className="mt-8 text-center text-[10px] text-content-muted tracking-wide">
+          <p className="mt-8 text-center text-2xs text-content-muted tracking-wide">
             {authT.hasAccount || 'ALREADY HAVE AN ACCOUNT?'}
             <button
               type="button"

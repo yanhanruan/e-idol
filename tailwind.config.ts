@@ -9,6 +9,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontSize: {
+        '2xs': '10px',
+        '3xs': '8px',
+      },
       fontFamily: {
         vibur: ["Vibur", "cursive"],
         sans: [

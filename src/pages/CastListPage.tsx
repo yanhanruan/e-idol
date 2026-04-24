@@ -330,7 +330,7 @@ const CastListPage = () => {
 
                 <div className="flex flex-wrap gap-1 mb-4">
                   {cast.tags.map((tag, i) => (
-                    <span key={i} className="px-2 py-0.5 bg-purple-900/30 border border-purple-500/30 rounded text-[10px] text-purple-300">
+                    <span key={i} className="px-2 py-0.5 bg-purple-900/30 border border-purple-500/30 rounded text-2xs text-purple-300">
                       {tag}
                     </span>
                   ))}
