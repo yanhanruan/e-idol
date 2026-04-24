@@ -10,7 +10,7 @@ interface HomepageSecTitleProps {
 
 const HomepageSecTitle = ({ icon: Icon, title, action, titleGradient = false }: HomepageSecTitleProps) => {
   return (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex items-center justify-between mb-3">
       <div className="flex items-center space-x-3 md:space-x-4">
         <div
           className="w-8 h-8 rounded-md flex items-center justify-center relative shrink-0"
@@ -28,7 +28,7 @@ const HomepageSecTitle = ({ icon: Icon, title, action, titleGradient = false }: 
 
         {titleGradient ? (
           <h3
-            className="text-lg font-black"
+            className="text-base font-black"
             style={{
               fontFamily: "'Orbitron', sans-serif",
               background: 'linear-gradient(135deg, #00ffff, #0099ff, #ff00ff)',
@@ -40,7 +40,7 @@ const HomepageSecTitle = ({ icon: Icon, title, action, titleGradient = false }: 
             {title}
           </h3>
         ) : (
-          <h3 className="text-lg font-black text-content-secondary">{title}</h3>
+          <h3 className="text-base font-black text-content-secondary">{title}</h3>
         )}
       </div>
 

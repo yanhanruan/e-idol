@@ -15,7 +15,7 @@ const Footer = () => (
         <Logo />
       </div>
       <p
-        className="text-sm font-medium"
+        className="text-xs font-medium"
         style={{
           fontFamily: "'Roboto Mono', monospace",
           color: '#00ffff',
