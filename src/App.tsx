@@ -26,36 +26,31 @@ const App: React.FC = () => {
         <TransitionProvider>
           <CyberTransition />
 
-          {/* 登录/注册页面不使用 MainLayout（独立全屏页） */}
-          <Switch>
-            <Route path="/login" component={LoginPage} />
-            <Route path="/register" component={RegisterPage} />
+          {/* 所有页面使用 MainLayout（登录/注册嵌套在 Header/Footer 布局中） */}
+          <MainLayout>
+            <Switch>
+              <Route path="/" component={HomePage} />
+              <Route path="/login" component={LoginPage} />
+              <Route path="/register" component={RegisterPage} />
+              <Route path="/process" component={ProcessPage} />
+              <Route path="/pricing" component={PricingPage} />
+              <Route path="/castList" component={CastListPage} />
+              <Route path="/recruitment" component={RecruitmentPage} />
+              <Route path="/reservation" component={ReservationPage} />
+              <Route path="/test" component={TestPage} />
 
-            {/* 其余页面使用 MainLayout */}
-            <Route>
-              <MainLayout>
-                <Switch>
-                  <Route path="/" component={HomePage} />
-                  <Route path="/process" component={ProcessPage} />
-                  <Route path="/pricing" component={PricingPage} />
-                  <Route path="/castList" component={CastListPage} />
-                  <Route path="/recruitment" component={RecruitmentPage} />
-                  <Route path="/reservation" component={ReservationPage} />
-                  <Route path="/test" component={TestPage} />
+              {/* 404 */}
+              <Route>
+                <div className="flex items-center justify-center min-h-[50vh] text-white">
+                  <div className="text-center">
+                    <h2 className="text-5xl font-bold mb-4 text-red-500">404</h2>
+                    <p>Page Not Found</p>
+                  </div>
+                </div>
+              </Route>
+            </Switch>
+          </MainLayout>
 
-                  {/* 404 */}
-                  <Route>
-                    <div className="flex items-center justify-center min-h-[50vh] text-white">
-                      <div className="text-center">
-                        <h2 className="text-5xl font-bold mb-4 text-red-500">404</h2>
-                        <p>Page Not Found</p>
-                      </div>
-                    </div>
-                  </Route>
-                </Switch>
-              </MainLayout>
-            </Route>
-          </Switch>
 
         </TransitionProvider>
       </AuthProvider>
