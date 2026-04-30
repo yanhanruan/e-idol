@@ -2,7 +2,7 @@ import Logo from '../Logo';
 
 const Footer = () => (
   <footer
-    className="mt-16 py-12 relative overflow-hidden"
+    className="mt-2 md:mt-4 py-10 md:py-12 relative overflow-hidden"
     style={{
       background: 'linear-gradient(180deg, rgba(5, 8, 20, 0) 0%, rgba(10, 13, 30, 0.8) 20%, rgba(10, 13, 30, 0.95) 100%)',
       borderTop: '1px solid rgba(0, 255, 255, 0.2)',
