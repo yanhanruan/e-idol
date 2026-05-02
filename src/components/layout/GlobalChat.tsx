@@ -31,14 +31,16 @@ const GlobalChat = () => {
   const chatPlaceholder = chatT.placeholder || '输入指令...';
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end font-sans pointer-events-none">
+    <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-50 flex flex-col items-end font-sans pointer-events-none">
       {/* 聊天面板 */}
       <div 
         className={`
-          mb-3 w-72 sm:w-80 md:w-88 flex flex-col rounded-xl
+          mb-3  h-[225px] sm:h-[380px] w-[calc(100vw-2rem)] sm:w-80 md:w-88 flex flex-col rounded-xl
           origin-bottom-right transition-all duration-300 ease-shine
           ${glassPanelStyle}
-          ${isOpen ? 'scale-100 opacity-100 translate-y-0 h-[380px] pointer-events-auto' : 'scale-95 opacity-0 pointer-events-none translate-y-8 h-[380px]'}
+          ${isOpen 
+            ? 'scale-100 opacity-100 translate-y-0 pointer-events-auto' 
+            : 'scale-95 opacity-0 pointer-events-none translate-y-8'}
         `}
       >
         <div className="p-3 border-b border-cyber-border flex justify-between items-center bg-white/5 rounded-t-xl">
@@ -77,19 +79,19 @@ const GlobalChat = () => {
           ))}
         </div>
 
-        <div className="p-2 border-t border-cyber-border bg-cyber-base/90 rounded-b-xl flex items-center gap-2">
+        <div className="p-2.5 sm:p-2 border-t border-cyber-border bg-cyber-base/90 rounded-b-xl flex items-center gap-2">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder={chatPlaceholder} 
-            className="flex-1 text-xs bg-black/40 border border-cyber-border focus:border-cyan-500/50 hover:border-white/20 rounded-full px-3 py-1.5 text-content-primary outline-none transition-all placeholder:text-content-secondary/50"
+            className="flex-1 text-xs bg-black/40 border border-cyber-border focus:border-cyan-500/50 hover:border-white/20 rounded-full px-3 py-2 sm:py-1.5 text-content-primary outline-none transition-all placeholder:text-content-secondary/50"
           />
           
           <button 
              onClick={handleSend}
-             className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-primary-aqua hover:bg-white/10 transition-colors duration-300 active:scale-95 group/send"
+             className="shrink-0 w-9 h-9 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-primary-aqua hover:bg-white/10 transition-colors duration-300 active:scale-95 group/send"
           >
              <Send className="w-4 h-4 transition-transform duration-300 group-hover/send:scale-110" />
           </button>
@@ -103,7 +105,7 @@ const GlobalChat = () => {
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className={`
-            relative z-10 w-8 h-8 rounded-full flex items-center justify-center
+            relative z-10 w-10 h-10 sm:w-8 sm:h-8 rounded-full flex items-center justify-center
             bg-cyber-base border border-cyber-border
             text-primary-aqua overflow-hidden
             transition-all duration-300 active:scale-95
