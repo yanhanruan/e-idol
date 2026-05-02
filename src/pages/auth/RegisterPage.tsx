@@ -1,7 +1,7 @@
 // src/pages/auth/RegisterPage.tsx
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { ArrowLeft, ChevronDown, Loader2, Zap } from 'lucide-react';
+import { ChevronDown, Loader2, Zap } from 'lucide-react';
 import { useTranslations } from '../../contexts/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import type { AuthUser } from '../../contexts/AuthContext';
@@ -51,7 +51,6 @@ const RoleSelector = ({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        /* 移动端维持原有大小，桌面端收紧到更精致的尺寸 */
         className="relative w-full flex items-center justify-between px-4 py-3 md:px-3 md:py-2 rounded-lg bg-cyber-base border border-cyber-border text-sm md:text-xs text-content-primary focus:outline-none transition-all duration-200 hover:bg-cyber-surface"
       >
         <span>{current?.label}</span>
@@ -131,10 +130,10 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    
+
     setIsLoading(true);
     setServerError('');
-    
+
     try {
       const registerRes = await fetch('/api/auth/register', {
         method: 'POST',
@@ -170,52 +169,104 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-cyber-base flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 overflow-hidden font-sans">
-      {/* Background Ambient Glows */}
-      <div className="absolute -top-1/4 -right-10 w-96 h-96 md:scale-125 bg-primary-purple/10 rounded-full blur-ambient-lg pointer-events-none" />
-      <div className="absolute -bottom-1/4 -left-10 w-96 h-96 md:scale-125 bg-primary-cyan400/10 rounded-full blur-ambient-lg pointer-events-none" />
+    <div className="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4 sm:px-6 lg:px-8 py-8 font-sans md:min-h-screen md:p-0 lg:p-0 md:items-stretch">
 
-      {/* Back Button */}
-      <button
-        type="button"
-        onClick={() => setLocation('/')}
-        className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 text-content-muted hover:text-primary-cyan400 transition-colors duration-200 group z-20"
-      >
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-200" />
-        <span className="text-2xs tracking-wider uppercase font-mono">BACK TO HOME</span>
-      </button>
+      {/* ===== Left Side: Immersive Brand Visual Zone (Desktop only) ===== */}
+      <div className="hidden md:flex md:w-[60%] md:relative md:overflow-hidden md:items-center md:justify-center md:bg-cyber-base">
 
-      {/* Register Container */}
-      <div className="relative z-10 w-full max-w-sm md:w-88 transition-all duration-300">
-        <div className="absolute -inset-px bg-gradient-to-br from-primary-purple/20 via-transparent to-primary-cyan400/20 rounded-2xl blur-sm" />
+        {/* Ambient glow — top-left cyan */}
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary-cyan400/20 rounded-full blur-ambient-lg pointer-events-none" />
+        {/* Ambient glow — bottom-right purple */}
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-primary-purple/15 rounded-full blur-ambient-lg pointer-events-none" />
+        {/* Ambient glow — center soft pink */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary-pink/5 rounded-full blur-ambient-md pointer-events-none" />
 
-        {/* Auth Panel - rounded-2xl for primary container */}
-        <div className="relative bg-cyber-glassPanel backdrop-blur-xl border border-cyber-border rounded-2xl p-6 md:p-8 shadow-panel">
+        {/* Decorative grid pattern via inline SVG */}
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="registerBrandGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#c084fc" strokeWidth="0.5" strokeOpacity="0.4" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#registerBrandGrid)" />
+          </svg>
+        </div>
+
+        {/* Brand Content */}
+        <div className="relative z-10 flex flex-col items-center text-center px-16">
+          {/* Decorative Orbital Ring */}
+          <div className="relative mb-14">
+            <div className="w-36 h-36 rounded-full border border-primary-purple/20 flex items-center justify-center animate-pulse">
+              <div className="w-28 h-28 rounded-full border border-primary-cyan400/15 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-purple/10 to-primary-cyan400/10 backdrop-blur-sm flex items-center justify-center">
+                  <Zap className="w-10 h-10 text-primary-purple drop-shadow-neon-purple" />
+                </div>
+              </div>
+            </div>
+            {/* Orbital accent dot */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary-purple shadow-neon-purple" />
+          </div>
+
+          {/* Brand Name */}
+          <h2 className="text-5xl font-black tracking-lg bg-gradient-to-r from-primary-purple via-primary-blue to-primary-cyan400 bg-clip-text text-transparent mb-5 font-mono leading-none">
+            E-IDOL
+          </h2>
+
+          {/* Tagline */}
+          <p className="text-base text-content-muted tracking-md uppercase mb-6">
+            Begin Your Virtual Journey
+          </p>
+
+          {/* Decorative divider */}
+          <div className="w-20 h-px bg-gradient-to-r from-transparent via-primary-purple/60 to-transparent mb-6" />
+
+          {/* Description */}
+          <p className="text-sm text-content-ghost tracking-wide max-w-sm leading-relaxed">
+            Create your account and step into a world of immersive digital experiences. Your story starts here.
+          </p>
+
+          {/* Bottom indicator dots */}
+          <div className="flex items-center gap-3 mt-14">
+            <div className="w-2 h-2 rounded-full bg-primary-purple/60" />
+            <div className="w-2 h-2 rounded-full bg-primary-cyan400/40" />
+            <div className="w-2 h-2 rounded-full bg-primary-purple/20" />
+          </div>
+        </div>
+      </div>
+
+      {/* ===== Right Side: Pure Register Operation Zone ===== */}
+      <div className="w-full max-w-[400px] transition-all duration-300 md:max-w-none md:w-[40%] md:flex md:items-center md:justify-center md:bg-cyber-surface md:relative">
+
+        {/* Vertical divider line between columns */}
+        <div className="hidden md:block md:absolute md:left-0 md:top-[15%] md:w-px md:h-[70%] md:bg-gradient-to-b md:from-transparent md:via-primary-purple/25 md:to-transparent" />
+
+        {/* Card wrapper — kept for mobile, stripped on desktop for a clean look */}
+        <div className="relative bg-cyber-glassPanel backdrop-blur-xl border border-cyber-border rounded-2xl p-8 md:p-8 md:pt-10 shadow-panel md:bg-transparent md:border-none md:shadow-none md:backdrop-blur-none md:rounded-none md:w-full md:max-w-sm">
 
           {/* Logo Section */}
-          <div className="flex items-center justify-center gap-2 mb-6 md:mb-2">
-            <div className="relative w-8 h-8 flex items-center justify-center">
-              <div className="absolute inset-0 bg-primary-purple/30 rounded-full blur-glow" />
-              <Zap size={18} className="relative text-primary-purple drop-shadow-neon-purple" />
+          <div className="flex flex-col items-center justify-center mb-8 md:mb-2">
+            <div className="flex items-center gap-2 mb-4 md:mb-3">
+              <div className="relative w-10 h-10 md:w-8 md:h-8 flex items-center justify-center">
+                <div className="absolute inset-0 bg-primary-purple/30 rounded-full blur-xl md:blur-glow" />
+                <Zap className="relative text-primary-purple drop-shadow-neon-purple w-[22px] h-[22px] md:w-[18px] md:h-[18px]" />
+              </div>
+              <span className="text-xl md:text-base font-bold tracking-widest bg-gradient-to-r from-primary-purple to-primary-cyan400 bg-clip-text text-transparent uppercase font-mono">
+                E-IDOL
+              </span>
             </div>
-            <span className="text-sm font-bold tracking-widest bg-gradient-to-r from-primary-purple to-primary-cyan400 bg-clip-text text-transparent uppercase font-mono">
-              E-IDOL
-            </span>
-          </div>
 
-          {/* Title Section */}
-          <div className="text-center mb-6 md:mb-1">
-            <h1 className="text-xl font-bold text-content-primary tracking-md mb-1">
+            <h1 className="text-xl md:text-base font-bold text-content-primary tracking-wide mb-1">
               {authT.registerTitle || 'CREATE ACCOUNT'}
             </h1>
-            <p className="text-2xs text-content-muted tracking-widest uppercase leading-none">
+            <p className="text-sm md:text-3xs text-content-muted md:tracking-[0.2em] uppercase">
               {authT.registerSubtitle || 'START YOUR JOURNEY'}
             </p>
-            <div className="mt-4 mx-auto w-12 h-px bg-gradient-to-r from-transparent via-primary-purple/60 to-transparent" />
           </div>
 
-          {/* Form Section - Regular Spacing gap-4 */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+          {/* Form Section */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-4">
             <CyberInput
               label={authT.username || 'USERNAME'}
               type="text"
@@ -225,7 +276,7 @@ const RegisterPage = () => {
               autoComplete="username"
               disabled={isLoading}
               error={fieldErrors.username}
-              className="text-xs"
+              className="text-sm md:text-2xs md:h-9"
             />
 
             <CyberInput
@@ -237,7 +288,7 @@ const RegisterPage = () => {
               autoComplete="new-password"
               disabled={isLoading}
               error={fieldErrors.password}
-              className="text-xs"
+              className="text-sm md:text-2xs md:h-9"
             />
 
             <CyberInput
@@ -249,7 +300,8 @@ const RegisterPage = () => {
               autoComplete="new-password"
               disabled={isLoading}
               error={fieldErrors.confirmPassword}
-              className="text-xs"
+              className="text-sm md:text-2xs md:h-9"
+
             />
 
             {/* Role Selection */}
@@ -266,21 +318,20 @@ const RegisterPage = () => {
 
             {/* Error Message */}
             {serverError && (
-              <div className="px-3 py-2 rounded-lg bg-status-error/10 border border-status-error/30 mt-1">
-                <span className="text-2xs text-status-error font-medium leading-relaxed">
+              <div className="px-3 py-2.5 md:py-2 rounded-lg bg-status-error/10 border border-status-error/30">
+                <span className="text-xs md:text-2xs text-status-error font-medium flex items-center gap-2 md:gap-1.5">
+                  <div className="w-1.5 h-1.5 md:w-1 md:h-1 rounded-full bg-status-error animate-pulse" />
                   {serverError}
                 </span>
               </div>
             )}
 
-            {/* Submit Button - rounded-full for core interaction */}
-            <div className="mt-4">
-              <CyberButton
-                className="w-full"
-              >
+            {/* Submit Button */}
+            <div className="mt-2 md:mt-1">
+              <CyberButton className="w-full h-11 md:h-9 text-sm md:text-2xs tracking-widest font-semibold">
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
-                    <Loader2 size={14} className="animate-spin" />
+                    <Loader2 size={16} className="animate-spin md:w-3.5 md:h-3.5" />
                     {authT.registering || 'REGISTERING...'}
                   </span>
                 ) : (
@@ -291,16 +342,19 @@ const RegisterPage = () => {
           </form>
 
           {/* Footer Section */}
-          <p className="mt-8 text-center text-2xs text-content-muted tracking-wide">
-            {authT.hasAccount || 'ALREADY HAVE AN ACCOUNT?'}
-            <button
-              type="button"
-              onClick={() => setLocation('/login')}
-              className="ml-1.5 text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-neon-cyan transition-all duration-200 cursor-pointer font-bold uppercase"
-            >
-              {authT.goLogin || 'LOG IN'}
-            </button>
-          </p>
+          <div className="text-center mt-6 pt-2 border-t border-cyber-border/30">
+            <p className="text-xs md:text-2xs text-content-muted tracking-wide mt-4 md:mt-3 flex items-center justify-center gap-1">
+              {authT.hasAccount || 'ALREADY HAVE AN ACCOUNT?'}
+              <button
+                type="button"
+                onClick={() => setLocation('/login')}
+                className="text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-neon-cyan transition-all duration-200 cursor-pointer font-bold uppercase tracking-wider md:text-2xs"
+              >
+                {authT.goLogin || 'LOG IN'}
+              </button>
+            </p>
+          </div>
+
         </div>
       </div>
     </div>
