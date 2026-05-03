@@ -115,13 +115,13 @@ const RegisterPage = () => {
   const validate = (): boolean => {
     const errors: FormErrors = {};
     if (form.username.trim().length < 2) {
-      errors.username = authT.errorUsernameMin || '用户名至少需要2个字符';
+      errors.username = String(authT.errorUsernameMin);
     }
     if (form.password.length < 6) {
-      errors.password = authT.errorPasswordMin || '密码至少需要6位';
+      errors.password = String(authT.errorPasswordMin);
     }
     if (form.password !== form.confirmPassword) {
-      errors.confirmPassword = authT.errorPasswordMismatch || '两次密码输入不一致';
+      errors.confirmPassword = String(authT.errorPasswordMismatch);
     }
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -146,7 +146,7 @@ const RegisterPage = () => {
       });
       const registerJson: ApiResponse = await registerRes.json();
       if (registerJson.code !== 200) {
-        setServerError(registerJson.message || authT.errorRegisterFailed || '注册失败，请稍后重试');
+        setServerError(registerJson.message || String(authT.errorRegisterFailed));
         return;
       }
       const loginRes = await fetch('/api/auth/login', {
@@ -162,7 +162,7 @@ const RegisterPage = () => {
         setLocation('/login');
       }
     } catch {
-      setServerError(authT.errorNetwork || '网络错误，请稍后重试');
+      setServerError(String(authT.errorNetwork));
     } finally {
       setIsLoading(false);
     }
@@ -215,7 +215,7 @@ const RegisterPage = () => {
 
           {/* Tagline */}
           <p className="text-base text-content-muted tracking-md uppercase mb-6">
-            Begin Your Virtual Journey
+            {authT.registerBrandTagline}
           </p>
 
           {/* Decorative divider */}
@@ -223,7 +223,7 @@ const RegisterPage = () => {
 
           {/* Description */}
           <p className="text-sm text-content-ghost tracking-wide max-w-sm leading-relaxed">
-            Create your account and step into a world of immersive digital experiences. Your story starts here.
+            {authT.registerBrandDescription}
           </p>
 
           {/* Bottom indicator dots */}
@@ -257,10 +257,10 @@ const RegisterPage = () => {
             </div>
 
             <h1 className="text-xl md:text-base font-bold text-content-primary tracking-wide mb-1">
-              {authT.registerTitle || 'CREATE ACCOUNT'}
+              {authT.registerTitle}
             </h1>
             <p className="text-sm md:text-3xs text-content-muted md:tracking-[0.2em] uppercase">
-              {authT.registerSubtitle || 'START YOUR JOURNEY'}
+              {authT.registerSubtitle}
             </p>
           </div>
 
@@ -268,9 +268,9 @@ const RegisterPage = () => {
           {/* Form Section */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-4">
             <CyberInput
-              label={authT.username || 'USERNAME'}
+              label={authT.username}
               type="text"
-              placeholder={authT.usernamePlaceholder || 'Enter username (min 2 chars)'}
+              placeholder={authT.usernamePlaceholder}
               value={form.username}
               onChange={handleChange('username')}
               autoComplete="username"
@@ -280,9 +280,9 @@ const RegisterPage = () => {
             />
 
             <CyberInput
-              label={authT.password || 'PASSWORD'}
+              label={authT.password}
               type="password"
-              placeholder={authT.passwordPlaceholder || 'Enter password (min 6 chars)'}
+              placeholder={authT.passwordPlaceholder}
               value={form.password}
               onChange={handleChange('password')}
               autoComplete="new-password"
@@ -292,9 +292,9 @@ const RegisterPage = () => {
             />
 
             <CyberInput
-              label={authT.confirmPassword || 'CONFIRM PASSWORD'}
+              label={authT.confirmPassword}
               type="password"
-              placeholder={authT.confirmPasswordPlaceholder || 'Repeat password'}
+              placeholder={authT.confirmPasswordPlaceholder}
               value={form.confirmPassword}
               onChange={handleChange('confirmPassword')}
               autoComplete="new-password"
@@ -307,7 +307,7 @@ const RegisterPage = () => {
             {/* Role Selection */}
             <div className="flex flex-col gap-1.5">
               <label className="text-2xs font-bold tracking-wider text-content-muted uppercase font-mono">
-                {authT.role || 'IDENTITY'}
+                {authT.role}
               </label>
               <RoleSelector
                 value={form.role}
@@ -332,10 +332,10 @@ const RegisterPage = () => {
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
                     <Loader2 size={16} className="animate-spin md:w-3.5 md:h-3.5" />
-                    {authT.registering || 'REGISTERING...'}
+                    {authT.registering}
                   </span>
                 ) : (
-                  authT.registerBtn || 'JOIN NOW'
+                  authT.registerBtn
                 )}
               </CyberButton>
             </div>
@@ -344,13 +344,13 @@ const RegisterPage = () => {
           {/* Footer Section */}
           <div className="text-center mt-6 pt-2 border-t border-cyber-border/30">
             <p className="text-xs md:text-2xs text-content-muted tracking-wide mt-4 md:mt-3 flex items-center justify-center gap-1">
-              {authT.hasAccount || 'ALREADY HAVE AN ACCOUNT?'}
+              {authT.hasAccount}
               <button
                 type="button"
                 onClick={() => setLocation('/login')}
                 className="text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-neon-cyan transition-all duration-200 cursor-pointer font-bold uppercase tracking-wider md:text-2xs"
               >
-                {authT.goLogin || 'LOG IN'}
+                {authT.goLogin}
               </button>
             </p>
           </div>

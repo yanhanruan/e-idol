@@ -43,7 +43,7 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.username.trim() || !form.password.trim()) {
-      setErrorMsg(authT.errorRequired || '请填写用户名和密码');
+      setErrorMsg(String(authT.errorRequired));
       return;
     }
 
@@ -63,10 +63,10 @@ const LoginPage = () => {
         login(json.data.token, json.data.user);
         setLocation('/');
       } else {
-        setErrorMsg(json.message || authT.errorInvalid || '用户名或密码错误');
+        setErrorMsg(json.message || String(authT.errorInvalid));
       }
     } catch {
-      setErrorMsg(authT.errorNetwork || '网络错误，请稍后重试');
+      setErrorMsg(String(authT.errorNetwork));
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +119,7 @@ const LoginPage = () => {
 
           {/* Tagline */}
           <p className="text-base text-content-muted tracking-md uppercase mb-6">
-            Next Generation Virtual Entertainment
+            {authT.brandTagline}
           </p>
 
           {/* Decorative divider */}
@@ -127,7 +127,7 @@ const LoginPage = () => {
 
           {/* Description */}
           <p className="text-sm text-content-ghost tracking-wide max-w-sm leading-relaxed">
-            Enter the future of digital interaction. Your gateway to immersive virtual experiences awaits.
+            {authT.brandDescription}
           </p>
 
           {/* Bottom indicator dots */}
@@ -161,20 +161,20 @@ const LoginPage = () => {
             </div>
 
             <h1 className="text-xl md:text-base font-bold text-content-primary tracking-wide mb-1">
-              {authT.loginTitle || 'USER LOGIN'}
+              {authT.loginTitle}
             </h1>
             {/* 桌面端使用 3xs 增加科技感 */}
             <p className="text-sm md:text-3xs text-content-muted md:tracking-[0.2em] uppercase">
-              {authT.loginSubtitle || 'SIGN IN TO YOUR ACCOUNT'}
+              {authT.loginSubtitle}
             </p>
           </div>
 
           {/* Form Section */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-4">
             <CyberInput
-              label={authT.username || 'ユーザー名'}
+              label={authT.username}
               type="text"
-              placeholder={authT.usernamePlaceholder || 'ユーザー名を入力してください'}
+              placeholder={authT.usernamePlaceholder}
               value={form.username}
               onChange={handleChange('username')}
               autoComplete="username"
@@ -185,9 +185,9 @@ const LoginPage = () => {
 
             <div className="flex flex-col gap-2 md:gap-1.5">
               <CyberInput
-                label={authT.password || 'パスワード'}
+                label={authT.password}
                 type="password"
-                placeholder={authT.passwordPlaceholder || 'パスワードを入力してください'}
+                placeholder={authT.passwordPlaceholder}
                 value={form.password}
                 onChange={handleChange('password')}
                 autoComplete="current-password"
@@ -208,7 +208,7 @@ const LoginPage = () => {
                   </div>
                   {/* 桌面端使用 2xs */}
                   <span className="text-xs md:text-2xs text-content-muted group-hover:text-content-primary transition-colors">
-                    {authT.rememberMe || 'Remember me'}
+                    {authT.rememberMe}
                   </span>
                 </label>
 
@@ -216,7 +216,7 @@ const LoginPage = () => {
                   type="button"
                   className="text-xs md:text-2xs text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-neon-cyan transition-all duration-200"
                 >
-                  {authT.forgotPassword || 'Forgot password?'}
+                  {authT.forgotPassword}
                 </button>
               </div>
             </div>
@@ -236,10 +236,10 @@ const LoginPage = () => {
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
                     <Loader2 size={16} className="animate-spin md:w-3.5 md:h-3.5" />
-                    {authT.loggingIn || 'AUTHENTICATING...'}
+                    {authT.loggingIn}
                   </span>
                 ) : (
-                  authT.loginBtn || 'ログイン'
+                  authT.loginBtn
                 )}
               </CyberButton>
             </div>
@@ -252,7 +252,7 @@ const LoginPage = () => {
             </div>
             <div className="relative flex justify-center text-xs md:text-3xs">
               <span className="bg-cyber-glassPanel px-4 text-content-muted/80 uppercase tracking-widest md:tracking-[0.15em]">
-                Or continue with
+                {authT.orContinueWith}
               </span>
             </div>
           </div>
@@ -272,13 +272,13 @@ const LoginPage = () => {
           {/* Footer Section */}
           <div className="text-center pt-2 border-t border-cyber-border/30">
             <p className="text-xs md:text-2xs text-content-muted tracking-wide mt-4 md:mt-3 flex items-center justify-center gap-1">
-              {authT.noAccount || "アカウントをお持ちでない方は"}
+              {authT.noAccount}
               <button
                 type="button"
                 onClick={() => setLocation('/register')}
                 className="text-primary-cyan400 hover:text-primary-cyan300 hover:drop-shadow-neon-cyan transition-all duration-200 cursor-pointer font-bold uppercase tracking-wider md:text-2xs"
               >
-                {authT.goRegister || '新規登録'}
+                {authT.goRegister}
               </button>
             </p>
           </div>
