@@ -26,4 +26,7 @@ func ConnectDB() {
 	}
 
 	fmt.Println("Database connected successfully!")
+
+	// Run migrations
+	AutoMigrate(DB)
 }
