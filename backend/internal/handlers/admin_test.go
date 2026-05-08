@@ -67,9 +67,9 @@ func TestGetStats(t *testing.T) {
 	db.Create(&users)
 
 	orders := []models.Order{
-		{ClientID: 3, HostID: 2, Status: models.StatusCompleted, TotalPrice: 100},
-		{ClientID: 3, HostID: 2, Status: models.StatusCompleted, TotalPrice: 150},
-		{ClientID: 3, HostID: 2, Status: models.StatusCancelled, TotalPrice: 200},
+		{ClientID: 3, HostID: 2, Status: models.OrderStatusCompleted, TotalPrice: 100},
+		{ClientID: 3, HostID: 2, Status: models.OrderStatusCompleted, TotalPrice: 150},
+		{ClientID: 3, HostID: 2, Status: models.OrderStatusCancelled, TotalPrice: 200},
 	}
 	db.Create(&orders)
 
@@ -77,7 +77,7 @@ func TestGetStats(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	_, router := gin.CreateTestContext(recorder)
 	router.GET("/admin/stats", GetStats(db))
-	
+
 	// Create and serve a new HTTP request.
 	req, _ := http.NewRequest(http.MethodGet, "/admin/stats", nil)
 	router.ServeHTTP(recorder, req)
