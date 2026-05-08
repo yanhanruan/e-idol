@@ -8,6 +8,7 @@ import (
 	"e-idol-backend/internal/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type WalletService struct {
@@ -109,6 +110,79 @@ func (s *WalletService) tryApplyTransaction(req ApplyTxRequest) (*models.LedgerR
 		}
 
 		// 4. write the ledger record snapshot
+		createdLedger = models.LedgerRecord{
+			TransactionID:   req.TransactionID,
+			WalletID:        wallet.ID,
+			UserID:          req.UserID,
+			Amount:          req.Amount,
+			BalanceBefore:   balanceBefore,
+			BalanceAfter:    balanceAfter,
+			TransactionType: req.TransactionType,
+			Status:          models.TxStatusSuccess,
+			ReferenceID:     req.ReferenceID,
+			Remark:          req.Remark,
+		}
+
+		if err := tx.Create(&createdLedger).Error; err != nil {
+			return err // a unique index conflict will be raised here if the idempotency key collides
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &createdLedger, nil
+}
+
+/*
+ApplyTransactionWithLock uses pessimistic locking (FOR UPDATE) to perform fund operations.
+Constraints and usage guidelines:
+1. Intended only for low-frequency administrative scenarios such as refunds, reconciliation corrections, and batch coupon issuance.
+2. Must NOT be called from high-frequency user-facing endpoints (e.g., top-ups, tips) to avoid exhausting the database connection pool or causing deadlocks.
+3. While holding the lock (inside the transaction function), do NOT include any RPC calls, external HTTP requests, or time-consuming computations.
+*/
+func (s *WalletService) ApplyTransactionWithLock(ctx context.Context, req ApplyTxRequest) (*models.LedgerRecord, error) {
+	var ledger models.LedgerRecord
+
+	// idempotency check (read outside the transaction; if the record exists and its status is success, return it directly)
+	if err := s.db.Where("transaction_id = ?", req.TransactionID).First(&ledger).Error; err == nil {
+		if ledger.Status == models.TxStatusSuccess {
+			return &ledger, nil
+		}
+	}
+
+	var createdLedger models.LedgerRecord
+
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		var wallet models.Wallet
+		// lock the wallet record with pessimistic locking
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("user_id = ?", req.UserID).First(&wallet).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				return ErrWalletNotFound
+			}
+			return err
+		}
+
+		// balance check (for debit operations)
+		if req.Amount < 0 && wallet.Balance+req.Amount < 0 {
+			return ErrInsufficientBalance
+		}
+
+		balanceBefore := wallet.Balance
+		balanceAfter := wallet.Balance + req.Amount
+
+		// directly update the balance and increment the version
+		if err := tx.Model(&wallet).Updates(map[string]interface{}{
+			"balance": balanceAfter,
+			"version": wallet.Version + 1,
+		}).Error; err != nil {
+			return err
+		}
+
+		// write the ledger record snapshot
 		createdLedger = models.LedgerRecord{
 			TransactionID:   req.TransactionID,
 			WalletID:        wallet.ID,
