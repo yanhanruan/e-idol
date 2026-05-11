@@ -144,6 +144,36 @@ Constraints and usage guidelines:
 2. Must NOT be called from high-frequency user-facing endpoints (e.g., top-ups, tips) to avoid exhausting the database connection pool or causing deadlocks.
 3. While holding the lock (inside the transaction function), do NOT include any RPC calls, external HTTP requests, or time-consuming computations.
 */
+// CreatePendingRecharge creates a ledger record with status=pending for an incoming
+// recharge. It does NOT modify the wallet balance; balance settlement happens when
+// the payment gateway callback confirms the transaction.
+func (s *WalletService) CreatePendingRecharge(userID uint, amount int64, txID string) (*models.LedgerRecord, error) {
+	var wallet models.Wallet
+	if err := s.db.Where("user_id = ?", userID).First(&wallet).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrWalletNotFound
+		}
+		return nil, err
+	}
+
+	record := models.LedgerRecord{
+		TransactionID:   txID,
+		WalletID:        wallet.ID,
+		UserID:          userID,
+		Amount:          amount,
+		BalanceBefore:   wallet.Balance,
+		BalanceAfter:    wallet.Balance, // balance unchanged until payment is confirmed
+		TransactionType: models.TxTypeRecharge,
+		Status:          models.TxStatusPending,
+	}
+
+	if err := s.db.Create(&record).Error; err != nil {
+		return nil, err
+	}
+
+	return &record, nil
+}
+
 func (s *WalletService) ApplyTransactionWithLock(ctx context.Context, req ApplyTxRequest) (*models.LedgerRecord, error) {
 	var ledger models.LedgerRecord
 
