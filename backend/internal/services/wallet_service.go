@@ -137,6 +137,50 @@ func (s *WalletService) tryApplyTransaction(req ApplyTxRequest) (*models.LedgerR
 	return &createdLedger, nil
 }
 
+// ConfirmRecharge settles a pending recharge after the payment gateway callback.
+// It acquires a pessimistic row lock on the LedgerRecord so concurrent callbacks
+// for the same transaction are serialized and the balance is credited exactly once.
+func (s *WalletService) ConfirmRecharge(txID string, status models.TransactionStatus) error {
+	return s.db.Transaction(func(tx *gorm.DB) error {
+		var ledger models.LedgerRecord
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("transaction_id = ?", txID).First(&ledger).Error; err != nil {
+			return err
+		}
+
+		// Idempotency: already finalized — no-op regardless of incoming status.
+		if ledger.Status != models.TxStatusPending {
+			return nil
+		}
+
+		if status == models.TxStatusFailed {
+			return tx.Model(&ledger).Update("status", models.TxStatusFailed).Error
+		}
+
+		// status == success: credit the wallet balance within the same transaction.
+		var wallet models.Wallet
+		if err := tx.Where("id = ?", ledger.WalletID).First(&wallet).Error; err != nil {
+			return err
+		}
+
+		balanceBefore := wallet.Balance
+		balanceAfter := wallet.Balance + ledger.Amount
+
+		if err := tx.Model(&wallet).Updates(map[string]interface{}{
+			"balance": balanceAfter,
+			"version": wallet.Version + 1,
+		}).Error; err != nil {
+			return err
+		}
+
+		return tx.Model(&ledger).Updates(map[string]interface{}{
+			"balance_before": balanceBefore,
+			"balance_after":  balanceAfter,
+			"status":         models.TxStatusSuccess,
+		}).Error
+	})
+}
+
 /*
 ApplyTransactionWithLock uses pessimistic locking (FOR UPDATE) to perform fund operations.
 Constraints and usage guidelines:

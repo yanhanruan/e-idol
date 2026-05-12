@@ -49,10 +49,18 @@ func ChatRoutes(router *gin.RouterGroup, db *gorm.DB, hub *websocket.Hub) {
 
 func WalletRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	walletHandler := handlers.NewWalletHandler(db)
+
+	// Authenticated user routes.
 	wallet := router.Group("/wallet")
 	wallet.Use(middleware.AuthMiddleware())
 	{
 		wallet.POST("/recharge", walletHandler.Recharge)
+	}
+
+	// Webhook routes: no JWT auth; secured by HMAC signature from the payment provider.
+	webhook := router.Group("/wallet/webhook")
+	{
+		webhook.POST("/recharge", walletHandler.WebhookRecharge)
 	}
 }
 
