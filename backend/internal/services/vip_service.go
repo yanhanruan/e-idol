@@ -22,6 +22,33 @@ func NewVipService(db *gorm.DB) *VipService {
 	}
 }
 
+// GetUserVipStatus returns the user's current VIP status with a lazy expiration
+// check. If the subscription has expired but the level is still > 0, the level
+// is atomically reset to 0 before returning, guaranteeing real-time correctness
+// without waiting for the nightly cleanup job.
+//
+// Call this method wherever VIP permission validation is required.
+func (s *VipService) GetUserVipStatus(userID uint) (*models.UserVip, error) {
+	var userVip models.UserVip
+	if err := s.db.Where("user_id = ?", userID).First(&userVip).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			// No record yet: return a zero-value status without persisting.
+			return &models.UserVip{UserID: userID, Level: 0}, nil
+		}
+		return nil, err
+	}
+
+	// Lazy expiration: downgrade in-place if the subscription has lapsed.
+	if userVip.Level > 0 && userVip.ExpireAt.Before(time.Now()) {
+		if err := s.db.Model(&userVip).Update("level", 0).Error; err != nil {
+			return nil, err
+		}
+		userVip.Level = 0
+	}
+
+	return &userVip, nil
+}
+
 // PurchaseVip purchases a VIP plan for a user inside a single atomic transaction:
 //  1. Validates that the plan exists and is active.
 //  2. Deducts the plan price from the user's wallet via applyTransactionTx

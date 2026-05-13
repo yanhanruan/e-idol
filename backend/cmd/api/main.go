@@ -5,6 +5,7 @@ import (
 
 	"e-idol-backend/internal/database"
 	"e-idol-backend/internal/handlers"
+	"e-idol-backend/internal/jobs"
 	"e-idol-backend/internal/routes"
 	"e-idol-backend/internal/websocket"
 
@@ -47,6 +48,9 @@ func main() {
 
 	vipHandler := handlers.NewVipHandler(database.DB)
 	routes.RegisterVipRoutes(router.Group("/api"), vipHandler)
+
+	// Start background jobs (each scheduler manages its own goroutine internally).
+	jobs.StartVipExpireScheduler(database.DB)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {
