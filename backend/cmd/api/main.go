@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"e-idol-backend/internal/database"
-	"e-idol-backend/internal/models"
+	"e-idol-backend/internal/handlers"
 	"e-idol-backend/internal/routes"
 	"e-idol-backend/internal/websocket"
 
@@ -28,11 +28,8 @@ func main() {
 	// Connect to database
 	database.ConnectDB()
 
-	// Auto-migrate models
-	err := database.DB.AutoMigrate(&models.User{}, &models.Order{}, &models.Message{})
-	if err != nil {
-		panic("Failed to auto-migrate database models")
-	}
+	// Auto-migrate all models (Wallet and LedgerRecord included via database.AutoMigrate)
+	database.AutoMigrate(database.DB)
 
 	// Serve static files from the "uploads" directory
 	router.Static("/uploads", "./uploads")
@@ -42,6 +39,11 @@ func main() {
 	go hub.Run()
 
 	routes.RegisterRoutes(router, database.DB, hub)
+
+	// Wallet routes are registered separately so the handler can be injected
+	// without coupling route wiring to the internal WalletRoutes helper.
+	walletHandler := handlers.NewWalletHandler(database.DB)
+	routes.RegisterWalletRoutes(router.Group("/api"), walletHandler)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {

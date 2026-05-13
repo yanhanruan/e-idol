@@ -47,23 +47,6 @@ func ChatRoutes(router *gin.RouterGroup, db *gorm.DB, hub *websocket.Hub) {
 	router.GET("/ws", handlers.ServeWs(hub, db))
 }
 
-func WalletRoutes(router *gin.RouterGroup, db *gorm.DB) {
-	walletHandler := handlers.NewWalletHandler(db)
-
-	// Authenticated user routes.
-	wallet := router.Group("/wallet")
-	wallet.Use(middleware.AuthMiddleware())
-	{
-		wallet.POST("/recharge", walletHandler.Recharge)
-	}
-
-	// Webhook routes: no JWT auth; secured by HMAC signature from the payment provider.
-	webhook := router.Group("/wallet/webhook")
-	{
-		webhook.POST("/recharge", walletHandler.WebhookRecharge)
-	}
-}
-
 func RegisterRoutes(router *gin.Engine, db *gorm.DB, hub *websocket.Hub) {
 	api := router.Group("/api")
 
@@ -71,6 +54,5 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB, hub *websocket.Hub) {
 	UserRoutes(api, db)
 	OrderRoutes(api, db)
 	ChatRoutes(api, db, hub)
-	WalletRoutes(api, db)
 	RegisterAdminRoutes(router, db)
 }
