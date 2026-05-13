@@ -58,6 +58,7 @@ func main() {
 
 	// Start background jobs (each scheduler manages its own goroutine internally).
 	jobs.StartVipExpireScheduler(database.DB)
+	jobs.StartReconciliationScheduler(database.DB)
 
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {
