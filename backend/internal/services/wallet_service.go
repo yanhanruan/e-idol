@@ -28,6 +28,55 @@ type ApplyTxRequest struct {
 	Remark          string
 }
 
+type LedgerFilter struct {
+	Type    string
+	StartAt *time.Time // inclusive lower bound
+	EndAt   *time.Time // exclusive upper bound (caller adds 1 day for full-day inclusion)
+}
+
+type Pagination struct {
+	Page     int
+	PageSize int
+}
+
+func (s *WalletService) GetBalance(userID uint) (*models.Wallet, error) {
+	var wallet models.Wallet
+	if err := s.db.Where("user_id = ?", userID).First(&wallet).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrWalletNotFound
+		}
+		return nil, err
+	}
+	return &wallet, nil
+}
+
+func (s *WalletService) ListLedger(userID uint, filter LedgerFilter, pg Pagination) ([]models.LedgerRecord, int64, error) {
+	query := s.db.Model(&models.LedgerRecord{}).Where("user_id = ?", userID)
+
+	if filter.Type != "" {
+		query = query.Where("transaction_type = ?", filter.Type)
+	}
+	if filter.StartAt != nil {
+		query = query.Where("created_at >= ?", *filter.StartAt)
+	}
+	if filter.EndAt != nil {
+		query = query.Where("created_at < ?", *filter.EndAt)
+	}
+
+	var total int64
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var records []models.LedgerRecord
+	offset := (pg.Page - 1) * pg.PageSize
+	if err := query.Order("created_at DESC").Offset(offset).Limit(pg.PageSize).Find(&records).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return records, total, nil
+}
+
 /*
 Architecture Design Notes:
 1. Why optimistic locking instead of pessimistic locking (FOR UPDATE)?

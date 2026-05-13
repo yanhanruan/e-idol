@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"e-idol-backend/internal/models"
 	"e-idol-backend/internal/services"
@@ -59,6 +60,126 @@ func (h *WalletHandler) Recharge(c *gin.Context) {
 		PayURL:        fmt.Sprintf("https://mock-pay.local/pay?tx=%s", txID),
 	})
 }
+
+// ── Balance ──────────────────────────────────────────────────────────────────
+
+type balanceResponse struct {
+	Balance       int64  `json:"balance"`
+	FrozenBalance int64  `json:"frozen_balance"`
+	Currency      string `json:"currency"`
+}
+
+func (h *WalletHandler) Balance(c *gin.Context) {
+	rawID, exists := c.Get("userID")
+	if !exists {
+		utils.Fail(c, http.StatusUnauthorized, "unauthorized")
+		return
+	}
+
+	wallet, err := h.walletSvc.GetBalance(rawID.(uint))
+	if err != nil {
+		utils.FailWithError(c, err)
+		return
+	}
+
+	utils.OK(c, balanceResponse{
+		Balance:       wallet.Balance,
+		FrozenBalance: wallet.FrozenBalance,
+		Currency:      wallet.Currency,
+	})
+}
+
+// ── Ledger list ───────────────────────────────────────────────────────────────
+
+type ledgerQueryParams struct {
+	Page     int    `form:"page"`
+	PageSize int    `form:"page_size"`
+	Type     string `form:"type"`
+	StartAt  string `form:"start_at"`
+	EndAt    string `form:"end_at"`
+}
+
+type paginationMeta struct {
+	Page     int   `json:"page"`
+	PageSize int   `json:"page_size"`
+	Total    int64 `json:"total"`
+}
+
+type ledgerListResponse struct {
+	List       []models.LedgerRecord `json:"list"`
+	Pagination paginationMeta        `json:"pagination"`
+}
+
+func (h *WalletHandler) ListLedger(c *gin.Context) {
+	rawID, exists := c.Get("userID")
+	if !exists {
+		utils.Fail(c, http.StatusUnauthorized, "unauthorized")
+		return
+	}
+	userID := rawID.(uint)
+
+	var q ledgerQueryParams
+	if err := c.ShouldBindQuery(&q); err != nil {
+		utils.Fail(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if q.Page == 0 {
+		q.Page = 1
+	}
+	if q.PageSize == 0 {
+		q.PageSize = 20
+	}
+	if q.Page < 1 {
+		utils.Fail(c, http.StatusBadRequest, "page must be >= 1")
+		return
+	}
+	if q.PageSize < 1 || q.PageSize > 100 {
+		utils.Fail(c, http.StatusBadRequest, "page_size must be between 1 and 100")
+		return
+	}
+
+	filter := services.LedgerFilter{Type: q.Type}
+
+	if q.StartAt != "" {
+		t, err := time.Parse("2006-01-02", q.StartAt)
+		if err != nil {
+			utils.Fail(c, http.StatusBadRequest, "invalid start_at, expected YYYY-MM-DD")
+			return
+		}
+		filter.StartAt = &t
+	}
+	if q.EndAt != "" {
+		t, err := time.Parse("2006-01-02", q.EndAt)
+		if err != nil {
+			utils.Fail(c, http.StatusBadRequest, "invalid end_at, expected YYYY-MM-DD")
+			return
+		}
+		// Add one day so end_at is inclusive of the full calendar day.
+		t = t.AddDate(0, 0, 1)
+		filter.EndAt = &t
+	}
+
+	records, total, err := h.walletSvc.ListLedger(userID, filter, services.Pagination{
+		Page:     q.Page,
+		PageSize: q.PageSize,
+	})
+	if err != nil {
+		utils.FailWithError(c, err)
+		return
+	}
+
+	utils.OK(c, ledgerListResponse{
+		List: records,
+		Pagination: paginationMeta{
+			Page:     q.Page,
+			PageSize: q.PageSize,
+			Total:    total,
+		},
+	})
+}
+
+// ── Webhook ───────────────────────────────────────────────────────────────────
 
 type webhookRechargeRequest struct {
 	TransactionID string `json:"transaction_id" binding:"required"`
