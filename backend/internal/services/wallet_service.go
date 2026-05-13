@@ -88,102 +88,114 @@ Architecture Design Notes:
    - Three retries combined with random exponential backoff (jitter, rand.Intn(50) * time.Millisecond) effectively stagger concurrent requests, resolving most optimistic locking failures while preventing herd behavior that could lead to system collapse.
 */
 
+// ApplyTransaction is the public, standalone entry point for fund operations.
+// It performs a fast-path idempotency check and then retries up to 3 times on
+// ErrConcurrentConflict, wrapping each attempt in its own DB transaction.
 func (s *WalletService) ApplyTransaction(ctx context.Context, req ApplyTxRequest) (*models.LedgerRecord, error) {
+	// Fast-path idempotency check outside the retry loop.
+	var existing models.LedgerRecord
+	if err := s.db.Where("transaction_id = ?", req.TransactionID).First(&existing).Error; err == nil {
+		if existing.Status == models.TxStatusSuccess {
+			return &existing, nil
+		}
+	}
+
 	maxRetries := 3
-	var result *models.LedgerRecord
-	var err error
+	var lastErr error
 
 	for attempt := 0; attempt <= maxRetries; attempt++ {
-		result, err = s.tryApplyTransaction(req)
-		if err == nil {
-			return result, nil // success
+		var ledger *models.LedgerRecord
+
+		txErr := s.db.Transaction(func(tx *gorm.DB) error {
+			var e error
+			ledger, e = s.applyTransactionTx(tx, req)
+			return e
+		})
+
+		if txErr == nil {
+			return ledger, nil
 		}
 
-		if err != ErrConcurrentConflict {
-			return nil, err // return other business errors or DB errors directly without retry
+		lastErr = txErr
+		if lastErr != ErrConcurrentConflict {
+			return nil, lastErr // non-retryable error (e.g. insufficient balance)
 		}
 
 		if attempt < maxRetries {
-			// random sleep to avoid herd behavior
+			// random jitter to avoid herd behaviour on retry
 			time.Sleep(time.Duration(rand.Intn(50)) * time.Millisecond)
 		}
 	}
 
-	return nil, err // max retries exceeded
+	return nil, lastErr // max retries exceeded
 }
 
-func (s *WalletService) tryApplyTransaction(req ApplyTxRequest) (*models.LedgerRecord, error) {
-	var ledger models.LedgerRecord
-
-	// idempotency check (read outside the transaction; if the record exists and its status is success, return it directly)
-	if err := s.db.Where("transaction_id = ?", req.TransactionID).First(&ledger).Error; err == nil {
-		if ledger.Status == models.TxStatusSuccess {
-			return &ledger, nil
+// applyTransactionTx is the core fund-transfer implementation. It runs entirely
+// within the provided tx and never opens a new transaction, which allows it to
+// participate in a larger outer transaction (e.g. VIP purchase) atomically.
+//
+// Use ApplyTransaction for the standalone path with idempotency + retry logic.
+func (s *WalletService) applyTransactionTx(tx *gorm.DB, req ApplyTxRequest) (*models.LedgerRecord, error) {
+	// Idempotency check within the current transaction.
+	var existing models.LedgerRecord
+	if err := tx.Where("transaction_id = ?", req.TransactionID).First(&existing).Error; err == nil {
+		if existing.Status == models.TxStatusSuccess {
+			return &existing, nil
 		}
 	}
 
-	var createdLedger models.LedgerRecord
-
-	err := s.db.Transaction(func(tx *gorm.DB) error {
-		// 1. read the current wallet state
-		var wallet models.Wallet
-		if err := tx.Where("user_id = ?", req.UserID).First(&wallet).Error; err != nil {
-			if err == gorm.ErrRecordNotFound {
-				return ErrWalletNotFound
-			}
-			return err
+	// 1. Read the current wallet state.
+	var wallet models.Wallet
+	if err := tx.Where("user_id = ?", req.UserID).First(&wallet).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrWalletNotFound
 		}
-
-		// 2. balance check (for debit operations)
-		if req.Amount < 0 && wallet.Balance+req.Amount < 0 {
-			return ErrInsufficientBalance
-		}
-
-		balanceBefore := wallet.Balance
-		balanceAfter := wallet.Balance + req.Amount
-
-		// 3. optimistic lock update on balance
-		result := tx.Model(&models.Wallet{}).
-			Where("id = ? AND version = ?", wallet.ID, wallet.Version).
-			Updates(map[string]interface{}{
-				"balance": balanceAfter,
-				"version": wallet.Version + 1,
-			})
-
-		if result.Error != nil {
-			return result.Error
-		}
-		if result.RowsAffected == 0 {
-			// concurrent conflict: the record was modified by another request
-			return ErrConcurrentConflict
-		}
-
-		// 4. write the ledger record snapshot
-		createdLedger = models.LedgerRecord{
-			TransactionID:   req.TransactionID,
-			WalletID:        wallet.ID,
-			UserID:          req.UserID,
-			Amount:          req.Amount,
-			BalanceBefore:   balanceBefore,
-			BalanceAfter:    balanceAfter,
-			TransactionType: req.TransactionType,
-			Status:          models.TxStatusSuccess,
-			ReferenceID:     req.ReferenceID,
-			Remark:          req.Remark,
-		}
-
-		if err := tx.Create(&createdLedger).Error; err != nil {
-			return err // a unique index conflict will be raised here if the idempotency key collides
-		}
-
-		return nil
-	})
-
-	if err != nil {
 		return nil, err
 	}
 
-	return &createdLedger, nil
+	// 2. Balance check (debit operations only).
+	if req.Amount < 0 && wallet.Balance+req.Amount < 0 {
+		return nil, ErrInsufficientBalance
+	}
+
+	balanceBefore := wallet.Balance
+	balanceAfter := wallet.Balance + req.Amount
+
+	// 3. Optimistic lock update on balance.
+	result := tx.Model(&models.Wallet{}).
+		Where("id = ? AND version = ?", wallet.ID, wallet.Version).
+		Updates(map[string]interface{}{
+			"balance": balanceAfter,
+			"version": wallet.Version + 1,
+		})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		// Another request updated the row between our read and write.
+		return nil, ErrConcurrentConflict
+	}
+
+	// 4. Write the ledger record snapshot.
+	ledger := models.LedgerRecord{
+		TransactionID:   req.TransactionID,
+		WalletID:        wallet.ID,
+		UserID:          req.UserID,
+		Amount:          req.Amount,
+		BalanceBefore:   balanceBefore,
+		BalanceAfter:    balanceAfter,
+		TransactionType: req.TransactionType,
+		Status:          models.TxStatusSuccess,
+		ReferenceID:     req.ReferenceID,
+		Remark:          req.Remark,
+	}
+
+	if err := tx.Create(&ledger).Error; err != nil {
+		return nil, err // unique index conflict surfaces here on idempotency key collision
+	}
+
+	return &ledger, nil
 }
 
 // ConfirmRecharge settles a pending recharge after the payment gateway callback.

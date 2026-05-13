@@ -24,6 +24,7 @@ var errorCodeMap = map[error]errorDetail{
 	services.ErrInsufficientBalance: {http.StatusBadRequest, 4001, "insufficient balance"},
 	services.ErrWalletNotFound:      {http.StatusNotFound, 4004, "wallet not found"},
 	services.ErrConcurrentConflict:  {http.StatusConflict, 4009, "concurrent conflict, please retry"},
+	services.ErrVipPlanNotFound:     {http.StatusNotFound, 4040, "vip plan not found or inactive"},
 }
 
 func OK(c *gin.Context, data interface{}) {

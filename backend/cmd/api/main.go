@@ -45,6 +45,9 @@ func main() {
 	walletHandler := handlers.NewWalletHandler(database.DB)
 	routes.RegisterWalletRoutes(router.Group("/api"), walletHandler)
 
+	vipHandler := handlers.NewVipHandler(database.DB)
+	routes.RegisterVipRoutes(router.Group("/api"), vipHandler)
+
 	// Test route
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
