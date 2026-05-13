@@ -31,6 +31,7 @@ func main() {
 
 	// Auto-migrate all models (Wallet and LedgerRecord included via database.AutoMigrate)
 	database.AutoMigrate(database.DB)
+	database.Seed(database.DB)
 
 	// Serve static files from the "uploads" directory
 	router.Static("/uploads", "./uploads")
