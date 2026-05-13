@@ -53,6 +53,9 @@ func main() {
 	tipHandler := handlers.NewTipHandler(database.DB)
 	routes.RegisterTipRoutes(router.Group("/api"), tipHandler)
 
+	idolHandler := handlers.NewIdolHandler(database.DB)
+	routes.RegisterIdolRoutes(router.Group("/api"), idolHandler, database.DB)
+
 	// Start background jobs (each scheduler manages its own goroutine internally).
 	jobs.StartVipExpireScheduler(database.DB)
 

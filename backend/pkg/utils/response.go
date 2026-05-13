@@ -25,8 +25,9 @@ var errorCodeMap = map[error]errorDetail{
 	services.ErrWalletNotFound:      {http.StatusNotFound, 4004, "wallet not found"},
 	services.ErrConcurrentConflict:  {http.StatusConflict, 4009, "concurrent conflict, please retry"},
 	services.ErrVipPlanNotFound:     {http.StatusNotFound, 4040, "vip plan not found or inactive"},
-	services.ErrIdolNotFound:        {http.StatusNotFound, 4041, "idol not found"},
-	services.ErrIdolBanned:          {http.StatusForbidden, 4030, "idol is currently banned"},
+	services.ErrIdolNotFound:           {http.StatusNotFound, 4041, "idol not found"},
+	services.ErrIdolBanned:             {http.StatusForbidden, 4030, "idol is currently banned"},
+	services.ErrWithdrawExceedsBalance: {http.StatusBadRequest, 4002, "withdraw amount exceeds withdrawable balance"},
 }
 
 func OK(c *gin.Context, data interface{}) {

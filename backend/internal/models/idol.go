@@ -25,8 +25,9 @@ type Idol struct {
 	UserID              uint       `gorm:"uniqueIndex;not null"              json:"user_id"`
 	StageName           string     `gorm:"type:varchar(64);not null"         json:"stage_name"`
 	Status              IdolStatus `gorm:"type:varchar(16);not null;default:'active'" json:"status"`
-	TotalEarnings       int64      `gorm:"not null;default:0"                json:"total_earnings"`        // cumulative gross income, in cents
-	WithdrawableBalance int64      `gorm:"not null;default:0"                json:"withdrawable_balance"`  // available for withdrawal, in cents
+	TotalEarnings        int64      `gorm:"not null;default:0"                json:"total_earnings"`         // cumulative gross income, in cents
+	WithdrawableBalance  int64      `gorm:"not null;default:0"                json:"withdrawable_balance"`   // available for withdrawal, in cents
+	FrozenWithdrawable   int64      `gorm:"not null;default:0"                json:"frozen_withdrawable"`    // locked pending withdrawal approval
 	CreatedAt           time.Time  `                                         json:"created_at"`
 	UpdatedAt           time.Time  `                                         json:"updated_at"`
 }
