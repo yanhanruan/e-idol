@@ -1,3 +1,6 @@
+# executable files
+*.exe
+
 /backend_rush.md
 
 # OPA reports
