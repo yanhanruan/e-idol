@@ -1,7 +1,15 @@
-import { useState } from 'react';
-import { Clock, Crown, Gamepad2, Gift, Heart, MessageSquare, Search, Star, Users, Volume2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Search, Star, Users } from 'lucide-react';
 import { useTranslations } from '../contexts/LanguageContext';
+import type { TranslationMap } from '../types';
 import PageTitle from '@src/components/ui/PageTitle';
+import CyberButton from '@src/components/ui/CyberButton';
+import CyberInput from '@src/components/ui/CyberInput';
+import CyberSelect from '@src/components/ui/CyberSelect';
+import CyberTag from '@src/components/ui/CyberTag';
+import AudioWaveButton from '@src/components/ui/AudioWaveButton';
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface CastGame {
   name: string;
@@ -41,11 +49,13 @@ interface CastProfile {
 
 type SortBy = 'featured' | 'rating' | 'orders' | 'price';
 
+// ─── Static data ──────────────────────────────────────────────────────────────
+
 const MOCK_CASTS: CastProfile[] = [
   {
     id: 1,
     name: 'Sakura',
-    avatar: 'https://i.pravatar.cc/400?img=5',
+    avatar: 'https://t4.ftcdn.net/jpg/04/42/49/59/240_F_442495911_Cgw0Hi96euYZTYLVcS5DStoiWcI2yVaS.jpg',
     title: 'プロゲーマー',
     rating: 4.9,
     totalOrders: 1247,
@@ -73,7 +83,7 @@ const MOCK_CASTS: CastProfile[] = [
   {
     id: 2,
     name: 'Ryu',
-    avatar: 'https://i.pravatar.cc/400?img=12',
+    avatar: 'https://t4.ftcdn.net/jpg/18/95/16/01/240_F_1895160187_mTM0kdt5q5zKClIJ3FqOs5UNj9hOLiJc.jpg',
     title: 'ベテランプレイヤー',
     rating: 4.8,
     totalOrders: 892,
@@ -101,7 +111,7 @@ const MOCK_CASTS: CastProfile[] = [
   {
     id: 3,
     name: 'Miku',
-    avatar: 'https://i.pravatar.cc/400?img=9',
+    avatar: 'https://t4.ftcdn.net/jpg/10/32/25/13/240_F_1032251378_okkWFLdhJ72BTsd607TUbcFPjPd5QXXE.jpg',
     title: 'アイドルゲーマー',
     rating: 5.0,
     totalOrders: 2156,
@@ -129,7 +139,7 @@ const MOCK_CASTS: CastProfile[] = [
   {
     id: 4,
     name: 'Ken',
-    avatar: 'https://i.pravatar.cc/400?img=15',
+    avatar: 'https://t4.ftcdn.net/jpg/09/39/91/95/240_F_939919517_RvZaSETts022mye2ijWcZmmlr8TaOmqH.jpg',
     title: 'コーチング専門',
     rating: 4.7,
     totalOrders: 634,
@@ -157,7 +167,7 @@ const MOCK_CASTS: CastProfile[] = [
   {
     id: 5,
     name: 'Yuki',
-    avatar: 'https://i.pravatar.cc/400?img=20',
+    avatar: 'https://t3.ftcdn.net/jpg/17/60/96/24/240_F_1760962410_x13fCh7ubp0sv905CLljtnk3KidYYQbp.jpg',
     title: '新人キャスト',
     rating: 4.6,
     totalOrders: 156,
@@ -185,7 +195,7 @@ const MOCK_CASTS: CastProfile[] = [
   {
     id: 6,
     name: 'Hana',
-    avatar: 'https://i.pravatar.cc/400?img=24',
+    avatar: 'https://t4.ftcdn.net/jpg/13/51/78/85/240_F_1351788581_arGhhm0CRbHKN6npTYc3gbPc8KhKapua.jpg',
     title: 'チャット専門',
     rating: 4.9,
     totalOrders: 1543,
@@ -212,254 +222,357 @@ const MOCK_CASTS: CastProfile[] = [
   },
 ];
 
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+const SectionHeader = ({ title }: { title: string }) => (
+  <div className="mb-3">
+    <span className="text-xs font-semibold text-content-muted tracking-wider uppercase">{title}</span>
+  </div>
+);
+
+interface CastCardProps {
+  cast: CastProfile;
+  isPlaying: boolean;
+  onSelect: () => void;
+  onToggleAudio: () => void;
+  t: TranslationMap;
+}
+
+const CastCard = ({ cast, isPlaying, onSelect, onToggleAudio, t }: CastCardProps) => (
+  // group/card — named group so CyberButton's internal group-hover is NOT triggered by card hover
+  <div className="group/card bg-cyber-surface/40 border border-cyber-border rounded-2xl overflow-hidden hover:border-primary-cyan400/30 transition-all duration-300 hover:shadow-neon-cyan">
+    {/* Fixed-height portrait — shorter on mobile for compact 2-col grid */}
+    <div className="relative h-36 md:h-44 overflow-hidden">
+      <img
+        src={cast.avatar}
+        alt={cast.name}
+        className="w-full h-full object-cover object-top group-hover/card:scale-105 transition-transform duration-500"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-cyber-base/80 via-cyber-base/10 to-transparent" />
+
+      {/* Featured badge */}
+      {cast.isFeatured && (
+        <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-cyber-glass backdrop-blur-sm border border-primary-aqua/60 px-2.5 py-1 rounded-full shadow-neon-cyan">
+          <span className="w-1 h-1 rounded-full bg-primary-aqua animate-pulse flex-shrink-0" />
+          <span className="text-2xs font-bold text-primary-aqua tracking-widest uppercase leading-none">{t.featuredBadge as string}</span>
+        </div>
+      )}
+
+      {cast.isOnline && (
+        <div className="absolute top-2 right-2 flex items-center gap-1 bg-cyber-base/60 backdrop-blur-sm border border-primary-cyan400/30 px-1.5 py-0.5 rounded-full">
+          <div className="w-1.5 h-1.5 bg-primary-cyan400 rounded-full animate-pulse" />
+          <span className="text-2xs font-mono text-primary-cyan400">LIVE</span>
+        </div>
+      )}
+
+      <div
+        className="absolute bottom-2 right-2"
+        onClick={(e) => { e.stopPropagation(); onToggleAudio(); }}
+      >
+        <AudioWaveButton isPlaying={isPlaying} onClick={() => {}} />
+      </div>
+    </div>
+
+    {/* Info */}
+    <div className="p-3 flex flex-col gap-1.5">
+      <div className="flex items-baseline justify-between gap-2">
+        <h3 className="text-sm font-bold text-content-primary group-hover/card:text-primary-cyan300 transition-colors truncate">
+          {cast.name}
+        </h3>
+        <span className="text-sm font-bold text-primary-cyan400 flex-shrink-0">¥{cast.price.toLocaleString()}</span>
+      </div>
+
+      {/* Title + star rating on same row */}
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-2xs text-content-muted truncate flex-1 min-w-0">{cast.title}</p>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <Star size={13} className="fill-accent-yellow text-accent-yellow" />
+          <span className="text-xs font-semibold text-content-secondary">{cast.rating}</span>
+        </div>
+      </div>
+
+      {cast.games[0] && (
+        <span className="w-fit text-2xs font-mono bg-cyber-base border border-cyber-border px-2 py-0.5 rounded text-content-muted">
+          {cast.games[0].name}&nbsp;·&nbsp;{cast.games[0].rank}
+        </span>
+      )}
+
+      <div className="flex flex-wrap gap-1">
+        {cast.tags.map((tag, i) => (
+          <CyberTag key={i} color="blue">{tag}</CyberTag>
+        ))}
+      </div>
+
+      <CyberButton text={t.reserve as string} className="w-full mt-1" onClick={onSelect} />
+    </div>
+  </div>
+);
+
+interface CastDetailModalProps {
+  cast: CastProfile;
+  onClose: () => void;
+  t: TranslationMap;
+}
+
+const SUPPORTER_RANK_COLOR = ['text-accent-yellow', 'text-content-secondary', 'text-content-muted'] as const;
+
+const CastDetailModal = ({ cast, onClose, t }: CastDetailModalProps) => (
+  <div
+    className="fixed inset-0 bg-cyber-base/80 backdrop-blur-sm z-max flex items-center justify-center p-6"
+    onClick={onClose}
+  >
+    <div
+      className="relative bg-cyber-panel border border-cyber-border rounded-2xl w-full max-w-3xl max-h-[90vh] md:max-h-[78vh] flex flex-col md:flex-row overflow-hidden"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Close */}
+      <button
+        onClick={onClose}
+        className="absolute top-3 right-3 z-10 w-8 h-8 bg-cyber-surface/80 hover:bg-cyber-surface rounded-full flex items-center justify-center text-content-muted hover:text-content-primary transition-colors"
+      >
+        ✕
+      </button>
+
+      {/* ── Left: portrait card + desktop CTA ── */}
+      <div className="flex-shrink-0 md:w-52 flex flex-col">
+        <div className="relative h-48 md:h-auto md:aspect-[3/4] overflow-hidden">
+          <img src={cast.avatar} alt={cast.name} className="w-full h-full object-cover object-top" />
+          <div className="absolute inset-0 bg-gradient-to-t from-cyber-panel/60 via-transparent to-transparent" />
+          {cast.isOnline && (
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-cyber-base/70 backdrop-blur-sm border border-primary-cyan400/40 px-2 py-0.5 rounded-full">
+              <div className="w-1.5 h-1.5 bg-primary-cyan400 rounded-full animate-pulse" />
+              <span className="text-2xs font-mono font-bold text-primary-cyan400 tracking-wider">LIVE</span>
+            </div>
+          )}
+        </div>
+
+        <div className="hidden md:flex flex-col gap-3 p-4 border-t border-cyber-border mt-auto">
+          <CyberButton text={t.reserveCast as string} className="w-full" />
+        </div>
+      </div>
+
+      {/* ── Right: scrollable content ── */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide p-5 border-t border-cyber-border md:border-t-0 md:border-l">
+        {/* Name / profession / key stats */}
+        <div className="mb-5 pr-8">
+          <h2 className="text-xl font-black text-content-primary leading-tight">{cast.name}</h2>
+          <p className="text-xs text-content-muted tracking-wider mt-0.5 mb-3">{cast.title}</p>
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <Star size={15} className="fill-accent-yellow text-accent-yellow" />
+              <span className="text-sm font-bold text-content-primary">{cast.rating}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-content-muted">
+              <Users size={13} />
+              <span className="text-xs">{cast.totalOrders}件</span>
+            </div>
+            <span className="text-base font-black text-primary-cyan400 ml-auto">¥{cast.price.toLocaleString()}</span>
+          </div>
+        </div>
+
+        {/* Bio */}
+        <div className="mb-5">
+          <SectionHeader title={t.bioTitle as string} />
+          <p className="text-content-secondary text-sm leading-relaxed">{cast.bio}</p>
+        </div>
+
+        {/* Games */}
+        <div className="mb-5">
+          <SectionHeader title={t.gamesTitle as string} />
+          <div className="grid grid-cols-2 gap-2">
+            {cast.games.map((game, i) => (
+              <div key={i} className="flex items-center gap-3 bg-cyber-base/40 border border-cyber-border rounded-xl p-3">
+                <span className="text-lg">{game.icon}</span>
+                <div>
+                  <p className="text-xs font-bold text-content-primary">{game.name}</p>
+                  <p className="text-2xs text-content-muted font-mono mt-0.5">{game.rank}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Available slots */}
+        <div className="mb-5">
+          <SectionHeader title={t.slotsTitle as string} />
+          <div className="flex flex-wrap gap-2">
+            {cast.availableSlots.map((slot, i) => (
+              <span key={i} className="px-3 py-1.5 bg-status-success/10 border border-status-success/20 rounded-lg text-status-success text-xs font-mono">
+                {slot}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Reviews */}
+        <div className="mb-5">
+          <SectionHeader title={t.reviewsTitle as string} />
+          <div className="space-y-2">
+            {cast.reviews.map((review, i) => (
+              <div key={i} className="bg-cyber-base/30 border border-cyber-border rounded-xl p-3">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-bold text-content-primary">{review.user}</span>
+                  <div className="flex gap-0.5">
+                    {[...Array(review.rating)].map((_, j) => (
+                      <Star key={j} size={13} className="fill-accent-yellow text-accent-yellow" />
+                    ))}
+                  </div>
+                </div>
+                <p className="text-xs text-content-secondary leading-relaxed">{review.comment}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Supporters — 3-column data cards */}
+        <div className="mb-5">
+          <SectionHeader title={t.supportersTitle as string} />
+          <div className="grid grid-cols-3 gap-2">
+            {cast.topSupporters.map((supporter, i) => (
+              <div key={i} className="bg-cyber-base/40 border border-cyber-border rounded-xl p-3 flex flex-col items-center gap-1">
+                <span className={`text-xs font-black font-mono ${SUPPORTER_RANK_COLOR[i] ?? SUPPORTER_RANK_COLOR[2]}`}>
+                  #{i + 1}
+                </span>
+                <p className="text-2xs text-content-muted font-mono truncate w-full text-center">{supporter.name}</p>
+                <p className="text-sm font-bold text-primary-cyan400">¥{supporter.amount.toLocaleString()}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile CTA */}
+        <div className="md:hidden">
+          <CyberButton text={t.reserveCast as string} className="w-full" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 const CastListPage = () => {
   const { t } = useTranslations();
   const [selectedCast, setSelectedCast] = useState<CastProfile | null>(null);
   const [filterOnline, setFilterOnline] = useState(false);
   const [sortBy, setSortBy] = useState<SortBy>('featured');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [playingCastId, setPlayingCastId] = useState<number | null>(null);
 
-  const filteredCasts = MOCK_CASTS.filter((cast) => !filterOnline || cast.isOnline).sort((a, b) => {
-    if (sortBy === 'featured') return Number(b.isFeatured) - Number(a.isFeatured);
-    if (sortBy === 'rating') return b.rating - a.rating;
-    if (sortBy === 'orders') return b.totalOrders - a.totalOrders;
-    if (sortBy === 'price') return a.price - b.price;
-    return 0;
-  });
+  const toggleAudio = (castId: number) => setPlayingCastId((prev) => (prev === castId ? null : castId));
+
+  // Page-scoped translations — all CastListPage-specific keys live under this namespace
+  const p = t.castListPage as TranslationMap;
+
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = selectedCast ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [selectedCast]);
+
+  const sortOptions = useMemo<{ value: SortBy; label: string }[]>(
+    () => [
+      { value: 'featured', label: p.sortFeatured as string },
+      { value: 'rating', label: p.sortRating as string },
+      { value: 'orders', label: p.sortOrders as string },
+      { value: 'price', label: p.sortPrice as string },
+    ],
+    [p],
+  );
+
+  const currentSortLabel = sortOptions.find((o) => o.value === sortBy)?.label ?? '';
+
+  const filteredCasts = MOCK_CASTS.filter((cast) => !filterOnline || cast.isOnline)
+    .filter(
+      (cast) =>
+        !searchQuery ||
+        cast.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        cast.games.some((g) => g.name.toLowerCase().includes(searchQuery.toLowerCase())),
+    )
+    .sort((a, b) => {
+      if (sortBy === 'featured') return Number(b.isFeatured) - Number(a.isFeatured);
+      if (sortBy === 'rating') return b.rating - a.rating;
+      if (sortBy === 'orders') return b.totalOrders - a.totalOrders;
+      if (sortBy === 'price') return a.price - b.price;
+      return 0;
+    });
 
   return (
-    <div className="min-h-screen text-white pb-16 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-[-10%] right-[10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-ambient-lg" />
-        <div className="absolute bottom-[20%] left-[-5%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-ambient-md" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-      </div>
+    <>
+      <div className="min-h-screen text-content-primary pb-16 relative overflow-hidden">
+        {/* Ambient background */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary-cyan/10 rounded-full blur-ambient-lg" />
+          <div className="absolute bottom-1/4 -left-12 w-80 h-80 bg-primary-neonPurple/10 rounded-full blur-ambient-md" />
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <PageTitle title={t.castList as string} comment="あなたにぴったりのキャストを見つけよう" subtitle="" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* ── Hero header ── */}
+          <PageTitle title={t.castList as string} comment={p.subtitle as string} />
 
-        <div className="mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between bg-slate-900/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-4">
-          <div className="relative flex-1 w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <input
-              type="text"
-              placeholder="キャスト名やゲーム名で検索"
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+          {/* Hairline separator */}
+          <div className="h-px mb-5 bg-gradient-to-r from-transparent via-primary-cyan400/20 to-transparent" />
+
+          {/* ── Controls bar — constrained width on desktop ── */}
+          <div className="max-w-2xl mx-auto flex items-center gap-2 mb-8">
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 z-10" size={14} />
+              <CyberInput
+                variant="glass"
+                rounded="full"
+                placeholder={p.searchPlaceholder as string}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 py-2 md:py-1.5 font-sans font-medium text-slate-300 placeholder:text-slate-500"
+                containerClassName="w-full"
+              />
+            </div>
+
+            <button
+              onClick={() => setFilterOnline(!filterOnline)}
+              className={`flex items-center gap-1.5 px-4 py-2 md:py-1.5 rounded-full text-xs font-sans font-medium tracking-wider flex-shrink-0 backdrop-blur-md border transition-[background-color,border-color,box-shadow,color] duration-300 ease-in-out ${
+                filterOnline
+                  ? 'bg-primary-cyan/10 border-primary-cyan400/40 text-primary-cyan400 shadow-neon-cyan'
+                  : 'bg-cyber-glass border-cyber-border text-slate-300 hover:bg-cyber-surface hover:border-cyan-500/30 hover:shadow-neon-cyan hover:text-cyan-50'
+              }`}
+            >
+              <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors duration-300 ${filterOnline ? 'bg-primary-cyan400 animate-pulse' : 'bg-slate-500'}`} />
+              {t.online as string}
+            </button>
+
+            <CyberSelect
+              value={sortBy}
+              label={currentSortLabel}
+              options={sortOptions}
+              onChange={(val) => setSortBy(val as SortBy)}
             />
           </div>
 
-          <div className="flex gap-3 w-full sm:w-auto">
-            <button
-              onClick={() => setFilterOnline(!filterOnline)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
-                filterOnline ? 'bg-cyan-500/20 border-cyan-500/50 text-primary-cyan400' : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-slate-600'
-              }`}
-            >
-              <div className={`w-2 h-2 rounded-full ${filterOnline ? 'bg-primary-cyan400 animate-pulse' : 'bg-slate-600'}`} />
-              {(t.online as string) || 'オンライン'}
-            </button>
-
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortBy)}
-              className="px-4 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500/50 cursor-pointer"
-            >
-              <option value="featured">おすすめ順</option>
-              <option value="rating">評価順</option>
-              <option value="orders">人気順</option>
-              <option value="price">料金順</option>
-            </select>
+          {/* ── Grid ── */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
+            {filteredCasts.map((cast) => (
+              <CastCard
+                key={cast.id}
+                cast={cast}
+                isPlaying={playingCastId === cast.id}
+                onSelect={() => setSelectedCast(cast)}
+                onToggleAudio={() => toggleAudio(cast.id)}
+                t={p}
+              />
+            ))}
           </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {filteredCasts.map((cast) => (
-            <div
-              key={cast.id}
-              onClick={() => setSelectedCast(cast)}
-              className="group relative bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all duration-500 hover:shadow-[0_0_30px_-5px_rgba(6,182,212,0.3)] cursor-pointer"
-            >
-              {cast.isFeatured && (
-                <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-gradient-to-r from-yellow-500/90 to-orange-500/90 px-3 py-1 rounded-full text-xs font-bold text-white shadow-lg">
-                  <Crown size={14} />
-                  <span>注目</span>
-                </div>
-              )}
-
-              {cast.isOnline && (
-                <div className="absolute top-3 right-3 z-20 flex items-center gap-1 bg-cyan-500/90 px-3 py-1 rounded-full text-xs font-bold text-white shadow-lg">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                  <span>ONLINE</span>
-                </div>
-              )}
-
-              <div className="relative h-64 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent z-10" />
-                <img src={cast.avatar} alt={cast.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                <button className="absolute bottom-4 right-4 z-20 w-12 h-12 bg-purple-600/90 hover:bg-purple-500 rounded-full flex items-center justify-center shadow-lg transition-colors group/play">
-                  <Volume2 size={20} className="text-white group-hover/play:scale-110 transition-transform" />
-                </button>
-              </div>
-
-              <div className="p-5">
-                <div className="mb-3">
-                  <h3 className="text-xl font-bold text-white group-hover:text-primary-cyan300 transition-colors mb-1">{cast.name}</h3>
-                  <p className="text-xs text-slate-400">{cast.title}</p>
-                </div>
-
-                <div className="flex items-center gap-4 mb-3 pb-3 border-b border-slate-800">
-                  <div className="flex items-center gap-1">
-                    <Star className="text-yellow-400 fill-yellow-400" size={16} />
-                    <span className="text-sm font-bold text-white">{cast.rating}</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-slate-400">
-                    <Users size={16} />
-                    <span className="text-xs">{cast.totalOrders}件</span>
-                  </div>
-                  <div className="ml-auto text-primary-cyan400 font-bold text-lg">¥{cast.price.toLocaleString()}</div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {cast.games.slice(0, 2).map((game, i) => (
-                    <div key={i} className="flex items-center gap-1 bg-slate-800/50 px-2 py-1 rounded text-xs">
-                      <span>{game.icon}</span>
-                      <span className="text-white font-medium">{game.name}</span>
-                      <span className="text-slate-400">· {game.rank}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-wrap gap-1 mb-4">
-                  {cast.tags.map((tag, i) => (
-                    <span key={i} className="px-2 py-0.5 bg-purple-900/30 border border-purple-500/30 rounded text-2xs text-purple-300">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-primary-cyan400 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40">
-                  予約する
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {selectedCast && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedCast(null)}>
-            <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-              <div className="relative h-80">
-                <img src={selectedCast.avatar} alt={selectedCast.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent" />
-
-                <button
-                  onClick={() => setSelectedCast(null)}
-                  className="absolute top-4 right-4 w-10 h-10 bg-slate-800/80 hover:bg-slate-700 rounded-full flex items-center justify-center text-white transition-colors"
-                >
-                  ✕
-                </button>
-
-                <div className="absolute bottom-6 left-6 right-6">
-                  <h2 className="text-4xl font-black text-white mb-2">{selectedCast.name}</h2>
-                  <p className="text-slate-300">{selectedCast.title}</p>
-                </div>
-              </div>
-
-              <div className="p-6 space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold text-primary-cyan400 mb-2 flex items-center gap-2">
-                    <MessageSquare size={20} />
-                    自己紹介
-                  </h3>
-                  <p className="text-slate-300 text-sm leading-relaxed bg-slate-800/50 p-4 rounded-lg">{selectedCast.bio}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
-                    <Gamepad2 size={20} />
-                    得意ゲーム
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {selectedCast.games.map((game, i) => (
-                      <div key={i} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 flex items-center gap-3">
-                        <span className="text-3xl">{game.icon}</span>
-                        <div>
-                          <p className="font-bold text-white">{game.name}</p>
-                          <p className="text-sm text-slate-400">段位: {game.rank}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
-                    <Clock size={20} />
-                    可接時段
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedCast.availableSlots.map((slot, i) => (
-                      <div key={i} className="px-4 py-2 bg-green-900/20 border border-green-500/30 rounded-lg text-green-300 text-sm">
-                        {slot}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
-                    <Heart size={20} />
-                    お客様の声
-                  </h3>
-                  <div className="space-y-3">
-                    {selectedCast.reviews.map((review, i) => (
-                      <div key={i} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-bold text-white text-sm">{review.user}</span>
-                          <div className="flex gap-0.5">
-                            {[...Array(review.rating)].map((_, j) => (
-                              <Star key={j} size={14} className="text-yellow-400 fill-yellow-400" />
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-slate-300 text-sm">{review.comment}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-bold text-primary-cyan400 mb-3 flex items-center gap-2">
-                    <Gift size={20} />
-                    応援ランキング TOP3
-                  </h3>
-                  <div className="space-y-2">
-                    {selectedCast.topSupporters.map((supporter, i) => (
-                      <div key={i} className="flex items-center justify-between bg-slate-800/50 border border-slate-700 rounded-lg p-3">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                              i === 0 ? 'bg-yellow-500 text-white' : i === 1 ? 'bg-slate-400 text-white' : 'bg-orange-600 text-white'
-                            }`}
-                          >
-                            {i + 1}
-                          </div>
-                          <span className="text-white font-medium">{supporter.name}</span>
-                        </div>
-                        <span className="text-primary-cyan400 font-bold">¥{supporter.amount.toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <button className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-primary-cyan400 text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 text-lg">
-                  このキャストを予約する
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </div>
+
+      {/* Modal outside relative z-10 — escapes stacking context, covers sticky header */}
+      {selectedCast && (
+        <CastDetailModal
+          cast={selectedCast}
+          onClose={() => setSelectedCast(null)}
+          t={p}
+        />
+      )}
+    </>
   );
 };
 
