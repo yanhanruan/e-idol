@@ -39,7 +39,7 @@ export default {
         // 主色调 (Neon Cyber Theme)
         primary: {
           pink: '#f472b6',     // 按钮渐变起点
-          purple: '#c084fc',   // 按钮渐变终点
+          purple: '#c084fc',   // 按钮渐变终点 purple-400
           neonPurple: '#7e0fff', // 卡片辉光左端
           aqua: '#0fffc1',       // 卡片辉光右端
           cyan: '#22d3ee',
@@ -76,8 +76,13 @@ export default {
           surface: '#0a0a20', // 组件表面/Hover色
           panel: '#0a0a1a',   // 浮窗面板底色
           border: 'rgba(255, 255, 255, 0.1)', // 统一替换 border-white/10
-          glass: 'rgba(5, 5, 16, 0.8)',       // 统一替换 bg-[#050510]/80 
-          glassPanel: 'rgba(10, 10, 26, 0.82)'// 统一替换 bg-[#0a0a1ad1] 
+          glass: 'rgba(5, 5, 16, 0.8)',       // 统一替换 bg-[#050510]/80
+          glassPanel: 'rgba(10, 10, 26, 0.82)',// 统一替换 bg-[#0a0a1ad1]
+          // CyberTag color palette — matches original hand-crafted values
+          tagCyan: '#06b6d4',      // cyan-500: tag border & accent
+          tagCyanDark: '#164e63',  // cyan-900: tag hover background
+          tagPurple: '#a855f7',    // purple-400/500: purple tag text & border
+          tagPurpleDark: '#3b0764',// purple-900: purple tag hover background
         }
       },
       zIndex: {
@@ -102,6 +107,7 @@ export default {
         'glass': '0 0 15px rgba(0,0,0,0.5)',
         'panel': '0 0 30px rgba(0,0,0,0.8)',
         'neon-cyan': '0 0 10px rgba(34,211,238,0.2)',
+        'neon-dot': '0 0 4px currentColor',  // micro dot glow, syncs with text color
         'neon-yellow': '0 0 5px rgba(252,227,0,0.4)', // 从 UserCard 提取
         'neon-purple': '0 0 20px rgba(147,51,234,0.3)', // 从 PricingPage 提取
         'neon-purple-lg': '0 0 30px rgba(147,51,234,0.5)',

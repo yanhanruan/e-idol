@@ -1,5 +1,6 @@
-import { Pause, Play } from 'lucide-react';
 import type { GameKey, GameRank, ServiceContent, ServiceMethod } from '../types';
+import AudioWaveButton from './ui/AudioWaveButton';
+import CyberTag from './ui/CyberTag';
 
 export interface UserCardTranslations {
   games: Record<GameKey, string>;
@@ -21,75 +22,6 @@ interface UserCardUser {
   methods: ServiceMethod[];
 }
 
-interface AudioWaveButtonProps {
-  isPlaying: boolean;
-  onClick: () => void;
-}
-
-const AudioWaveButton = ({ isPlaying, onClick }: AudioWaveButtonProps) => {
-  const waveConfig = [
-    { duration: '1.2s', delay: '0s' },
-    { duration: '1.0s', delay: '0.15s' },
-    { duration: '1.3s', delay: '0.3s' },
-    { duration: '1.1s', delay: '0.15s' },
-    { duration: '1.2s', delay: '0s' },
-  ];
-
-  return (
-    <button onClick={onClick} className="flex px-3 py-1.5 md:px-4 md:py-2 items-center justify-center space-x-2 bg-black/50 backdrop-blur-sm text-primary-cyan400 rounded-md hover:scale-105 duration-300">
-      <div className="relative w-4 h-4 flex-shrink-0">
-        <Play className={`w-4 h-4 fill-primary-cyan400 text-primary-cyan400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-0' : 'opacity-100'}`} />
-        <Pause className={`absolute top-0 left-0 w-4 h-4 fill-primary-cyan400 text-primary-cyan400 transition-opacity duration-300 ease-in-out ${isPlaying ? 'opacity-100' : 'opacity-0'}`} />
-      </div>
-      <div className="flex items-center justify-center space-x-1 h-5 md:h-6">
-        {waveConfig.map((bar, i) => (
-          <div
-            key={i}
-            className="w-[3px] bg-primary-cyan400 rounded-sm animate-wave shadow-[0_0_5px_rgba(34,211,238,0.8)]"
-            style={{
-              animationDuration: bar.duration,
-              animationDelay: bar.delay,
-              animationPlayState: isPlaying ? 'running' : 'paused',
-              animationFillMode: 'backwards',
-            }}
-          ></div>
-        ))}
-      </div>
-    </button>
-  );
-};
-
-interface CyberTagProps {
-  children: string;
-  color?: 'blue' | 'purple';
-}
-
-const CyberTag = ({ children, color = 'blue' }: CyberTagProps) => {
-  const styles = {
-    blue: 'text-primary-cyan400 border-cyan-500/30 hover:bg-cyan-900/40',
-    purple: 'text-purple-400 border-purple-500/30 hover:bg-purple-900/40',
-  };
-
-  const accentColor = color === 'blue' ? 'bg-primary-cyan400' : 'bg-purple-400';
-
-  return (
-    <div
-      className={`
-      relative flex items-center gap-1.5 
-      px-2 py-0.5
-      border bg-black/50 backdrop-blur-sm
-      font-mono text-2xs
-      tracking-wider uppercase font-bold
-      transition-all duration-300 cursor-default
-      clip-chamfer-tr
-      ${styles[color] || styles.blue}
-    `}
-    >
-      <span className={`w-1 h-1 block ${accentColor} shadow-[0_0_4px_currentColor]`}></span>
-      {children}
-    </div>
-  );
-};
 
 interface UserCardProps {
   user: UserCardUser;
