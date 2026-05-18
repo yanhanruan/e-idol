@@ -1,232 +1,247 @@
-# Style & Design Guide (UI 规范)
+# Style & Design Guide (UI Specification)
 
-## 1. 核心视觉与基础原子规范
-- **风格定义**：Cyberpunk / Neon / Glassmorphism (玻璃态)。
-- **背景层级**：统一使用语义化颜色，如基础背景 `bg-cyber-base`，容器背景 `bg-cyber-surface`。
-- **自定义修饰符（强制）**：
-  - 发光模糊：核心特效使用 `blur-glow`(14px)；氛围光按场景分级使用 `blur-ambient-sm`(80px) / `blur-ambient-md`(100px) / `blur-ambient-lg`(120px)。
-  - 特殊字距：`tracking-sm`(0.15em) 用于小号强调，`tracking-md`(0.2em) 用于副标题，`tracking-lg`(0.3em) 用于大字号 Slogan/主标题。
-- **多边形裁剪 (Clip-Path)**：
-  - 严禁在代码中写死任意值 `[clip-path:...]`。
-  - 强制使用预设工具类：`.clip-chamfer-tr`, `.clip-chamfer-bl` (左下倒角), `.clip-chamfer-br` (右下倒角)。
+## 1. Core Visuals & Atomic Standards
 
-## 2. 颜色 Token 与文本规范
-**绝对限制：严禁使用 Tailwind 默认的 slate/gray 等色系，必须使用 config 中的内容。**
+- **Style Definition**: Cyberpunk / Neon / Glassmorphism.
+- **Background Hierarchy**: Use unified semantic colors, such as `bg-cyber-base` for the base background and `bg-cyber-surface` for container backgrounds.
+- **Custom Modifiers (Mandatory)**:
+  - **Glow Blur**: Use `blur-glow` (14px) for core effects; use tiered ambient light based on the scene: `blur-ambient-sm` (80px) / `blur-ambient-md` (100px) / `blur-ambient-lg` (120px).
+  - **Special Letter Spacing**: `tracking-sm` (0.15em) for small emphasis, `tracking-md` (0.2em) for subheadings, and `tracking-lg` (0.3em) for large slogans/main titles.
+- **Polygon Clipping (Clip-Path)**:
+  - Strictly forbidden to hardcode values like `[clip-path:...]` in the code.
+  - Mandatory use of preset utility classes: `.clip-chamfer-tr`, `.clip-chamfer-bl` (bottom-left chamfer), `.clip-chamfer-br` (bottom-right chamfer).
 
-- **主副基调**：
-  - 主文本：`text-content-primary`
-  - 次文本：`text-content-secondary`
-  - 弱文本/幽灵：`text-content-muted` 或 `text-content-ghost`
-- **高亮与强调**：
-  - 青/蓝系：`text-primary-aqua` / `text-primary-cyan400`
-  - 紫/粉系：`text-primary-purple` / `text-primary-neonPurple`
-  - 警示/点缀：`text-accent-yellow`
+------
 
+## 2. Color Tokens & Text Standards
 
+**Absolute Restriction: It is strictly forbidden to use Tailwind's default color palettes (e.g., slate/gray). You must use the values defined in the config(tailwind.config.ts).**
 
-## 3. 原子组件规范
-- **禁止指令**：严禁在业务页面直接手写原生 HTML 标签（如 `<button>`, `<select>`）并赋予复杂样式。
-- **强制复用映射**：
-  - 按钮 -> `<CyberButton />`
-  - 下拉框 -> `<CyberSelect />`
-  - 标题 -> `<PageTitle />`
-- **修改限制**：若需微调原子组件外观，优先通过 `className` 透传，严禁修改原始组件内部的样式逻辑。
+- **Primary & Secondary Tones**:
+  - Main Text: `text-content-primary`
+  - Secondary Text: `text-content-secondary`
+  - Muted/Ghost Text: `text-content-muted` or `text-content-ghost`
+- **Highlights & Emphasis**:
+  - Cyan/Blue Tones: `text-primary-aqua` / `text-primary-cyan400`
+  - Purple/Pink Tones: `text-primary-purple` / `text-primary-neonPurple`
+  - Warnings/Accents: `text-accent-yellow`
 
-## 4. 光影与色彩协同规范 (Glow & Color Harmony)
+------
 
-**⚠️ 前置豁免声明**：本节中定义的 `shadow-neon-*` 与 `drop-shadow-neon-*` 为 Tailwind 预设的自定义 Token，**豁免**第 1 节中对原生阴影的禁用限制。但依然**绝对禁止**使用带有硬编码色值的任意值（如 `shadow-[0_0_20px_rgba(...)]`）。
+## 3. Atomic Component Standards
 
-### 4.1 色彩同频绑定原则 (Color Harmony Binding)
-光影的颜色必须与该组件内部的主色调（Text / Border / Background）保持严格同频。AI 在生成组件时，需根据元素的颜色动态推理并应用对应阴影，严禁“张冠李戴”：
+- **Forbidden Directive**: It is strictly prohibited to manually write native HTML tags (e.g., `<button>`, `<select>`) with complex styles directly in business pages.
+- **Mandatory Reuse Mapping**:
+  - Button -> `<CyberButton />`
+  - Select Box -> `<CyberSelect />`
+  - Title -> `<PageTitle />`
+- **Modification Restrictions**: If you need to tweak the appearance of an atomic component, prioritize passing a `className`. It is strictly forbidden to modify the internal styling logic of the original component.
 
-| 核心发光元素主色调                          | 对应的矩形阴影 (Box Shadow) | 对应的异形阴影 (Drop Shadow) |
-| :------------------------------------------ | :-------------------------- | :--------------------------- |
-| `*-primary-cyan-*` / `*-primary-aqua`       | `shadow-neon-cyan`          | `drop-shadow-neon-cyan`      |
-| `*-primary-purple` / `*-primary-neonPurple` | `shadow-neon-purple`        | `drop-shadow-neon-purple`    |
-| *-accent-yellow                             | `shadow-neon-yellow`        | -                            |
+------
 
-### 4.2 光影决策逻辑（授权 AI 思考场景）
+## 4. Glow & Color Harmony
 
-光影并非必需品，滥用会导致严重的视觉疲劳。AI 在构建组件时，必须独立思考业务场景，按以下准则决策是否应用发光效果：
+**⚠️ Pre-emptive Exemption Statement**: The `shadow-neon-*` and `drop-shadow-neon-*` tokens defined in this section are custom Tailwind tokens and are **exempt** from the native shadow ban in Section 1. However, hardcoding arbitrary values (e.g., `shadow-[0_0_20px_rgba(...)]`) remains **absolutely prohibited**.
 
-- **可以触发场景**：核心 Call to Action 按钮的交互反馈（Hover / Active）、带有关键指标数字的卡片、页面主 Slogan（如 `<PageTitle />`）。
-- **绝对禁止场景**：大段常规正文、次要辅助按钮、禁用状态（Ghost）、大面积的基础背景容器。
-- **形态匹配规则**：规则的容器盒子优先使用 `shadow-*`；不规则图形（SVG Icon、单行渐变文本）必须使用 `drop-shadow-*` 以贴合内容边缘。
+### 4.1 Color Harmony Binding Principle
 
-### 4.3 行为规范示例
+The color of the glow must stay strictly in sync with the main color tone (Text / Border / Background) of that component. When generating components, AI should dynamically infer and apply the corresponding shadow; mismatched colors are strictly forbidden:
 
-✅ **正确示例（色彩同频，且基于状态合理触发）**:
-```tsx
-// 容器应用青色交互阴影，子文本匹配青色系
+| **Core Glowing Element Primary Color**      | **Corresponding Box Shadow** | **Corresponding Drop Shadow** |
+| ------------------------------------------- | ---------------------------- | ----------------------------- |
+| `*-primary-cyan-*` / `*-primary-aqua`       | `shadow-neon-cyan`           | `drop-shadow-neon-cyan`       |
+| `*-primary-purple` / `*-primary-neonPurple` | `shadow-neon-purple`         | `drop-shadow-neon-purple`     |
+| `*-accent-yellow`                           | `shadow-neon-yellow`         | -                             |
+
+### 4.2 Glow Decision Logic (Authorized AI Thinking Scenarios)
+
+Glow is not a necessity; overuse leads to severe visual fatigue. When building components, AI must independently evaluate the business scenario and decide whether to apply glow effects based on these guidelines:
+
+- **Trigger Scenarios**: Interaction feedback for core Call-to-Action (CTA) buttons (Hover / Active), cards containing key metric numbers, and main page slogans (e.g., `<PageTitle />`).
+- **Forbidden Scenarios**: Large blocks of regular body text, secondary auxiliary buttons, disabled states (Ghost), and large-area base background containers.
+- **Shape Matching Rules**: Use `shadow-*` for regular container boxes; use `drop-shadow-*` for irregular shapes (SVG Icons, single-line gradient text) to fit the edges of the content.
+
+### 4.3 Behavioral Examples
+
+✅ **Correct Example (Color-synced and state-based trigger)**:
+
+```
+// Container applies cyan interactive shadow; child text matches the cyan palette
 <div className="border border-primary-cyan-400 hover:shadow-neon-cyan transition-shadow">
   <span className="text-primary-cyan-300">System Online</span>
 </div>
 
-// 不规则 Icon 使用同频的 Drop Shadow
+// Irregular Icon uses a synced Drop Shadow
 <Icon className="fill-primary-purple drop-shadow-neon-purple" />
 ```
 
-❌ **错误示例（严禁出现的模式）**:
+❌ **Incorrect Example (Strictly prohibited patterns)**:
 
 ```
-// 错误 1：颜色串台（紫色文字配了青色光影）
+// Error 1: Mismatched colors (Purple text paired with Cyan glow)
 <div className="text-primary-purple shadow-neon-cyan">...</div>
 
-// 错误 2：无视预设配置，强行使用任意值硬编码
+// Error 2: Ignoring preset config, forcing a hardcoded arbitrary value
 <button className="drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">...</button>
 ```
 
+------
 
+## 5. Tailwind Native Class Control (Whitelist & Blacklist)
 
-## 5. Tailwind 原生类边界管控 (Whitelist & Blacklist)
+To ensure the purity of the Cyberpunk visual specification and global state management, AI **must strictly adhere** to the following blacklist and whitelist when using Tailwind default atomic classes:
 
-为确保 Cyberpunk 视觉规范的纯粹性与全局状态管理，AI 在使用 Tailwind 默认原子类时，**必须严格遵守**以下黑白名单：
+### 🚫 Blacklist (Strictly Prohibited)
 
-### 🚫 绝对禁止 (Blacklist)
-一旦触发以下行为，视为严重违反设计系统：
-1. **禁用原生色彩**：严禁使用任何 Tailwind 默认色板（如 `bg-gray-800`, `text-red-500`, `border-blue-400`）。必须使用 config 中的 `cyber.*`, `primary.*`, `content.*`, `status.*`。
-2. **禁用原生阴影**：严禁使用 `shadow-sm`, `shadow-md`, `shadow-xl` 等黑灰阴影。所有阴影必须来自 `shadow-neon-*`, `shadow-glass`, `shadow-panel` 或对应的 `drop-shadow-*`。
-3. **禁用任意值 (JIT)**：严禁在代码中写死硬编码的任意值，如 `w-[133px]`, `text-[#ff0000]`, `bg-[rgba(10,10,16,0.5)]`。必须依赖预设的间距系统和 `cyber.glass` 等语义化 Token。
+The following actions are considered serious violations of the design system:
 
-### ✅ 完全放行 (Whitelist)
+1. **No Native Colors**: Strictly forbidden to use any Tailwind default color palette (e.g., `bg-gray-800`, `text-red-500`, `border-blue-400`). You must use `cyber.*`, `primary.*`, `content.*`, or `status.*` from the config.
+2. **No Native Shadows**: Strictly forbidden to use `shadow-sm`, `shadow-md`, `shadow-xl`, etc. All shadows must come from `shadow-neon-*`, `shadow-glass`, `shadow-panel`, or the corresponding `drop-shadow-*`.
+3. **No Arbitrary Values (JIT)**: Strictly forbidden to hardcode arbitrary values in code, such as `w-[133px]`, `text-[#ff0000]`, or `bg-[rgba(10,10,16,0.5)]`. You must rely on the preset spacing system and semantic tokens like `cyber.glass`.
 
-以下 Tailwind 原生工程化工具类，AI 可根据排版与布局需求自主决策，自由组合：
-1. **布局与栅格**：`flex`, `grid`, `absolute`, `relative`, `z-*`（除弹窗外的常规层级）, `items-center`, `justify-between` 等。
-2. **间距与尺寸**：`w-full`, `max-w-*`, `h-screen`, `p-4`, `mx-auto`, `gap-2` 等基于 4px 乘数系统的基础类。
-3. **排版比例**：`text-xs` 到 `text-4xl` 等字体大小，`font-normal` 到 `font-black` 等字重控制（注意：字色仍受黑名单管控）。
-4. **状态伪类组合**：鼓励合理使用 `hover:`, `focus:`, `active:`, `group-hover:`, `peer-checked:` 等伪类来搭配预设的光影与色彩变化（例如：`hover:shadow-neon-cyan`）。
+### ✅ Whitelist (Fully Permitted)
 
-## 	6. 圆角形态规范 (Rounding Preference)
+AI may autonomously decide to use the following Tailwind native engineering utility classes for layout and typography:
 
-**AI 约束：** 项目整体必须呈现“外圆内方”且层次分明的现代赛博风格，严格按以下层级应用圆角工具类，严禁随意混用：
+1. **Layout & Grid**: `flex`, `grid`, `absolute`, `relative`, `z-*` (standard levels excluding modals), `items-center`, `justify-between`, etc.
+2. **Spacing & Sizing**: `w-full`, `max-w-*`, `h-screen`, `p-4`, `mx-auto`, `gap-2`, etc., based on the 4px multiplier system.
+3. **Typography Ratios**: Font sizes from `text-xs` to `text-4xl`, and font weights from `font-normal` to `font-black` (Note: text color remains controlled by the blacklist).
+4. **State Pseudo-classes**: Encouraged use of `hover:`, `focus:`, `active:`, `group-hover:`, `peer-checked:`, etc., to pair with preset glow and color transitions (e.g., `hover:shadow-neon-cyan`).
 
-- **`rounded-full` (极度圆润)**：**仅限**核心交互按钮 (Primary Buttons)、用户头像、状态指示灯、氛围修饰球。
-- **`rounded-2xl` (一级包裹)**：**仅限**主要界面容器（主卡片）、登录/注册等 Auth 面板、Modal 全局弹窗。
-- **`rounded-xl` (二级包裹)**：适用于聊天气泡、次级信息容器、导航下拉弹窗。
-- **`rounded-lg` (标准功能体)**：强制用于常规功能性组件，如下拉选项区、正文内容块、输入框 (Inputs)。
-- **`rounded-md / rounded-sm` (细微软化)**：小图标背景、极小元素的边缘（如音频波动条）修饰。
+------
 
+## 6. Rounding Preference
 
+**AI Constraint**: The project must exhibit a modern Cyberpunk style with a clear "round outside, square inside" hierarchy. Apply rounding utility classes strictly according to these levels; do not mix them randomly:
 
-## 7. 抽象网格与组件排版范式 (Sizing, Spacing & Grid Paradigm)
+- **`rounded-full` (Maximum Roundness)**: **Only for** core interactive buttons (Primary Buttons), user avatars, status indicator lights, and ambient decorative spheres.
+- **`rounded-2xl` (Level 1 Wrap)**: **Only for** main interface containers (Main Cards), Auth panels (Login/Register), and global Modal pop-ups.
+- **`rounded-xl` (Level 2 Wrap)**: For chat bubbles, secondary info containers, and navigation dropdowns.
+- **`rounded-lg` (Standard Functional Body)**: Mandatory for regular functional components like dropdown selection areas, body content blocks, and Inputs.
+- **`rounded-md / rounded-sm` (Subtle Softening)**: Small icon backgrounds and tiny element edge refinements (like audio wave bars).
 
-### 7.1 间距系统 (Spacing)
+------
 
-- **微小间距 (0.5~2)**: `gap-1.5`, `gap-2`, `space-x-1`, `space-x-2`, `px-1.5`, `py-1`, `py-2`，以及垂直约束 `mb-0.5`, `mb-1`, `mb-2`。主要用于标签、小图标与文字之间、细微的内部对齐，维持赛博朋克风格的高密度信息感，也常用于将标题与副标题紧密绑定为一个整体。
-- **常规间距 (3~4)**: `p-3`, `px-4`, `gap-3`, `space-x-3`, `space-y-3`，以及垂直约束 `mb-3`, `mb-4`。主要用于卡片内边距、常规组件元素之间的排版，或作为内部内容段落、图标与区块标题之间的分隔。
-- **大间距/区块间距 (6~12)**: `px-6`, `py-8`, `space-x-8`，以及垂直约束 `mb-6`, `mb-8`, `mb-12`。主要用于页面级容器的内外边距、主要导航项之间的距离。其中 `mb-12` 作为顶级规范，专门用于大页面中核心区块（Major Block，如各个 Section）之间的垂直分隔。
+## 7. Sizing, Spacing & Grid Paradigm
 
-### 7.2 尺寸与边界 (Sizing & Constraints)
+### 7.1 Spacing System
 
-- __页面级约束__: `max-w-7xl mx-auto`，用于控制全局最大宽度并居中。
-- __组件级约束__: `w-72 sm:w-80 md:w-88` (聊天框等悬浮面板)，`min-w-[200px]`, `max-h-[400px]` (下拉菜单等)。
-- __原子尺寸__: `w-8 h-8`、`w-4 h-4`、`w-3 h-3`。常用于圆形按钮、图标、状态圆点，通过等宽高等比例保持正圆或正方形。
+- **Micro Spacing (0.5–2)**: `gap-1.5`, `gap-2`, `space-x-1`, `space-x-2`, `px-1.5`, `py-1`, `py-2`, along with vertical constraints `mb-0.5`, `mb-1`, `mb-2`. Used for tags, small icons, text-to-icon spacing, and subtle inner alignments. 
+- **Regular Spacing (3–4)**: `p-3`, `px-4`, `gap-3`, `space-x-3`, `space-y-3`, along with vertical constraints `mb-3`, `mb-4`. Used for card padding, regular component layout, or separating content paragraphs, icons, and block titles.
+- **Large / Block Spacing (6–12)**: `px-6`, `py-8`, `space-x-8`, along with vertical constraints `mb-6`, `mb-8`, `mb-12`. Used for page-level container margins and major navigation distances. `mb-12` is a top-tier specification specifically for separating major sections in large pages.
 
-### 7.3 排版紧凑度 (Typography)
+### 7.2 Sizing & Constraints
 
-- __字号体系__: 偏向使用较小字号实现精致感，如 `text-2xs`, `text-xs`, `text-sm`。使用 CSS 变量进行跨断点响应式字号如 `[font-size:var(--font-name-base)]`。
+- **Page-Level Constraints**: `max-w-7xl mx-auto`, used to control the global maximum width and center the layout.
+- **Component-Level Constraints**: `w-72 sm:w-80 md:w-88` (for floating panels like chat boxes), `min-w-[200px]`, `max-h-[400px]` (for dropdown menus, etc.).
+- **Atomic Sizing**: `w-8 h-8`, `w-4 h-4`, `w-3 h-3`. Commonly used for circular buttons, icons, and status dots, maintaining a perfect circle or square proportionally through equal width and height.
 
-- __字距搭配__:
+### 7.3 Typography Compactness
 
-  - `tracking-wide` / `tracking-wider` 搭配 `text-xs` 或 `text-sm`，增加阅读呼吸感，特别是在赛博朋克风格的大写字母、标签中。
-  - `tracking-widest` 用于导航等强调元素。
+- **Font Size System**: Leans toward smaller font sizes to achieve a refined, high-tech aesthetic, such as `text-2xs`, `text-xs`, and `text-sm`. 
+- **Letter Spacing Pairings**:
+  - `tracking-wide` / `tracking-wider` paired with `text-xs` or `text-sm` to inject reading "breathing room," especially in cyberpunk-styled uppercase letters and tags.
+  - `tracking-widest` used for emphasized elements like navigation links.
+- **Line Height Pairings**:
+  - `leading-none` paired with small font-size tags (e.g., `text-2xs`) to ensure tag heights remain extremely compact with zero excess whitespace.
+  - `leading-relaxed` paired with chat bubbles or large blocks of text.
+- **Font Families**: A hybrid mix of `font-sans` (main body text) and `font-mono` (decorative tags, specific numerical data).
 
-- __行高搭配__:
+### 7.4 Responsive Strategy
 
-  - `leading-none` 搭配小字号标签（如 `text-2xs`）确保标签高度紧凑无多余空白。
-  - `leading-relaxed` 搭配聊天气泡或大段文本，提升阅读体验。
+- **Mobile-First**: Styles are written for mobile viewports by default, then progressively overridden using `sm:`, `md:`, and `lg:` breakpoints.
+- **Layout Transformation**: Drastic changes in structure between breakpoints.
+  - *Example*: The navigation bar collapses into a hidden menu on mobile (`md:hidden` + absolute-positioned popup) but expands horizontally on desktop (`md:flex`, `space-x-8`).
+- **Scaling Dimensions & White Space**:
+  - **Container Sizing**: `w-72 sm:w-80 md:w-88` — widths increase as the viewport expands.
+  - **Container Height**: `h-14 md:h-12` — mobile elements often require larger touch targets for accessibility, while desktop elements become more compact and precise.
+  - **Padding Expansion**: `px-4 sm:px-6 lg:px-8` — side margins increase on larger screens to prevent content from hitting the edge of the display.
+- **Desktop Vertical Compression**: A specific "inverse" layout rule for this project.
+  - In focused views like authentication pages or complex forms, mobile layouts use large vertical margins (`mb-6`, `mb-8`) to separate layers of information.
+  - On desktop, these margins are **aggressively compressed** (`md:mb-1`, `md:mb-2`) to maintain visual focus and that signature high-density, "information-rich" cyberpunk feel.
 
-- __字体族__: 混合使用 `font-sans`（主体）、`font-mono`（装饰性标签、特定数字）。
+------
 
-### 7.4 响应式策略 (Responsiveness)
+### AI Layout Paradigm Decision Table
 
-- **移动端优先**: 默认写移动端样式，然后通过 `sm:`, `md:`, `lg:` 进行覆盖。
-- **布局方向改变**: 例如导航栏在移动端折叠 (`md:hidden` + 绝对定位弹窗)，在桌面端水平展开 (`md:flex`, `space-x-8`)。
-- **尺寸与留白放大**:
-  - 容器尺寸: `w-72 sm:w-80 md:w-88`，随屏幕变大而加宽。
-  - 容器高度: `h-14 md:h-12`，在某些场景下移动端可能需要更大高度方便点击，桌面端则变得紧凑。
-  - 边距放大: `px-4 sm:px-6 lg:px-8`，屏幕越大两边留白越多。
-  - 字体大小: `[font-size:var(--font-name-base)] md:[font-size:var(--font-name-md)]`。
-- **桌面端垂直压缩 (Desktop Vertical Compression)**: 这是一个特定的反向排版规律。在特定表单或聚焦视图（如认证页面）中，移动端为了拉开层级会使用大垂直间距（如 `mb-6`, `mb-8`），而在桌面端会大幅压缩垂直间距（如 `md:mb-1`, `md:mb-2`），以保持视线的聚焦和组件的高密度紧凑感。
+| **Scenario / Component Type**           | **Spacing**                                                 | **Sizing & Constraints**                                     | **Typography**                                               | **Responsive Strategy**                                      |
+| --------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **Page-Level Container / Outer Layout** | `py-8 px-4` (scales up with screen size: `sm:px-6 lg:px-8`) | `max-w-7xl mx-auto`, `w-full`                                | -                                                            | Increase horizontal safety zone whitespace; shift from a single-column to a multi-column layout grid. |
+| **Navigation Bar / Top Header**         | Inner elements scale from `space-x-2` to `space-x-8`        | `h-14` (Mobile) -> `md:h-12` (Desktop)                       | `text-xs`, `font-medium`, `tracking-widest`                  | `md:flex` to expand navigation links, `md:hidden` to collapse into a hamburger menu. |
+| **Card Interior / List Item**           | `p-3`, `space-y-2`, `gap-2`, `gap-3`                        | Width is typically controlled by Grid/Flex, filling the parent container. | `text-sm`, paired with responsive CSS variables to control font scaling. | Utilize `md:p-*` to expand inner padding, increasing visual breathing room. |
+| **Tag / Micro Decoration (Tag/Badge)**  | `px-1.5 py-1`, `px-2 py-0.5`, `gap-1.5`                     | Adaptive width `w-fit`, `flex-shrink-0`                      | `text-2xs`, `font-bold`, `leading-none`, `tracking-wider`, often paired with `font-mono` | Stays highly consistent; does not change drastically across responsive breakpoints. |
+| **Icon Button / Interactive Control**   | Centered internally with no specific padding                | `w-8 h-8` (Regular wrapper), `w-4 h-4` (Icon itself)         | -                                                            | Add desktop hover scaling transitions (`hover:scale-105`).   |
+| **Chat Bubble / Text Block**            | `p-2.5`                                                     | `max-w-[85%]`                                                | `text-xs`, `leading-relaxed`, `tracking-wide`                | Floating panel expands with wider viewports: `w-72 sm:w-80 md:w-88`. |
+| **Form Input / Dropdown Select**        | `px-3 py-1.5`                                               | `flex-1` or occupies specified grid width                    | `text-xs`, `placeholder:text-content-secondary`              | -                                                            |
 
-### AI 布局范式决策表
+------
 
-| 情景 / 组件类型                 | 间距 (Spacing)                             | 尺寸与边界 (Sizing)                     | 排版 (Typography)                                            | 响应式策略 (Responsive)                        |
-| :------------------------------ | :----------------------------------------- | :-------------------------------------- | :----------------------------------------------------------- | :--------------------------------------------- |
-| **页面级容器 / 外层布局**       | `py-8 px-4` (随屏幕增大 `sm:px-6 lg:px-8`) | `max-w-7xl mx-auto`, `w-full`           | -                                                            | 增加两侧安全区留白，从单列变为多列布局。       |
-| **导航栏 / 顶部 Header**        | 内部元素 `space-x-2` 到 `space-x-8`        | `h-14` (移动端) -> `md:h-12` (桌面端)   | `text-xs`, `font-medium`, `tracking-widest`                  | `md:flex` 展开导航，`md:hidden` 收起汉堡菜单。 |
-| **卡片内层 / 列表项**           | `p-3`, `space-y-2`, `gap-2`, `gap-3`       | 宽度通常由 Grid/Flex 控制，占满父容器。 | `text-sm`, 搭配响应式 CSS 变量控制字体。                     | 使用 `md:p-*` 放大内边距，提升呼吸感。         |
-| **标签 / 微小装饰 (Tag/Badge)** | `px-1.5 py-1`, `px-2 py-0.5`, `gap-1.5`    | 宽度自适应 `w-fit`, `flex-shrink-0`     | `text-2xs`, `font-bold`, `leading-none`, `tracking-wider`, 常搭 `font-mono` | 基本保持一致，不随断点发生巨变。               |
-| **图标按钮 / 交互控件**         | 内部居中无特定 Padding                     | `w-8 h-8` (常规), `w-4 h-4` (图标本身)  | -                                                            | 桌面端增加 hover 效果 (`hover:scale-105`)。    |
-| **对话气泡 / 文本块**           | `p-2.5`                                    | `max-w-[85%]`                           | `text-xs`, `leading-relaxed`, `tracking-wide`                | 悬浮面板随屏幕变宽：`w-72 sm:w-80 md:w-88`。   |
-| **表单输入框 / Select**         | `px-3 py-1.5`                              | `flex-1` 或占据指定宽度                 | `text-xs`, `placeholder:text-content-secondary`              | -                                              |
+## 8. Responsive Web Design (RWD) Strategy
 
-## 8. 响应式网页设计 (RWD Strategy)
+**AI Constraint:** The project's responsive strategy strictly prohibits simple "visual hiding" via display utilities. It must strictly follow the core logic of **"component restructuring and interactive degradation."** When generating layout code, the AI must strictly execute the following three sets of matrix specifications:
 
-**AI 约束：** 项目的响应式策略严禁采用简单的“视觉隐藏”，必须遵循**“组件重组与交互降级”**的核心逻辑。AI 在生成布局代码时，必须严格执行以下三套矩阵规范：
+### 8.1 Density-Based Grid Paradigm
 
-### 8.1 抽象网格布局矩阵 (Density-Based Grid Paradigm)
+**AI Constraint:** When generating new list or grid components, it is strictly forbidden to force-fit outdated legacy business nomenclature. The AI must first evaluate the target component's **"Information Density"** and **"Base Aspect Ratio,"** classify it into one of the following 4 abstract visual archetypes, and strictly execute the corresponding responsive `grid-cols-*` column progression to ensure optimal visual balance from Mobile to XL viewports:
 
-**AI 约束：** 当生成新的列表或网格组件时，严禁试图去硬套旧有业务名称。AI 必须首先评估目标组件的**“信息密度 (Information Density)”**与**“基础纵横比 (Aspect Ratio)”**，将其归类至以下 4 种抽象视觉范式之一，并严格执行对应的响应式 `grid-cols-*` 列数阶梯，以确保从 Mobile 到 XL 端的视觉平衡：
+| **Visual Archetype**                                  | **Characteristics & Target Scenarios**                       | **Mobile** | **sm (640px)** | **md (768px)** |
+| ----------------------------------------------------- | ------------------------------------------------------------ | ---------- | -------------- | -------------- |
+| **Type A: Micro / Dense Elements (Micro)**            | Contains only icons, small avatars, or micro badges. Extremely low reading cognitive load, ideal for high-density tiling. | `cols-4`   | `cols-4`       | `cols-6`       |
+| **Type B: Portrait Standard Card (Portrait)**         | Vertical cards emphasizing visual presentation (e.g., character illustrations, posters, simple image items). Low horizontal information footprint. | `cols-2`   | `cols-3`       | `cols-3`       |
+| **Type C: Landscape / High-Density Card (Landscape)** | Complex cards containing mixed graphics/text, multi-line text summaries, and action buttons. Adequate horizontal reading space must be guaranteed. | `cols-1`   | `cols-1`       | `cols-2`       |
+| **Type D: Wide Block / Data Panel (Wide)**            | Data analytics dashboards, pricing tier tables, multi-column comparison blocks. A single item requires a large page area to carry structured data. | `cols-1`   | `cols-1`       | `cols-2`       |
 
-| **组件视觉形态 (Visual Archetype)**   | **特征描述与适用场景 (Characteristics)**                     | **Mobile** | **sm (640px)** | **md (768px)** |
-| ------------------------------------- | ------------------------------------------------------------ | ---------- | -------------- | -------------- |
-| **Type A: 微型/致密元素 (Micro)**     | 仅包含图标、小头像、微型徽章。阅读负担极低，适合高密度平铺。 | `cols-4`   | `cols-4`       | `cols-6`       |
-| **Type B: 纵向标准卡片 (Portrait)**   | 强调视觉展示的纵向卡片（如人物立绘卡、海报、简单图片项）。横向信息少。 | `cols-2`   | `cols-3`       | `cols-3`       |
-| **Type C: 横向/高密卡片 (Landscape)** | 包含图文混排、多行文字摘要、操作按钮的复杂卡片。必须保证足够的横向阅读空间。 | `cols-1`   | `cols-1`       | `cols-2`       |
-| **Type D: 宽幅区块/数据面板 (Wide)**  | 数据统计看板、定价套餐表、多列对比区块。单项需要极大的页面面积来承载结构化数据。 | `cols-1`   | `cols-1`       | `cols-2`       |
+### 8.2 Special Page-Level Layout: Type E Split-Screen Immersive Focus View
 
-### 8.2 特殊页面级布局：Type E 沉浸式分栏视图 (Split-Screen Focus)
+**AI Constraint:** Distinct from the component-level layout grids detailed above, Type E is a **global page-level** layout engineered for standalone interactive user flows. When generating these core system flows, the AI must strictly apply the following structural breakdown:
 
-**AI 约束：** 区别于上述组件级网格，Type E 是用于独立交互流程的**全局页面级**布局。AI 在生成此类核心流程页面时，必须严格应用以下结构：
+1. Core Layout Mechanism (Flex 60/40)
 
-**1. 核心布局机制 (Flex 60/40)**
+- **Parent Container**: Must utilize a Flex layout and comprehensively address the collapse issues of mobile browser address bars (`flex min-h-[calc(100vh-8rem)] md:min-h-screen md:items-stretch`).
+- **Visual Zone (Left)**: `hidden md:flex md:w-[60%] md:relative md:overflow-hidden md:bg-cyber-base`. Specifically dedicated to housing large ambient glows (`blur-ambient-lg`), SVG array schematics, or 3D floating canvas elements.
+- **Action Zone (Right)**: `w-full max-w-[400px] md:max-w-none md:w-[40%] md:flex md:items-center md:justify-center`. Must perfectly center the core interaction form both vertically and horizontally.
 
-- **父容器：** 必须采用 Flex 布局，并处理移动端浏览器高度坍塌问题（`flex min-h-[calc(100vh-8rem)] md:min-h-screen md:items-stretch`）。
-- **视觉区 (Left)：** `hidden md:flex md:w-[60%] md:relative md:overflow-hidden md:bg-cyber-base`。专门用于承载大型氛围光 (`blur-ambient-lg`)、SVG 阵列图或 3D 悬浮元素。
-- **操作区 (Right)：** `w-full max-w-[400px] md:max-w-none md:w-[40%] md:flex md:items-center md:justify-center`。必须在垂直和水平方向完美居中核心表单。
+#### 2. Applicable Scenarios
 
-**2. 适用场景**
+- **Account Gateways**: Login, Registration, and primary Password Recovery flows.
+- **Creator / Idol Onboarding**: Initial setup wizard pages, such as configuring a virtual avatar or entering agency/label information.
+- **Premium Upgrade / VIP Checkout**: Left side showcases exclusive tier privileges (e.g., dynamic glowing badges), right side handles the secure payment checkout form.
+- **Campaign Landing / Standalone Event Gateway**: Standalone promotional/tournament entry pages like the "Summer Cyber Awards" registration page.
 
-- **账户准入：** 登录 (Login)、注册 (Register)、找回密码主流程。
-- **创作者/偶像入驻 (Creator Onboarding)：** 第一步设置虚拟形象、填写厂牌信息等初始化向导页面。
-- **高阶订阅/VIP 结账 (Premium Upgrade)：** 左侧展示 VIP 专属特权（如动态光效徽章），右侧为支付表单。
-- **大型赛事/活动独立入口 (Campaign Landing)：** 如“夏季赛博大赏”的报名入口页。
+#### 3. Strictly Prohibited Scenarios (Negative List)
 
-**3. 严禁使用场景 (负面清单)**
+- Any secondary settings page inside the app dashboard (e.g., editing profiles, changing passwords, notification preferences).
+- Any functional or operational form popping up inside the main application layout (which already features a navigation header/sidebar).
+- Regular product, asset, or character details detail pages.
+- *(For the prohibited scenarios listed above, please downgrade to using standard Type B or Type C cards nested within the global shell layout, or trigger a Modal popup.)*
 
-- 任何应用内部的二级设置页（如修改个人资料、更改密码、通知设置）。
-- 任何在主界面（带有导航栏）中弹出的业务表单。
-- 常规的商品/角色详情页。
-- *（对于上述被禁用的场景，请降级使用标准的 Type B 或 Type C 卡片嵌套在全局布局中，或使用 Modal 弹窗。）*
+### 8.3 Comprehensive Text Size Scaling Rules
 
-### 8.3 全面字号 (Text Size) 缩放规律
+Specifying responsive font sizes arbitrarily is prohibited. A clear distinction must be made between two distinct functional mechanisms: "Visual Impact" and "Functional Reading":
 
-禁止随意指定响应式字号。必须区分“视觉冲击类”与“功能阅读类”两套机制：
-
-- **H1/标题类 (Dramatic Scale)**：强制执行大跨度缩放以维持视觉张力。
-  - **Logo/品牌**: `text-2xl` → `md:text-3xl`
+- **H1 / Headings (Dramatic Scale)**: 
+  - **Logo / Branding**: `text-2xl` → `md:text-3xl`
   - **Hero Title**: `text-2xl` → `md:text-2xl`
   - **Section Title**: `text-xl` → `md:text-2xl`
-- **Body/功能类 (Subtle Scale)**：以可读性为核心，进行微调或反向优化。
-  - **常规正文**: `text-sm` 或 `text-xs` (Mobile) 保持稳定，桌面端略增。
-  - **动态变量**: 姓名等关键字段优先使用 `[font-size:var(--font-name-base)]` 配合媒体查询微调。
-  - **按钮文字**: 允许出现“反向缩小”（如 `text-sm` → `md:text-xs`），以适配桌面端更紧凑的 UI 布局。
+- **Body / Functional (Subtle Scale)**: 
+  - **Regular Body Text**: `text-sm` or `text-xs` (Mobile) remains stable, scaling up slightly on desktop.
+  - **Dynamic Variables**: Critical metadata fields (like usernames or stats) should give priority to `text-name-base` combined with media queries for fine-grained tuning.
+  - **Button Labels**: "Inverse shrinking" is explicitly permitted (e.g., `text-sm` → `md:text-xs`).
 
-### 8.4 动态显隐与组件级交互降级
+### 8.4 Dynamic Visibility & Component-Level Interactive Degradation
 
-严禁滥用 `hidden` 进行简单裁切。AI 必须通过 `hidden/block/flex` 的切换实现“同一数据、两套逻辑”：
+Abuse of `hidden` utilities for simple content cropping is strictly prohibited. The AI must switch between `hidden/block/flex` states to execute the paradigm of **"same data, dual operational logic"**:
 
-- **导航重组 (Header Reconstruction)**：
-  - 桌面端：`<nav className="hidden md:flex">` 居中排列。
-  - 移动端：对应兄弟组件为 `<button className="md:hidden">`（汉堡菜单），交互目标必须折叠入 `absolute top-full` 的抽屉菜单。
-- **视觉效果降级 (Visual Performance)**：
-  - 桌面端：启用高性能 3D 背景或高分辨率立绘。
-  - 移动端：通过 `md:hidden` 切换为低透明度、模糊处理的轻量化背景，确保窄屏下的文字对比度。
-- **交互形态转换 (Form Transformation)**：
-  - **移动端**：倾向于“图标化”与“圆形化”（如 `w-9 h-9 rounded-full`），适配指尖触控。
-  - **桌面端**：恢复为“列表化”与“长条化”（如 `w-36 h-auto`），适配鼠标精准交互。
+- **Header Reconstruction**:
+  - Desktop: `<nav className="hidden md:flex">` aligned centrally.
+  - Mobile: The corresponding sibling element becomes `<button className="md:hidden">` (hamburger trigger), and the interactive target must collapse down safely into an `absolute top-full` full-width drawer menu.
+- **Visual Performance Degradation**:
+  - Desktop: Enable high-performance 3D atmospheric backgrounds or ultra-high-resolution character illustrations.
+  - Mobile: Switch via `md:hidden` to a low-opacity, blurred, lightweight static background matrix to guarantee strict text contrast ratios on narrow viewports.
+- **Interaction Form Transformation**:
+  - **Mobile Viewports**: Lean heavily toward "iconization" and "circularization" (e.g., `w-9 h-9 rounded-full`) to optimize directly for ergonomic thumb touch-targets.
+  - **Desktop Viewports**: Revert to "listification" and "elongation" (e.g., `w-36 h-auto`) to cater to high-precision mouse pointer interactions.
 
-### 8.5 响应式设计哲学 (RWD Philosophy)
+### 8.5 Responsive Design Philosophy (RWD Philosophy)
 
-AI 生成的每一行响应式代码都应体现：**移动端重触控、重纵向流动；桌面端重视觉冲击、重信息密度、重横向平衡。**
+Every line of responsive code generated by the AI should reflect: **Mobile layouts prioritize touch ergonomics and clean vertical flow; Desktop layouts maximize visual impact, raw information density, and strict horizontal balance.**

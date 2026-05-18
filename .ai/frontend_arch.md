@@ -1,20 +1,34 @@
-# Architecture & Data Flow Guide (架构与数据流规范)
+# Architecture & Data Flow Guide
 
-## 1. 文件夹职责 (Folder Responsibility)
-- `src/components/ui`：存放纯粹的、无状态的原子组件。
-- `src/components/features`：存放带有业务逻辑的复合组件（如 GlobalChat）。
-- `src/contexts/`：存放全局状态管理（如语言切换、过渡动画）。
+## 1. Folder Responsibilities
+- `src/components/ui`: Stores purely presentational, stateless atomic components.
+- `src/components/features`: Stores composite components containing business logic (e.g., `GlobalChat`).
+- `src/contexts/`: Stores global state management logic (such as language switching and transition animations).
 
-## 2. 国际化 (i18n) 处理流程
-- **单一数据源**：UI 渲染所需的静态文本严禁存放在局部 `useState` 中。
-- **消费方式**：
-  - 必须通过 `const { t } = useTranslations();` 钩子获取翻译对象。
-  - 使用 `String(t.key)` 或局部断言 `(t.key as string)` 确保类型安全。
-- **状态剥离**：
-  - 静态欢迎语（Welcome Message）应直接从 `t` 中渲染，不进入消息数组。
-  - 消息数组（State）仅存储用户输入的动态内容。
-- **同步更新**：Header 切换语言时，所有消费 `t` 的组件必须能够实时重绘（通过 Context 自动触发）。
+## 2. Internationalization (i18n) Workflow
+- **Single Source of Truth**:
+  - Static text used for UI rendering must never be stored in local `useState`.
 
-## 3. TypeScript 严谨性
-- **禁止 Any**：除非是 `TranslationMap` 这种极特殊的泛型兜底，否则禁止在业务逻辑中使用 `any`。
-- **局部断言**：针对 `TranslationValue` 的联合类型，推荐在组件内部使用 `(t.xxx || {}) as Record<string, string>` 进行局部窄化。
+- **Consumption Method**:
+  - Translation objects must be obtained through the hook:
+    ```ts
+    const { t } = useTranslations();
+    ```
+  - Use `String(t.key)` or local assertions like `(t.key as string)` to ensure type safety.
+
+- **State Separation**:
+  - Static welcome messages should be rendered directly from `t` and must not be inserted into the message array.
+  - The message array (`State`) should only store dynamic user-generated content.
+
+- **Synchronized Updates**:
+  - When the Header switches languages, all components consuming `t` must re-render in real time automatically through Context updates.
+
+## 3. TypeScript Strictness
+- **No `any` Allowed**:
+  - The use of `any` in business logic is prohibited unless absolutely necessary for exceptional generic fallback cases such as `TranslationMap`.
+
+- **Local Type Assertions**:
+  - For union types like `TranslationValue`, it is recommended to perform localized narrowing within components:
+    ```ts
+    (t.xxx || {}) as Record<string, string>
+    ```
