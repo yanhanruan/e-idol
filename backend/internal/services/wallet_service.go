@@ -1,0 +1,346 @@
+package services
+
+import (
+	"context"
+	"math/rand"
+	"time"
+
+	"e-idol-backend/internal/models"
+
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+)
+
+type WalletService struct {
+	db *gorm.DB
+}
+
+func NewWalletService(db *gorm.DB) *WalletService {
+	return &WalletService{db: db}
+}
+
+type ApplyTxRequest struct {
+	UserID          uint
+	Amount          int64
+	TransactionID   string
+	TransactionType models.TransactionType
+	ReferenceID     string
+	Remark          string
+}
+
+type LedgerFilter struct {
+	Type    string
+	StartAt *time.Time // inclusive lower bound
+	EndAt   *time.Time // exclusive upper bound (caller adds 1 day for full-day inclusion)
+}
+
+type Pagination struct {
+	Page     int
+	PageSize int
+}
+
+func (s *WalletService) GetBalance(userID uint) (*models.Wallet, error) {
+	var wallet models.Wallet
+	if err := s.db.Where("user_id = ?", userID).First(&wallet).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrWalletNotFound
+		}
+		return nil, err
+	}
+	return &wallet, nil
+}
+
+func (s *WalletService) ListLedger(userID uint, filter LedgerFilter, pg Pagination) ([]models.LedgerRecord, int64, error) {
+	query := s.db.Model(&models.LedgerRecord{}).Where("user_id = ?", userID)
+
+	if filter.Type != "" {
+		query = query.Where("transaction_type = ?", filter.Type)
+	}
+	if filter.StartAt != nil {
+		query = query.Where("created_at >= ?", *filter.StartAt)
+	}
+	if filter.EndAt != nil {
+		query = query.Where("created_at < ?", *filter.EndAt)
+	}
+
+	var total int64
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var records []models.LedgerRecord
+	offset := (pg.Page - 1) * pg.PageSize
+	if err := query.Order("created_at DESC").Offset(offset).Limit(pg.PageSize).Find(&records).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return records, total, nil
+}
+
+/*
+Architecture Design Notes:
+1. Why optimistic locking instead of pessimistic locking (FOR UPDATE)?
+   - In high-concurrency scenarios such as top-ups and tips, pessimistic locking can hold database connections for extended periods, reducing system throughput and increasing the risk of deadlocks.
+   - Optimistic locking, controlled via a version field, avoids prolonged row lock retention and delivers better performance in read-heavy or short-write-conflict workloads.
+
+2. Why is the retry limit set to 3?
+   - Automatic retries resolve occasional concurrent conflicts. However, if conflicts are too frequent (e.g., a hot account receiving a high volume of tips simultaneously), unlimited retries can exhaust CPU resources.
+   - Three retries combined with random exponential backoff (jitter, rand.Intn(50) * time.Millisecond) effectively stagger concurrent requests, resolving most optimistic locking failures while preventing herd behavior that could lead to system collapse.
+*/
+
+// ApplyTransaction is the public, standalone entry point for fund operations.
+// It performs a fast-path idempotency check and then retries up to 3 times on
+// ErrConcurrentConflict, wrapping each attempt in its own DB transaction.
+func (s *WalletService) ApplyTransaction(ctx context.Context, req ApplyTxRequest) (*models.LedgerRecord, error) {
+	// Fast-path idempotency check outside the retry loop.
+	var existing models.LedgerRecord
+	if err := s.db.Where("transaction_id = ?", req.TransactionID).First(&existing).Error; err == nil {
+		if existing.Status == models.TxStatusSuccess {
+			return &existing, nil
+		}
+	}
+
+	maxRetries := 3
+	var lastErr error
+
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		var ledger *models.LedgerRecord
+
+		txErr := s.db.Transaction(func(tx *gorm.DB) error {
+			var e error
+			ledger, e = s.applyTransactionTx(tx, req)
+			return e
+		})
+
+		if txErr == nil {
+			return ledger, nil
+		}
+
+		lastErr = txErr
+		if lastErr != ErrConcurrentConflict {
+			return nil, lastErr // non-retryable error (e.g. insufficient balance)
+		}
+
+		if attempt < maxRetries {
+			// random jitter to avoid herd behaviour on retry
+			time.Sleep(time.Duration(rand.Intn(50)) * time.Millisecond)
+		}
+	}
+
+	return nil, lastErr // max retries exceeded
+}
+
+// applyTransactionTx is the core fund-transfer implementation. It runs entirely
+// within the provided tx and never opens a new transaction, which allows it to
+// participate in a larger outer transaction (e.g. VIP purchase) atomically.
+//
+// Use ApplyTransaction for the standalone path with idempotency + retry logic.
+func (s *WalletService) applyTransactionTx(tx *gorm.DB, req ApplyTxRequest) (*models.LedgerRecord, error) {
+	// Idempotency check within the current transaction.
+	var existing models.LedgerRecord
+	if err := tx.Where("transaction_id = ?", req.TransactionID).First(&existing).Error; err == nil {
+		if existing.Status == models.TxStatusSuccess {
+			return &existing, nil
+		}
+	}
+
+	// 1. Read the current wallet state.
+	var wallet models.Wallet
+	if err := tx.Where("user_id = ?", req.UserID).First(&wallet).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrWalletNotFound
+		}
+		return nil, err
+	}
+
+	// 2. Balance check (debit operations only).
+	if req.Amount < 0 && wallet.Balance+req.Amount < 0 {
+		return nil, ErrInsufficientBalance
+	}
+
+	balanceBefore := wallet.Balance
+	balanceAfter := wallet.Balance + req.Amount
+
+	// 3. Optimistic lock update on balance.
+	result := tx.Model(&models.Wallet{}).
+		Where("id = ? AND version = ?", wallet.ID, wallet.Version).
+		Updates(map[string]interface{}{
+			"balance": balanceAfter,
+			"version": wallet.Version + 1,
+		})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		// Another request updated the row between our read and write.
+		return nil, ErrConcurrentConflict
+	}
+
+	// 4. Write the ledger record snapshot.
+	ledger := models.LedgerRecord{
+		TransactionID:   req.TransactionID,
+		WalletID:        wallet.ID,
+		UserID:          req.UserID,
+		Amount:          req.Amount,
+		BalanceBefore:   balanceBefore,
+		BalanceAfter:    balanceAfter,
+		TransactionType: req.TransactionType,
+		Status:          models.TxStatusSuccess,
+		ReferenceID:     req.ReferenceID,
+		Remark:          req.Remark,
+	}
+
+	if err := tx.Create(&ledger).Error; err != nil {
+		return nil, err // unique index conflict surfaces here on idempotency key collision
+	}
+
+	return &ledger, nil
+}
+
+// ConfirmRecharge settles a pending recharge after the payment gateway callback.
+// It acquires a pessimistic row lock on the LedgerRecord so concurrent callbacks
+// for the same transaction are serialized and the balance is credited exactly once.
+func (s *WalletService) ConfirmRecharge(txID string, status models.TransactionStatus) error {
+	return s.db.Transaction(func(tx *gorm.DB) error {
+		var ledger models.LedgerRecord
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("transaction_id = ?", txID).First(&ledger).Error; err != nil {
+			return err
+		}
+
+		// Idempotency: already finalized — no-op regardless of incoming status.
+		if ledger.Status != models.TxStatusPending {
+			return nil
+		}
+
+		if status == models.TxStatusFailed {
+			return tx.Model(&ledger).Update("status", models.TxStatusFailed).Error
+		}
+
+		// status == success: credit the wallet balance within the same transaction.
+		var wallet models.Wallet
+		if err := tx.Where("id = ?", ledger.WalletID).First(&wallet).Error; err != nil {
+			return err
+		}
+
+		balanceBefore := wallet.Balance
+		balanceAfter := wallet.Balance + ledger.Amount
+
+		if err := tx.Model(&wallet).Updates(map[string]interface{}{
+			"balance": balanceAfter,
+			"version": wallet.Version + 1,
+		}).Error; err != nil {
+			return err
+		}
+
+		return tx.Model(&ledger).Updates(map[string]interface{}{
+			"balance_before": balanceBefore,
+			"balance_after":  balanceAfter,
+			"status":         models.TxStatusSuccess,
+		}).Error
+	})
+}
+
+/*
+ApplyTransactionWithLock uses pessimistic locking (FOR UPDATE) to perform fund operations.
+Constraints and usage guidelines:
+1. Intended only for low-frequency administrative scenarios such as refunds, reconciliation corrections, and batch coupon issuance.
+2. Must NOT be called from high-frequency user-facing endpoints (e.g., top-ups, tips) to avoid exhausting the database connection pool or causing deadlocks.
+3. While holding the lock (inside the transaction function), do NOT include any RPC calls, external HTTP requests, or time-consuming computations.
+*/
+// CreatePendingRecharge creates a ledger record with status=pending for an incoming
+// recharge. It does NOT modify the wallet balance; balance settlement happens when
+// the payment gateway callback confirms the transaction.
+func (s *WalletService) CreatePendingRecharge(userID uint, amount int64, txID string) (*models.LedgerRecord, error) {
+	var wallet models.Wallet
+	if err := s.db.Where("user_id = ?", userID).First(&wallet).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, ErrWalletNotFound
+		}
+		return nil, err
+	}
+
+	record := models.LedgerRecord{
+		TransactionID:   txID,
+		WalletID:        wallet.ID,
+		UserID:          userID,
+		Amount:          amount,
+		BalanceBefore:   wallet.Balance,
+		BalanceAfter:    wallet.Balance, // balance unchanged until payment is confirmed
+		TransactionType: models.TxTypeRecharge,
+		Status:          models.TxStatusPending,
+	}
+
+	if err := s.db.Create(&record).Error; err != nil {
+		return nil, err
+	}
+
+	return &record, nil
+}
+
+func (s *WalletService) ApplyTransactionWithLock(ctx context.Context, req ApplyTxRequest) (*models.LedgerRecord, error) {
+	var ledger models.LedgerRecord
+
+	// idempotency check (read outside the transaction; if the record exists and its status is success, return it directly)
+	if err := s.db.Where("transaction_id = ?", req.TransactionID).First(&ledger).Error; err == nil {
+		if ledger.Status == models.TxStatusSuccess {
+			return &ledger, nil
+		}
+	}
+
+	var createdLedger models.LedgerRecord
+
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		var wallet models.Wallet
+		// lock the wallet record with pessimistic locking
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("user_id = ?", req.UserID).First(&wallet).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				return ErrWalletNotFound
+			}
+			return err
+		}
+
+		// balance check (for debit operations)
+		if req.Amount < 0 && wallet.Balance+req.Amount < 0 {
+			return ErrInsufficientBalance
+		}
+
+		balanceBefore := wallet.Balance
+		balanceAfter := wallet.Balance + req.Amount
+
+		// directly update the balance and increment the version
+		if err := tx.Model(&wallet).Updates(map[string]interface{}{
+			"balance": balanceAfter,
+			"version": wallet.Version + 1,
+		}).Error; err != nil {
+			return err
+		}
+
+		// write the ledger record snapshot
+		createdLedger = models.LedgerRecord{
+			TransactionID:   req.TransactionID,
+			WalletID:        wallet.ID,
+			UserID:          req.UserID,
+			Amount:          req.Amount,
+			BalanceBefore:   balanceBefore,
+			BalanceAfter:    balanceAfter,
+			TransactionType: req.TransactionType,
+			Status:          models.TxStatusSuccess,
+			ReferenceID:     req.ReferenceID,
+			Remark:          req.Remark,
+		}
+
+		if err := tx.Create(&createdLedger).Error; err != nil {
+			return err // a unique index conflict will be raised here if the idempotency key collides
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &createdLedger, nil
+}

@@ -12,11 +12,11 @@ var ErrOrderConflict = errors.New("order conflict")
 type OrderStatus string
 
 const (
-	StatusPending   OrderStatus = "pending"
-	StatusConfirmed OrderStatus = "confirmed"
-	StatusCompleted OrderStatus = "completed"
-	StatusCancelled OrderStatus = "cancelled"
-	StatusRejected  OrderStatus = "rejected"
+	OrderStatusPending   OrderStatus = "pending"
+	OrderStatusConfirmed OrderStatus = "confirmed"
+	OrderStatusCompleted OrderStatus = "completed"
+	OrderStatusCancelled OrderStatus = "cancelled"
+	OrderStatusRejected  OrderStatus = "rejected"
 )
 
 type Order struct {

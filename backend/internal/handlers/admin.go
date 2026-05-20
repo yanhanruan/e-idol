@@ -54,7 +54,7 @@ func GetStats(db *gorm.DB) gin.HandlerFunc {
 		db.Model(&models.Order{}).Count(&totalOrders)
 
 		var totalRevenue float64
-		db.Model(&models.Order{}).Where("status = ?", models.StatusCompleted).Select("sum(total_price)").Row().Scan(&totalRevenue)
+		db.Model(&models.Order{}).Where("status = ?", models.OrderStatusCompleted).Select("sum(total_price)").Row().Scan(&totalRevenue)
 
 		c.JSON(http.StatusOK, gin.H{
 			"total_users":   totalUsers,

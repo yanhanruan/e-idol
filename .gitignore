@@ -1,3 +1,11 @@
+# executable files
+*.exe
+
+/backend_rush.md
+
+# OPA reports
+.reports/
+
 # environment info
 .env
 

@@ -8,6 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AuthRequired is the canonical middleware name used by wallet and future routes.
+// AuthMiddleware remains available as an alias for backward compatibility.
+func AuthRequired() gin.HandlerFunc {
+	return AuthMiddleware()
+}
+
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")

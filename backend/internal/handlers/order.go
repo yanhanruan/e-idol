@@ -58,7 +58,7 @@ func CreateOrder(db *gorm.DB) gin.HandlerFunc {
 			// Check for overlapping orders for the same host.
 			var count int64
 			query := tx.Model(&models.Order{}).
-				Where("host_id = ? AND status IN ?", input.HostID, []models.OrderStatus{models.StatusConfirmed, models.StatusPending})
+				Where("host_id = ? AND status IN ?", input.HostID, []models.OrderStatus{models.OrderStatusConfirmed, models.OrderStatusPending})
 
 			if tx.Dialector.Name() == "sqlite" {
 				query = query.Where("start_time < ? AND datetime(start_time, '+' || duration || ' hours') > ?", orderEndTime, input.StartTime)
@@ -79,7 +79,7 @@ func CreateOrder(db *gorm.DB) gin.HandlerFunc {
 			order = models.Order{
 				ClientID:   clientID.(uint),
 				HostID:     input.HostID,
-				Status:     models.StatusPending,
+				Status:     models.OrderStatusPending,
 				StartTime:  input.StartTime,
 				Duration:   input.Duration,
 				TotalPrice: totalPrice,
@@ -166,14 +166,14 @@ func UpdateOrderStatus(db *gorm.DB) gin.HandlerFunc {
 		newStatus := input.Status
 
 		if userRole == string(models.RoleHost) {
-			if currentStatus == models.StatusPending && (newStatus == models.StatusConfirmed || newStatus == models.StatusRejected) {
+			if currentStatus == models.OrderStatusPending && (newStatus == models.OrderStatusConfirmed || newStatus == models.OrderStatusRejected) {
 				order.Status = newStatus
 			} else {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status transition"})
 				return
 			}
 		} else if userRole == string(models.RoleClient) {
-			if currentStatus == models.StatusPending && newStatus == models.StatusCancelled {
+			if currentStatus == models.OrderStatusPending && newStatus == models.OrderStatusCancelled {
 				order.Status = newStatus
 			} else {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status transition"})
