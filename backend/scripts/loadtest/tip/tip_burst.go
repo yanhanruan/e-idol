@@ -322,26 +322,26 @@ func verify(db *gorm.DB, idol models.Idol) {
 		currentIdol.WithdrawableBalance == idolIncomeSum,
 		fmt.Sprintf("balance=%d  sum_income=%d", currentIdol.WithdrawableBalance, idolIncomeSum))
 
-	// 3. Revenue split is internally consistent: commission + idol_income == gross.
-	// Compared against actual DB data so that HTTP-level failures (missing TipRecords)
-	// don't produce false negatives — only a ledger discrepancy triggers a FAIL here.
-	var commissionSum, actualGross int64
+	// 3. Revenue split is internally consistent on settlement_amount:
+	//    commission + idol_income == settlement_amount for every committed record.
+	// Compared against actual DB data so HTTP-level failures don't produce false negatives.
+	var commissionSum, settlementSum int64
 	db.Model(&models.TipRecord{}).
 		Where("idol_id = ?", idol.ID).
 		Select("COALESCE(SUM(commission_amount), 0)").
 		Scan(&commissionSum)
 	db.Model(&models.TipRecord{}).
 		Where("idol_id = ?", idol.ID).
-		Select("COALESCE(SUM(amount), 0)").
-		Scan(&actualGross)
-	check("Revenue split sums to gross (commission+income==amount)",
-		commissionSum+idolIncomeSum == actualGross,
-		fmt.Sprintf("commission=%d  idol_income=%d  gross=%d", commissionSum, idolIncomeSum, actualGross))
+		Select("COALESCE(SUM(settlement_amount), 0)").
+		Scan(&settlementSum)
+	check("Revenue split sums to settlement (commission+income==settlement_amount)",
+		commissionSum+idolIncomeSum == settlementSum,
+		fmt.Sprintf("commission=%d  idol_income=%d  settlement=%d", commissionSum, idolIncomeSum, settlementSum))
 
-	// 4. idol.total_earnings reflects actual gross from successful tip transactions.
-	check("Idol total_earnings == actual gross tipped",
-		currentIdol.TotalEarnings == actualGross,
-		fmt.Sprintf("total_earnings=%d  actual_gross=%d", currentIdol.TotalEarnings, actualGross))
+	// 4. idol.total_earnings reflects the settlement_amount of all committed tips.
+	check("Idol total_earnings == SUM(settlement_amount)",
+		currentIdol.TotalEarnings == settlementSum,
+		fmt.Sprintf("total_earnings=%d  settlement_sum=%d", currentIdol.TotalEarnings, settlementSum))
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
