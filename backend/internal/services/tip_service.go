@@ -28,31 +28,77 @@ var (
 type TipService struct {
 	db        *gorm.DB
 	walletSvc *WalletService
-	vipSvc    *VipService
 }
 
 func NewTipService(db *gorm.DB) *TipService {
 	return &TipService{
 		db:        db,
 		walletSvc: NewWalletService(db),
-		vipSvc:    NewVipService(db),
 	}
 }
 
-// getVipDiscountRate returns the consumer's VIP discount rate in basis points
-// (e.g. 9000 = pay 90% = 10% off). Returns 10000 (no discount) when the user
-// is not an active VIP or the plan cannot be resolved.
-func (s *TipService) getVipDiscountRate(userID uint) int {
-	userVip, err := s.vipSvc.GetUserVipStatus(userID)
-	if err != nil || userVip.Level == 0 || userVip.LastPlanID == 0 {
+// ── Amount computation helpers ────────────────────────────────────────────────
+
+// computePaidAmount applies a VIP discount rate (basis points) to the original
+// tip amount to derive what the consumer is actually charged.
+//
+// Mirrors pkg/utils.ApplyDiscount — inlined to avoid an import cycle with
+// pkg/utils/response.go which imports the services package.
+//
+// Ceiling division keeps fractional cents on the consumer side so the platform
+// never absorbs more than (originalAmount - paidAmount).
+func computePaidAmount(originalAmount int64, vipDiscountRate int) int64 {
+	if vipDiscountRate <= 0 || vipDiscountRate >= 10000 {
+		return originalAmount // no discount: guard against invalid rates
+	}
+	return (originalAmount*int64(vipDiscountRate) + 9999) / 10000
+}
+
+// computeSettlementAmount returns the amount used as the basis for idol
+// commission calculation.
+//
+// Currently equal to originalAmount. Isolated as a named function so that
+// future divergence (e.g. partial refunds, multi-tier platform subsidies)
+// requires a change in exactly one place rather than hunting call sites.
+func computeSettlementAmount(originalAmount int64) int64 {
+	return originalAmount
+}
+
+// ── VIP discount resolution ───────────────────────────────────────────────────
+
+// resolveVipDiscountTx returns the consumer's active VIP discount rate in
+// basis points using the provided transaction (tx), ensuring the VIP state read
+// is consistent with the tip write that follows in the same transaction.
+//
+// Trade-off vs. pre-transaction lookup:
+//   - PRO  stronger consistency: the discount applied matches the VIP state at
+//     the exact instant the tip record is written; no stale-read window.
+//   - CON  two additional SELECT statements on the critical path (user_vip and
+//     vip_plans). Both are point reads on indexed columns; latency impact is
+//     sub-millisecond under normal load.
+//
+// Returns 10000 (no discount) when:
+//   - the user has no user_vip row with level > 0, or
+//   - the VIP subscription has expired (expiry check done inline; the lazy-update
+//     of user_vip.level is intentionally omitted here to avoid an unrelated write
+//     in the tip transaction — the nightly job and VipService handle cleanup), or
+//   - the associated VipPlan cannot be queried.
+func resolveVipDiscountTx(tx *gorm.DB, userID uint) int {
+	var userVip models.UserVip
+	if err := tx.Where("user_id = ? AND level > 0", userID).First(&userVip).Error; err != nil {
+		return 10000
+	}
+	if !userVip.ExpireAt.After(time.Now()) || userVip.LastPlanID == 0 {
 		return 10000
 	}
 	var plan models.VipPlan
-	if err := s.db.Select("discount_rate").First(&plan, userVip.LastPlanID).Error; err != nil {
+	if err := tx.Select("discount_rate").First(&plan, userVip.LastPlanID).Error; err != nil {
 		return 10000
 	}
 	return plan.DiscountRate
 }
+
+// ── Commission rate ───────────────────────────────────────────────────────────
 
 // getEffectiveCommissionRate returns the currently active commission rate in
 // basis points. The result is cached for commissionCacheTTL (5 minutes) to
@@ -83,36 +129,31 @@ func (s *TipService) getEffectiveCommissionRate() (int, error) {
 	return config.CommissionRate, nil
 }
 
+// ── Tip transaction ───────────────────────────────────────────────────────────
+
 // Tip executes the three-party fund flow for a single tipping transaction.
 // All monetary steps run inside one DB transaction; any failure causes a full rollback.
 //
-// Amount semantics:
+// Amount flow:
 //
-//	originalAmount   = amount (declared tip value)
-//	paidAmount       = originalAmount * vipDiscountRate / 10000  (what consumer is charged)
-//	discountAmount   = originalAmount - paidAmount               (platform-absorbed subsidy)
-//	settlementAmount = originalAmount                            (basis for idol split)
+//	originalAmount   = amount  (declared by consumer)
+//	vipDiscountRate  = resolved inside the transaction (consistent with the write)
+//	paidAmount       = computePaidAmount(originalAmount, vipDiscountRate)
+//	discountAmount   = originalAmount - paidAmount      (platform-absorbed subsidy)
+//	settlementAmount = computeSettlementAmount(originalAmount)
 //
 // Revenue split on settlementAmount:
 //
 //	commission = settlementAmount * commissionRate / 10000  (floor — favours idol)
 //	idolIncome = settlementAmount - commission
 //
-// The platform's net revenue on this tip = commission - discountAmount.
+// Enforcement guarantees:
+//   - All four amount fields are set explicitly on every write (no reliance on DB defaults).
+//   - DB CHECK constraints (chk_tip_*) provide a second layer of defence.
+//   - For non-VIP users vipDiscountRate = 10000, so paidAmount = originalAmount
+//     and discountAmount = 0 by construction — no special-case branch needed.
 func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, error) {
-	// Resolve VIP discount before the transaction to keep the critical path short.
-	// A narrow window where VIP status changes mid-flight is acceptable.
-	vipDiscountRate := s.getVipDiscountRate(uint(fromUserID))
-
-	// Calculate consumer-facing amounts outside the transaction (pure arithmetic).
 	originalAmount := amount
-	// Mirrors pkg/utils.ApplyDiscount — inlined to avoid an import cycle with pkg/utils/response.go.
-	paidAmount := originalAmount
-	if vipDiscountRate > 0 && vipDiscountRate < 10000 {
-		paidAmount = (originalAmount*int64(vipDiscountRate) + 9999) / 10000
-	}
-	discountAmount := originalAmount - paidAmount
-	settlementAmount := originalAmount // always equals originalAmount for now
 
 	var tipRecord models.TipRecord
 
@@ -135,11 +176,19 @@ func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, e
 			return fmt.Errorf("commission rate unavailable: %w", err)
 		}
 
-		// 3. Revenue split on settlementAmount.
+		// 3. Resolve VIP discount inside the transaction for consistency.
+		vipDiscountRate := resolveVipDiscountTx(tx, uint(fromUserID))
+
+		// 4. Derive all four amount fields.
+		paidAmount := computePaidAmount(originalAmount, vipDiscountRate)
+		discountAmount := originalAmount - paidAmount
+		settlementAmount := computeSettlementAmount(originalAmount)
+
+		// 5. Revenue split on settlementAmount.
 		commission := settlementAmount * int64(rate) / 10000 // floor — favours idol over platform
 		idolIncome := settlementAmount - commission
 
-		// 4. Deduct paidAmount from consumer wallet (reuses the outer transaction).
+		// 6. Deduct paidAmount from consumer wallet (reuses the outer transaction).
 		ledgerTxID := uuid.New().String()
 		_, err = s.walletSvc.applyTransactionTx(tx, ApplyTxRequest{
 			UserID:          uint(fromUserID),
@@ -153,7 +202,7 @@ func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, e
 			return err
 		}
 
-		// 5. Atomically increment idol balance on settlementAmount — no read-modify-write.
+		// 7. Atomically increment idol balance on settlementAmount — no read-modify-write.
 		if err := tx.Model(&models.Idol{}).Where("id = ?", idol.ID).Updates(map[string]interface{}{
 			"withdrawable_balance": gorm.Expr("withdrawable_balance + ?", idolIncome),
 			"total_earnings":       gorm.Expr("total_earnings + ?", settlementAmount),
@@ -161,7 +210,7 @@ func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, e
 			return err
 		}
 
-		// 6. Insert TipRecord with all four amount fields persisted.
+		// 8. Insert TipRecord — all four amount fields explicitly set on every write.
 		tipRecord = models.TipRecord{
 			FromUserID:       uint(fromUserID),
 			IdolID:           uint(idolID),
@@ -177,7 +226,7 @@ func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, e
 			return err
 		}
 
-		// 7. Insert a LedgerRecord from the idol's perspective so idols can
+		// 9. Insert a LedgerRecord from the idol's perspective so idols can
 		// query their income history via the same ledger API.
 		// WalletID is 0: idol income is tracked on Idol.WithdrawableBalance,
 		// not on a consumer Wallet; the field is informational here.

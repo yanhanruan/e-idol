@@ -64,4 +64,28 @@ func migrateTipRecordsAmountFields(db *gorm.DB) {
 	`).Error; err != nil {
 		log.Printf("tip_records vip_discount_rate drop warning: %v", err)
 	}
+
+	// Enforce amount-field invariants as DB CHECK constraints.
+	// GORM's AutoMigrate creates these on fresh tables via struct tags, but does
+	// not add them to existing tables — the raw SQL below fills that gap.
+	// Each ALTER is guarded by a pg_constraint existence check so re-runs are safe.
+	if err := db.Exec(`
+		DO $$
+		BEGIN
+			IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_tip_original_pos') THEN
+				ALTER TABLE tip_records ADD CONSTRAINT chk_tip_original_pos CHECK (original_amount > 0);
+			END IF;
+			IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_tip_paid_range') THEN
+				ALTER TABLE tip_records ADD CONSTRAINT chk_tip_paid_range CHECK (paid_amount > 0 AND paid_amount <= original_amount);
+			END IF;
+			IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_tip_discount_nonneg') THEN
+				ALTER TABLE tip_records ADD CONSTRAINT chk_tip_discount_nonneg CHECK (discount_amount >= 0);
+			END IF;
+			IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_tip_settlement_pos') THEN
+				ALTER TABLE tip_records ADD CONSTRAINT chk_tip_settlement_pos CHECK (settlement_amount > 0);
+			END IF;
+		END $$;
+	`).Error; err != nil {
+		log.Printf("tip_records check constraints warning: %v", err)
+	}
 }
