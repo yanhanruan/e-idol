@@ -15,6 +15,7 @@ type TipRecord struct {
 	Amount           int64     `gorm:"not null"                      json:"amount"`            // total paid by the user, in cents
 	CommissionAmount int64     `gorm:"not null"                      json:"commission_amount"` // platform commission deducted, in cents
 	IdolIncome       int64     `gorm:"not null"                      json:"idol_income"`       // net amount credited to the idol, in cents
-	LedgerTxID       string    `gorm:"type:varchar(64);index"        json:"ledger_tx_id"`      // transaction_id of the corresponding LedgerRecord
+	LedgerTxID       string    `gorm:"type:varchar(64);index"        json:"ledger_tx_id"`       // transaction_id of the corresponding LedgerRecord
+	VipDiscountRate  int       `gorm:"not null;default:10000"        json:"vip_discount_rate"`  // basis points applied to commission; 10000 = no VIP discount
 	CreatedAt        time.Time `                                     json:"created_at"`
 }

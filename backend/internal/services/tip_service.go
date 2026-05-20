@@ -28,13 +28,30 @@ var (
 type TipService struct {
 	db        *gorm.DB
 	walletSvc *WalletService
+	vipSvc    *VipService
 }
 
 func NewTipService(db *gorm.DB) *TipService {
 	return &TipService{
 		db:        db,
 		walletSvc: NewWalletService(db),
+		vipSvc:    NewVipService(db),
 	}
+}
+
+// getVipDiscountRate returns the consumer's VIP commission discount rate in
+// basis points (e.g. 9000 = 10% off). Returns 10000 (no discount) when the
+// user is not a VIP or the plan cannot be resolved.
+func (s *TipService) getVipDiscountRate(userID uint) int {
+	userVip, err := s.vipSvc.GetUserVipStatus(userID)
+	if err != nil || userVip.Level == 0 || userVip.LastPlanID == 0 {
+		return 10000
+	}
+	var plan models.VipPlan
+	if err := s.db.Select("discount_rate").First(&plan, userVip.LastPlanID).Error; err != nil {
+		return 10000
+	}
+	return plan.DiscountRate
 }
 
 // getEffectiveCommissionRate returns the currently active commission rate in
@@ -71,9 +88,14 @@ func (s *TipService) getEffectiveCommissionRate() (int, error) {
 //
 // Revenue split:
 //
-//	commission = amount * rate / 10000  (floor division — slightly favours idol)
-//	idol_income = amount - commission
+//	effectiveRate = platformRate * vipDiscountRate / 10000  (VIP reduces commission)
+//	commission    = amount * effectiveRate / 10000           (floor — favours idol)
+//	idol_income   = amount - commission
 func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, error) {
+	// Resolve VIP discount before opening the transaction to keep the critical
+	// path short. A tiny window where VIP status changes mid-flight is acceptable.
+	vipDiscountRate := s.getVipDiscountRate(uint(fromUserID))
+
 	var tipRecord models.TipRecord
 
 	err := s.db.Transaction(func(tx *gorm.DB) error {
@@ -95,8 +117,13 @@ func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, e
 			return fmt.Errorf("commission rate unavailable: %w", err)
 		}
 
-		// 3. Calculate revenue sharing.
-		commission := amount * int64(rate) / 10000 // floor — favours idol over platform
+		// 3. Apply VIP discount to the commission rate, then calculate revenue sharing.
+		// Mirrors pkg/utils.ApplyDiscount — inlined to avoid an import cycle with pkg/utils/response.go.
+		effectiveRate := rate
+		if vipDiscountRate > 0 && vipDiscountRate < 10000 {
+			effectiveRate = int((int64(rate)*int64(vipDiscountRate) + 9999) / 10000)
+		}
+		commission := amount * int64(effectiveRate) / 10000 // floor — favours idol over platform
 		idolIncome := amount - commission
 
 		// 4. Deduct from consumer wallet (reuses the outer transaction).
@@ -130,6 +157,7 @@ func (s *TipService) Tip(fromUserID, idolID, amount int64) (*models.TipRecord, e
 			CommissionAmount: commission,
 			IdolIncome:       idolIncome,
 			LedgerTxID:       ledgerTxID,
+			VipDiscountRate:  vipDiscountRate,
 		}
 		if err := tx.Create(&tipRecord).Error; err != nil {
 			return err
